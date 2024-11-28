@@ -45,27 +45,30 @@ def prepare_mesh_for_unet(binary_mask):
     return tensor_mask
 
 class UNet3D(nn.Module):
-    def __init__(self, in_channels=1, out_channels=4):
+    def __init__(self, in_channels=1, out_channels=4, coefficients_per_channel=8):
         super(UNet3D, self).__init__()
-        
-        # Encoder (Contracting Path) - reduced to 2 levels
+
+        # Encoder (Contracting Path)
         self.enc1 = self.conv_block(in_channels, 32)
         self.enc2 = self.conv_block(32, 64)
-        
+
         # Bottleneck
         self.bottleneck = self.conv_block(64, 128)
-        
-        # Decoder (Expansive Path) - reduced to 2 levels
+
+        # Decoder (Expansive Path) with skip connections
         self.upconv2 = self.upconv_block(128, 64)
         self.dec2 = self.conv_block(128, 64)  # 128 because of concatenation
-        
+
         self.upconv1 = self.upconv_block(64, 32)
-        self.dec1 = self.conv_block(64, 32)   # 64 because of concatenation
-        
+        self.dec1 = self.conv_block(64, 32)  # 64 because of concatenation
+
         # Final output layer
-        self.final_conv = nn.Conv3d(32, out_channels, kernel_size=1)
+        self.final_conv = nn.Conv3d(32, out_channels * coefficients_per_channel, kernel_size=1)
+        self.out_channels = out_channels
+        self.coefficients_per_channel = coefficients_per_channel
 
     def conv_block(self, in_channels, out_channels):
+        """Helper function to define 3D convolutional blocks."""
         return nn.Sequential(
             nn.Conv3d(in_channels, out_channels, kernel_size=3, padding=1),
             nn.BatchNorm3d(out_channels, track_running_stats=False),
@@ -74,8 +77,9 @@ class UNet3D(nn.Module):
             nn.BatchNorm3d(out_channels, track_running_stats=False),
             nn.ReLU(inplace=True)
         )
-    
+
     def upconv_block(self, in_channels, out_channels):
+        """Helper function to define 3D upconvolution blocks."""
         return nn.Sequential(
             nn.ConvTranspose3d(in_channels, out_channels, kernel_size=2, stride=2),
             nn.BatchNorm3d(out_channels, track_running_stats=False),
@@ -83,23 +87,33 @@ class UNet3D(nn.Module):
         )
 
     def forward(self, x):
-        # Encoder - only 2 levels
-        enc1 = self.enc1(x)                                    # 20x20x20
-        enc2 = self.enc2(F.max_pool3d(enc1, 2, 2))           # 10x10x10
-        
+        # Encoder
+        enc1 = self.enc1(x)  # Level 1
+        enc2 = self.enc2(F.max_pool3d(enc1, kernel_size=2, stride=2))  # Level 2
+
         # Bottleneck
-        bottleneck = self.bottleneck(F.max_pool3d(enc2, 2, 2)) # 5x5x5
-        
-        # Decoder - only 2 levels
-        up2 = self.upconv2(bottleneck)                        # 10x10x10
-        up2 = torch.cat([up2, enc2], dim=1)
+        bottleneck = self.bottleneck(F.max_pool3d(enc2, kernel_size=2, stride=2))  # Bottleneck
+
+        # Decoder
+        up2 = self.upconv2(bottleneck)  # Upsample bottleneck
+        up2 = torch.cat([up2, enc2], dim=1)  # Skip connection with encoder level 2
         up2 = self.dec2(up2)
-        
-        up1 = self.upconv1(up2)                              # 20x20x20
-        up1 = torch.cat([up1, enc1], dim=1)
+
+        up1 = self.upconv1(up2)  # Upsample decoder level 2
+        up1 = torch.cat([up1, enc1], dim=1)  # Skip connection with encoder level 1
         up1 = self.dec1(up1)
-        
-        output = self.final_conv(up1)
+
+        # Final output
+        output = self.final_conv(up1)  # [batch, out_channels * coefficients_per_channel, depth, height, width]
+
+        # Reshape output to [batch, out_channels, coefficients_per_channel, depth, height, width]
+        batch_size = output.shape[0]
+        output = output.view(
+            batch_size,
+            self.out_channels,
+            self.coefficients_per_channel,
+            *output.shape[2:]  # Spatial dimensions
+        )
         return output
 
 # Main processing pipeline
@@ -125,11 +139,11 @@ def process_mesh(model_path, grid_resolution=(20, 20, 20)):
 # Main
 if __name__ == "__main__":
     # Process the mesh and get coefficients
-    mesh_path = "Baseline_ML4Science.stl"
+    mesh_path = "/Users/macbookpro16/mlproject2/SteadyStateSplinePINNs/src/Baseline_ML4Science.stl"
     coefficients = process_mesh(mesh_path)
     
     # Print shapes to verify
-    print(f"Coefficients shape: {coefficients.shape}")  # Should be [1, 4, 20, 20, 20]
+    print(f"Coefficients shape: {coefficients.shape}")  # Should be [1, 4, 8, 20, 20, 20]
     
     # If you want to access individual coefficient volumes
     coeff1 = coefficients[0, 0].numpy()  # First coefficient volume
@@ -137,7 +151,7 @@ if __name__ == "__main__":
     coeff3 = coefficients[0, 2].numpy()  # Third coefficient volume
     coeff4 = coefficients[0, 3].numpy()  # Fourth coefficient volume
 
-    print(coeff1)
-    print(coeff2)
-    print(coeff3)
-    print(coeff4)
+    #print(coeff1)
+    #print(coeff2)
+    #print(coeff3)
+    #print(coeff4)
