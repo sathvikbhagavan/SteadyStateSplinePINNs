@@ -1,9 +1,6 @@
 import trimesh
 import numpy as np
 
-model = trimesh.load("Baseline_ML4Science.stl")
-
-
 def get_binary_mask(model, grid_resolution):
     bounds = model.bounds
     min_bound, max_bound = bounds[0], bounds[1]
