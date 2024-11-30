@@ -3,6 +3,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from sample import *
 
 # Convert binary mask to PyTorch tensor and reshape for UNet
 def prepare_mesh_for_unet(binary_mask):
@@ -88,7 +89,7 @@ class UNet3D(nn.Module):
         return output
 
 # Main processing pipeline
-def process_mesh(model_path, grid_resolution=(20, 20, 20)):
+def process_mesh(model_path, grid_resolution=(50, 20, 10)):
     # Load model
     model_mesh = trimesh.load(model_path)
     
@@ -102,15 +103,15 @@ def process_mesh(model_path, grid_resolution=(20, 20, 20)):
     unet_model = UNet3D(in_channels=1, out_channels=4)
     
     # Process through UNet
-    with torch.no_grad():  # If just inferencing
-        coefficients = unet_model(unet_input)
+    # with torch.no_grad():  # If just inferencing
+    coefficients = unet_model(unet_input)
     
     return coefficients
 
 # Main
 if __name__ == "__main__":
     # Process the mesh and get coefficients
-    mesh_path = "/Users/macbookpro16/mlproject2/SteadyStateSplinePINNs/src/Baseline_ML4Science.stl"
+    mesh_path = "src/Baseline_ML4Science.stl"
     coefficients = process_mesh(mesh_path)
     
     # Print shapes to verify
