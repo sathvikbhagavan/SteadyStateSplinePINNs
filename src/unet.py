@@ -87,6 +87,10 @@ class UNet3D(nn.Module):
             *output.shape[2:]  # Spatial dimensions
         )
         return output
+    
+def initialize_weights(m):
+    if isinstance(m, torch.nn.Conv3d) or isinstance(m, torch.nn.Linear):
+        torch.nn.init.xavier_uniform_(m.weight)
 
 # Main processing pipeline
 def process_mesh(model_path, grid_resolution=(50, 20, 10)):
