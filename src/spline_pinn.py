@@ -13,7 +13,7 @@ import wandb
 seed = 42
 
 # Model Params
-epochs = 1000
+epochs = 500
 lr = 1e-4
 
 # Physics Constants
@@ -199,7 +199,7 @@ for epoch in tqdm(range(epochs)):
         validation_vx,validation_vy,validation_vz,validation_p,validation_loss_divergence,validation_loss_momentum_x,validation_loss_momentum_y,validation_loss_momentum_z,validation_loss_inlet_boundary,validation_loss_other_boundary = get_fields_and_losses(spline_coeff, validation_points, validation_labels)
         validation_loss_total = validation_loss_divergence + validation_loss_momentum_x + validation_loss_momentum_y + validation_loss_momentum_z + validation_loss_inlet_boundary + validation_loss_other_boundary
         
-        wandb.log({'Divergence Loss': np.log(validation_loss_divergence.item()), 'X Momentum Loss': np.log(validation_loss_momentum_x.item()), 'Y Momentum Loss': np.log(validation_loss_momentum_y.item()), 'Z Momentum Loss': np.log(validation_loss_momentum_z.item()), 'Inlet Boundary Loss': np.log(validation_loss_inlet_boundary.item()), 'Other Boundary Loss': np.log(validation_loss_other_boundary.item()), 'Total Loss': np.log(validation_loss_total.item())})
+        wandb.log({'Validation Divergence Loss': np.log(validation_loss_divergence.item()), 'Validation X Momentum Loss': np.log(validation_loss_momentum_x.item()), 'Validation Y Momentum Loss': np.log(validation_loss_momentum_y.item()), 'Validation Z Momentum Loss': np.log(validation_loss_momentum_z.item()), 'Validation Inlet Boundary Loss': np.log(validation_loss_inlet_boundary.item()), 'Validation Other Boundary Loss': np.log(validation_loss_other_boundary.item()), 'Validation Total Loss': np.log(validation_loss_total.item())})
 
         validation_loss_track.append(validation_loss_total.item())
         print(f'Validation Loss: {validation_loss_total.item()}')
