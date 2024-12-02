@@ -43,10 +43,10 @@ class UNet3D(nn.Module):
         """Helper function to define 3D convolutional blocks."""
         return nn.Sequential(
             nn.Conv3d(in_channels, out_channels, kernel_size=3, padding=1),
-            nn.BatchNorm3d(out_channels, track_running_stats=False),
+            nn.BatchNorm3d(out_channels, track_running_stats=True),
             nn.ReLU(inplace=True),
             nn.Conv3d(out_channels, out_channels, kernel_size=3, padding=1),
-            nn.BatchNorm3d(out_channels, track_running_stats=False),
+            nn.BatchNorm3d(out_channels, track_running_stats=True),
             nn.ReLU(inplace=True)
         )
 
