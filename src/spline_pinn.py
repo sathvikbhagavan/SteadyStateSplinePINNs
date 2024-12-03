@@ -5,8 +5,9 @@ import torch
 from sample import *
 from hermite_spline import *
 from unet import *
-from torch.optim import Adam
-from tqdm import tqdm
+from torch.optim import Adam, LBFGS
+from torch.optim.lr_scheduler import ReduceLROnPlateau
+# from tqdm import tqdm
 import time
 import wandb
 import matplotlib.pyplot as plt
@@ -14,9 +15,8 @@ from mpl_toolkits.mplot3d import Axes3D
 
 seed = 42
 
-# Model Params
-epochs = 500
-lr = 1e-4
+# Model Hyperparams
+epochs = 100
 
 # Physics Constants
 inlet_velocity = 0.5
@@ -28,8 +28,8 @@ wandb.init(
     project="Spline-PINNs_with_validation",
     # track hyperparameters and run metadata
     config={
-        "learning_rate": lr,
-        "optimizer": "Adam",
+        # "learning_rate": lr,
+        "optimizer": "LBFGS",
         "architecture": "Unet",
         "epochs": epochs,
         "seed": seed,
@@ -43,7 +43,7 @@ torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 
 # Check for Metal (MPS) device
-device = torch.device("cpu" if torch.backends.mps.is_available() else "cpu")
+device = 'cuda'
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
@@ -176,7 +176,7 @@ def get_fields_and_losses(spline_coeff, points, labels):
         (
             (vx * vx_x + vy * vx_y + vz * vx_z)
             + (1 / rho) * p_x
-            - 1000 * (mu / rho) * (vx_xx + vx_yy + vx_zz)
+            - (mu / rho) * (vx_xx + vx_yy + vx_zz)
         )
         ** 2
     )
@@ -184,7 +184,7 @@ def get_fields_and_losses(spline_coeff, points, labels):
         (
             (vx * vy_x + vy * vy_y + vz * vy_z)
             + (1 / rho) * p_y
-            - 1000 * (mu / rho) * (vy_xx + vy_yy + vy_zz)
+            - (mu / rho) * (vy_xx + vy_yy + vy_zz)
         )
         ** 2
     )
@@ -192,7 +192,7 @@ def get_fields_and_losses(spline_coeff, points, labels):
         (
             (vx * vz_x + vy * vz_y + vz * vz_z)
             + (1 / rho) * p_z
-            - 1000 * (mu / rho) * (vz_xx + vz_yy + vz_zz)
+            - (mu / rho) * (vz_xx + vz_yy + vz_zz)
         )
         ** 2
     )
@@ -223,7 +223,7 @@ def get_fields_and_losses(spline_coeff, points, labels):
 
 ##################################################################################################################################
 
-obj = trimesh.load("src/Baseline_ML4Science.stl")
+obj = trimesh.load("./Baseline_ML4Science.stl")
 
 grid_resolution = np.array([20, 20, 20])
 binary_mask = get_binary_mask(obj, grid_resolution)
@@ -231,24 +231,25 @@ step = obj.bounding_box.extents / (grid_resolution - 1)
 
 # Instantiate the neural network
 unet_model = UNet3D().to(device)
-optimizer = Adam(unet_model.parameters(), lr=lr)
+optimizer = LBFGS(unet_model.parameters(), line_search_fn = 'strong_wolfe')
 unet_model.apply(initialize_weights)
 
 start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
-validation_points, validation_labels = sample_points(1000, 200, 800)
+validation_points, validation_labels = sample_points(1000, 500, 1000)
 
 
-for epoch in tqdm(range(epochs)):
-    train_points, train_labels = sample_points(1000, 200, 800)
+for epoch in range(epochs):
+    print(f'{epoch}/{epochs}')
+    train_points, train_labels = sample_points(1000, 500, 1000)
 
     # Ensure training points allow gradient computation
     train_points.requires_grad_(True)
 
     # Get Hermite Spline coefficients from the Unet
-    unet_input = prepare_mesh_for_unet(binary_mask)
+    unet_input = prepare_mesh_for_unet(binary_mask).to(device)
     spline_coeff = unet_model(unet_input)[0]
 
     # Calculating various field terms using coefficients
@@ -270,19 +271,19 @@ for epoch in tqdm(range(epochs)):
         + loss_momentum_x
         + loss_momentum_y
         + loss_momentum_z
-        + 1000 * loss_inlet_boundary
+        + 100 * loss_inlet_boundary
         + 100 * loss_other_boundary
     )
 
     wandb.log(
         {
-            "Divergence Loss": np.log(loss_divergence.item()),
-            "X Momentum Loss": np.log(loss_momentum_x.item()),
-            "Y Momentum Loss": np.log(loss_momentum_y.item()),
-            "Z Momentum Loss": np.log(loss_momentum_z.item()),
-            "Inlet Boundary Loss": np.log(loss_inlet_boundary.item()),
-            "Other Boundary Loss": np.log(loss_other_boundary.item()),
-            "Total Loss": np.log(loss_total.item()),
+            "Divergence Loss": np.log10(loss_divergence.item()),
+            "X Momentum Loss": np.log10(loss_momentum_x.item()),
+            "Y Momentum Loss": np.log10(loss_momentum_y.item()),
+            "Z Momentum Loss": np.log10(loss_momentum_z.item()),
+            "Inlet Boundary Loss": np.log10(loss_inlet_boundary.item()),
+            "Other Boundary Loss": np.log10(loss_other_boundary.item()),
+            "Total Loss": np.log10(loss_total.item()),
         }
     )
 
@@ -321,23 +322,23 @@ for epoch in tqdm(range(epochs)):
             + validation_loss_momentum_x
             + validation_loss_momentum_y
             + validation_loss_momentum_z
-            + 1000 * validation_loss_inlet_boundary
+            + 100 * validation_loss_inlet_boundary
             + 100 * validation_loss_other_boundary
         )
 
         wandb.log(
             {
-                "Validation Divergence Loss": np.log(validation_loss_divergence.item()),
-                "Validation X Momentum Loss": np.log(validation_loss_momentum_x.item()),
-                "Validation Y Momentum Loss": np.log(validation_loss_momentum_y.item()),
-                "Validation Z Momentum Loss": np.log(validation_loss_momentum_z.item()),
-                "Validation Inlet Boundary Loss": np.log(
+                "Validation Divergence Loss": np.log10(validation_loss_divergence.item()),
+                "Validation X Momentum Loss": np.log10(validation_loss_momentum_x.item()),
+                "Validation Y Momentum Loss": np.log10(validation_loss_momentum_y.item()),
+                "Validation Z Momentum Loss": np.log10(validation_loss_momentum_z.item()),
+                "Validation Inlet Boundary Loss": np.log10(
                     validation_loss_inlet_boundary.item()
                 ),
-                "Validation Other Boundary Loss": np.log(
+                "Validation Other Boundary Loss": np.log10(
                     validation_loss_other_boundary.item()
                 ),
-                "Validation Total Loss": np.log(validation_loss_total.item()),
+                "Validation Total Loss": np.log10(validation_loss_total.item()),
             }
         )
 
@@ -357,6 +358,7 @@ for epoch in tqdm(range(epochs)):
 
 stop_time = time.time()
 print(f"Time taken for training is: {stop_time - start_time}")
+torch.save(unet_model.state_dict(), '../run/unet_model.pt')
 
 ## Plotting
 unet_model.eval()
