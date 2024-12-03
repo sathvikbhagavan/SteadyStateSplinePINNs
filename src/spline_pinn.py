@@ -225,7 +225,7 @@ def get_fields_and_losses(spline_coeff, points, labels):
 
 obj = trimesh.load("./Baseline_ML4Science.stl")
 
-grid_resolution = np.array([20, 20, 20])
+grid_resolution = np.array([64, 32, 16])
 binary_mask = get_binary_mask(obj, grid_resolution)
 step = obj.bounding_box.extents / (grid_resolution - 1)
 
@@ -238,13 +238,13 @@ start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
-validation_points, validation_labels = sample_points(1000, 500, 1000)
+validation_points, validation_labels = sample_points(2000, 1000, 2000)
 
 
 for epoch in range(epochs):
     print(f'{epoch}/{epochs}')
     def closure():
-        train_points, train_labels = sample_points(1000, 500, 1000)
+        train_points, train_labels = sample_points(2000, 1000, 2000)
 
         # Ensure training points allow gradient computation
         train_points.requires_grad_(True)
@@ -367,6 +367,8 @@ print(f"Time taken for training is: {stop_time - start_time}")
 torch.save(unet_model.state_dict(), '../run/unet_model.pt')
 
 ## Plotting
+unet_input = prepare_mesh_for_unet(binary_mask).to(device)
+spline_coeff = unet_model(unet_input)[0]
 unet_model.eval()
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)
 spline_coeff = unet_model(unet_input)[0]
@@ -393,8 +395,8 @@ fields = [
 
 for field in fields:
     # Convert to numpy for plotting
-    points = validation_points.detach().numpy()
-    scalar_field = field[1].detach().numpy()
+    points = validation_points.cpu().detach().numpy()
+    scalar_field = field[1].cpu().detach().numpy()
 
     # Create a 3D scatter plot
     fig = plt.figure(figsize=(10, 7))
