@@ -2,6 +2,7 @@ import trimesh
 import numpy as np
 import torch
 
+
 def get_binary_mask(model, grid_resolution):
     bounds = model.bounds
     min_bound, max_bound = bounds[0], bounds[1]
@@ -26,27 +27,37 @@ def get_binary_mask(model, grid_resolution):
             binary_volume[index_x, index_y, index_z] = 1
     return binary_volume
 
+
 def get_inlet_surface_points(obj, num_points):
     threshold = 1e-5
     faces_x_zero = [
-        i for i, face in enumerate(obj.faces)
-        if np.all(np.abs(obj.vertices[face, 0]) < threshold)  # Check if all vertices' x-coordinates are 0
+        i
+        for i, face in enumerate(obj.faces)
+        if np.all(
+            np.abs(obj.vertices[face, 0]) < threshold
+        )  # Check if all vertices' x-coordinates are 0
     ]
     subset_mesh = obj.submesh([faces_x_zero], only_watertight=False)[0]
     points, _ = trimesh.sample.sample_surface(subset_mesh, count=num_points)
-    inlet_surface_points = torch.tensor(points / 1000.0, dtype = torch.float64)
+    inlet_surface_points = torch.tensor(points / 1000.0, dtype=torch.float64)
     inlet_surface_labels = torch.ones(inlet_surface_points.size(0), dtype=torch.int64)
     return inlet_surface_points, inlet_surface_labels
+
 
 def get_other_surface_points(obj, num_points):
     threshold = 1e-5
     points, _ = trimesh.sample.sample_surface(obj, count=num_points)
     filtered_points = points[np.abs(points[:, 0]) > threshold]
-    other_surface_points = torch.tensor(filtered_points / 1000.0, dtype = torch.float64)
-    other_surface_labels = 2*torch.ones(other_surface_points.size(0), dtype=torch.int64)
+    other_surface_points = torch.tensor(filtered_points / 1000.0, dtype=torch.float64)
+    other_surface_labels = 2 * torch.ones(
+        other_surface_points.size(0), dtype=torch.int64
+    )
     return other_surface_points, other_surface_labels
 
+
 def get_volume_points(obj, num_points):
-    volume_points = torch.tensor(trimesh.sample.volume_mesh(obj, num_points) / 1000.0, dtype=torch.float64)
+    volume_points = torch.tensor(
+        trimesh.sample.volume_mesh(obj, num_points) / 1000.0, dtype=torch.float64
+    )
     volume_labels = torch.zeros(volume_points.size(0), dtype=torch.int64)
     return volume_points, volume_labels

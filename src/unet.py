@@ -5,16 +5,18 @@ import torch.nn as nn
 import torch.nn.functional as F
 from sample import *
 
+
 # Convert binary mask to PyTorch tensor and reshape for UNet
 def prepare_mesh_for_unet(binary_mask):
     # Convert to float32 tensor
     tensor_mask = torch.from_numpy(binary_mask).float()
-    
+
     # Add batch and channel dimensions
     # From (20, 20, 20) to (1, 1, 20, 20, 20)
     tensor_mask = tensor_mask.unsqueeze(0).unsqueeze(0)
-    
+
     return tensor_mask
+
 
 class UNet3D(nn.Module):
     def __init__(self, in_channels=1, out_channels=4, coefficients_per_channel=8):
@@ -35,7 +37,9 @@ class UNet3D(nn.Module):
         self.dec1 = self.conv_block(64, 32)  # 64 because of concatenation
 
         # Final output layer
-        self.final_conv = nn.Conv3d(32, out_channels * coefficients_per_channel, kernel_size=1)
+        self.final_conv = nn.Conv3d(
+            32, out_channels * coefficients_per_channel, kernel_size=1
+        )
         self.out_channels = out_channels
         self.coefficients_per_channel = coefficients_per_channel
 
@@ -47,7 +51,7 @@ class UNet3D(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv3d(out_channels, out_channels, kernel_size=3, padding=1),
             nn.BatchNorm3d(out_channels, track_running_stats=True),
-            nn.ReLU(inplace=True)
+            nn.ReLU(inplace=True),
         )
 
     def upconv_block(self, in_channels, out_channels):
@@ -55,7 +59,7 @@ class UNet3D(nn.Module):
         return nn.Sequential(
             nn.ConvTranspose3d(in_channels, out_channels, kernel_size=2, stride=2),
             nn.BatchNorm3d(out_channels, track_running_stats=False),
-            nn.ReLU(inplace=True)
+            nn.ReLU(inplace=True),
         )
 
     def forward(self, x):
@@ -64,7 +68,9 @@ class UNet3D(nn.Module):
         enc2 = self.enc2(F.max_pool3d(enc1, kernel_size=2, stride=2))  # Level 2
 
         # Bottleneck
-        bottleneck = self.bottleneck(F.max_pool3d(enc2, kernel_size=2, stride=2))  # Bottleneck
+        bottleneck = self.bottleneck(
+            F.max_pool3d(enc2, kernel_size=2, stride=2)
+        )  # Bottleneck
 
         # Decoder
         up2 = self.upconv2(bottleneck)  # Upsample bottleneck
@@ -76,7 +82,9 @@ class UNet3D(nn.Module):
         up1 = self.dec1(up1)
 
         # Final output
-        output = self.final_conv(up1)  # [batch, out_channels * coefficients_per_channel, depth, height, width]
+        output = self.final_conv(
+            up1
+        )  # [batch, out_channels * coefficients_per_channel, depth, height, width]
 
         # Reshape output to [batch, out_channels, coefficients_per_channel, depth, height, width]
         batch_size = output.shape[0]
@@ -84,50 +92,55 @@ class UNet3D(nn.Module):
             batch_size,
             self.out_channels,
             self.coefficients_per_channel,
-            *output.shape[2:]  # Spatial dimensions
+            *output.shape[2:],  # Spatial dimensions
         )
         return output
-    
+
+
 def initialize_weights(m):
     if isinstance(m, torch.nn.Conv3d) or isinstance(m, torch.nn.Linear):
         torch.nn.init.xavier_uniform_(m.weight)
+
 
 # Main processing pipeline
 def process_mesh(model_path, grid_resolution=(50, 20, 10)):
     # Load model
     model_mesh = trimesh.load(model_path)
-    
+
     # Get binary mask
     binary_mask = get_binary_mask(model_mesh, grid_resolution)
-    
+
     # Prepare for UNet
     unet_input = prepare_mesh_for_unet(binary_mask)
-    
+
     # Initialize UNet
     unet_model = UNet3D(in_channels=1, out_channels=4)
-    
+
     # Process through UNet
     # with torch.no_grad():  # If just inferencing
     coefficients = unet_model(unet_input)
-    
+
     return coefficients
+
 
 # Main
 if __name__ == "__main__":
     # Process the mesh and get coefficients
     mesh_path = "src/Baseline_ML4Science.stl"
     coefficients = process_mesh(mesh_path)
-    
+
     # Print shapes to verify
-    print(f"Coefficients shape: {coefficients.shape}")  # Should be [1, 4, 8, 20, 20, 20]
-    
+    print(
+        f"Coefficients shape: {coefficients.shape}"
+    )  # Should be [1, 4, 8, 20, 20, 20]
+
     # If you want to access individual coefficient volumes
     coeff1 = coefficients[0, 0].numpy()  # First coefficient volume
     coeff2 = coefficients[0, 1].numpy()  # Second coefficient volume
     coeff3 = coefficients[0, 2].numpy()  # Third coefficient volume
     coeff4 = coefficients[0, 3].numpy()  # Fourth coefficient volume
 
-    #print(coeff1)
-    #print(coeff2)
-    #print(coeff3)
-    #print(coeff4)
+    # print(coeff1)
+    # print(coeff2)
+    # print(coeff3)
+    # print(coeff4)
