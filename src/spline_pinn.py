@@ -238,13 +238,13 @@ start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
-validation_points, validation_labels = sample_points(2000, 1000, 2000)
+validation_points, validation_labels = sample_points(3000, 3000, 3000)
 
 
 for epoch in range(epochs):
     print(f'{epoch}/{epochs}')
     def closure():
-        train_points, train_labels = sample_points(2000, 1000, 2000)
+        train_points, train_labels = sample_points(2000, 2000, 2000)
 
         # Ensure training points allow gradient computation
         train_points.requires_grad_(True)
