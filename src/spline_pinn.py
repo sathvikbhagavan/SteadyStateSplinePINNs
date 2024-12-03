@@ -12,24 +12,33 @@ import time
 import wandb
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import os
+from git import Repo
+
+# Path to the parent directory of the `src/` folder
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+# Initialize the repository at the parent directory level
+repo = Repo(parent_dir)
 
 seed = 42
 
 # Model Hyperparams
-epochs = 100
+epochs = 500
+lr = 1e-3
 
 # Physics Constants
 inlet_velocity = 0.5
 rho = 1.010427
 mu = 2.02e-5
 
-wandb.init(
+run = wandb.init(
     # set the wandb project where this run will be logged
     project="Spline-PINNs_with_validation",
     # track hyperparameters and run metadata
     config={
-        # "learning_rate": lr,
-        "optimizer": "LBFGS",
+        "learning_rate": lr,
+        "optimizer": "Adam",
         "architecture": "Unet",
         "epochs": epochs,
         "seed": seed,
@@ -43,7 +52,7 @@ torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 
 # Check for Metal (MPS) device
-device = 'cpu'
+device = 'cuda'
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
@@ -231,7 +240,8 @@ step = obj.bounding_box.extents / (grid_resolution - 1)
 
 # Instantiate the neural network
 unet_model = UNet3D().to(device)
-optimizer = LBFGS(unet_model.parameters(), line_search_fn = 'strong_wolfe')
+optimizer = Adam(unet_model.parameters())
+scheduler = ReduceLROnPlateau(optimizer, patience=20)
 unet_model.apply(initialize_weights)
 
 start_time = time.time()
@@ -242,67 +252,65 @@ validation_points, validation_labels = sample_points(3000, 3000, 3000)
 
 
 for epoch in range(epochs):
-    print(f'{epoch}/{epochs}')
-    def closure():
-        train_points, train_labels = sample_points(2000, 2000, 2000)
+    print(f'{epoch+1}/{epochs}')
+    train_points, train_labels = sample_points(2000, 2000, 2000)
 
-        # Ensure training points allow gradient computation
-        train_points.requires_grad_(True)
+    # Ensure training points allow gradient computation
+    train_points.requires_grad_(True)
 
-        # Get Hermite Spline coefficients from the Unet
-        unet_input = prepare_mesh_for_unet(binary_mask).to(device)
-        spline_coeff = unet_model(unet_input)[0]
+    # Get Hermite Spline coefficients from the Unet
+    unet_input = prepare_mesh_for_unet(binary_mask).to(device)
+    spline_coeff = unet_model(unet_input)[0]
 
-        # Calculating various field terms using coefficients
-        (
-            vx,
-            vy,
-            vz,
-            p,
-            loss_divergence,
-            loss_momentum_x,
-            loss_momentum_y,
-            loss_momentum_z,
-            loss_inlet_boundary,
-            loss_other_boundary,
-        ) = get_fields_and_losses(spline_coeff, train_points, train_labels)
+    # Calculating various field terms using coefficients
+    (
+        vx,
+        vy,
+        vz,
+        p,
+        loss_divergence,
+        loss_momentum_x,
+        loss_momentum_y,
+        loss_momentum_z,
+        loss_inlet_boundary,
+        loss_other_boundary,
+    ) = get_fields_and_losses(spline_coeff, train_points, train_labels)
 
-        loss_total = (
-            loss_divergence
-            + loss_momentum_x
-            + loss_momentum_y
-            + loss_momentum_z
-            + 100 * loss_inlet_boundary
-            + 100 * loss_other_boundary
-        )
+    loss_total = (
+        loss_divergence
+        + loss_momentum_x
+        + loss_momentum_y
+        + loss_momentum_z
+        + 100 * loss_inlet_boundary
+        + 100 * loss_other_boundary
+    )
 
-        wandb.log(
-            {
-                "Divergence Loss": np.log10(loss_divergence.item()),
-                "X Momentum Loss": np.log10(loss_momentum_x.item()),
-                "Y Momentum Loss": np.log10(loss_momentum_y.item()),
-                "Z Momentum Loss": np.log10(loss_momentum_z.item()),
-                "Inlet Boundary Loss": np.log10(loss_inlet_boundary.item()),
-                "Other Boundary Loss": np.log10(loss_other_boundary.item()),
-                "Total Loss": np.log10(loss_total.item()),
-            }
-        )
+    wandb.log(
+        {
+            "Divergence Loss": np.log10(loss_divergence.item()),
+            "X Momentum Loss": np.log10(loss_momentum_x.item()),
+            "Y Momentum Loss": np.log10(loss_momentum_y.item()),
+            "Z Momentum Loss": np.log10(loss_momentum_z.item()),
+            "Inlet Boundary Loss": np.log10(loss_inlet_boundary.item()),
+            "Other Boundary Loss": np.log10(loss_other_boundary.item()),
+            "Total Loss": np.log10(loss_total.item()),
+        }
+    )
 
-        training_loss_track.append(loss_total.item())
-        print(
-            f"Divergence Loss: {loss_divergence.item()}, "
-            f"X Momentum Loss: {loss_momentum_x.item()}, "
-            f"Y Momentum Loss: {loss_momentum_y.item()}, "
-            f"Z Momentum Loss: {loss_momentum_z.item()}, "
-            f"Inlet Boundary Loss: {loss_inlet_boundary.item()}, "
-            f"Other Boundary Loss: {loss_other_boundary.item()}, "
-            f"Total Loss: {loss_total.item()}"
-        )
+    training_loss_track.append(loss_total.item())
+    print(
+        f"Divergence Loss: {loss_divergence.item()}, "
+        f"X Momentum Loss: {loss_momentum_x.item()}, "
+        f"Y Momentum Loss: {loss_momentum_y.item()}, "
+        f"Z Momentum Loss: {loss_momentum_z.item()}, "
+        f"Inlet Boundary Loss: {loss_inlet_boundary.item()}, "
+        f"Other Boundary Loss: {loss_other_boundary.item()}, "
+        f"Total Loss: {loss_total.item()}"
+    )
 
-        # Using LBFGS optimizer
-        optimizer.zero_grad()
-        loss_total.backward()
-        return loss_total
+    # Using LBFGS optimizer
+    optimizer.zero_grad()
+    loss_total.backward()
 
     # Validation
     # Switch model to evaluation mode
@@ -360,7 +368,9 @@ for epoch in range(epochs):
         )
 
     unet_model.train()
-    optimizer.step(closure)
+    optimizer.step()
+    scheduler.step(loss_total)
+    print(f"Learning Rate: {optimizer.param_groups[0]['lr']}")
 
 stop_time = time.time()
 print(f"Time taken for training is: {stop_time - start_time}")
@@ -412,3 +422,22 @@ for field in fields:
     ax.set_zlabel("Z")
     plt.title(f"{field[0]}")
     plt.savefig(f"../run/{field[0]}.png", dpi=300, bbox_inches="tight")
+
+
+if repo.is_dirty(untracked_files=True):
+    print("Repository has changes, preparing to commit.")
+
+    # Stage all changes in the parent directory
+    repo.git.add(A=True)  # Stages all changes
+
+    # Commit the changes
+    commit_message = f"Running job with run name: {run.name}, url: {run.url}"
+    repo.index.commit(commit_message)
+    print(f"Committed changes with message: {commit_message}")
+
+    # Push changes
+    origin = repo.remote(name="origin")
+    origin.push()
+    print("Pushed changes to the remote repository.")
+else:
+    print("No changes to commit.")
