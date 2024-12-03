@@ -243,62 +243,68 @@ validation_points, validation_labels = sample_points(1000, 500, 1000)
 
 for epoch in range(epochs):
     print(f'{epoch}/{epochs}')
-    train_points, train_labels = sample_points(1000, 500, 1000)
+    def closure():
+        train_points, train_labels = sample_points(1000, 500, 1000)
 
-    # Ensure training points allow gradient computation
-    train_points.requires_grad_(True)
+        # Ensure training points allow gradient computation
+        train_points.requires_grad_(True)
 
-    # Get Hermite Spline coefficients from the Unet
-    unet_input = prepare_mesh_for_unet(binary_mask).to(device)
-    spline_coeff = unet_model(unet_input)[0]
+        # Get Hermite Spline coefficients from the Unet
+        unet_input = prepare_mesh_for_unet(binary_mask).to(device)
+        spline_coeff = unet_model(unet_input)[0]
 
-    # Calculating various field terms using coefficients
-    (
-        vx,
-        vy,
-        vz,
-        p,
-        loss_divergence,
-        loss_momentum_x,
-        loss_momentum_y,
-        loss_momentum_z,
-        loss_inlet_boundary,
-        loss_other_boundary,
-    ) = get_fields_and_losses(spline_coeff, train_points, train_labels)
+        # Calculating various field terms using coefficients
+        (
+            vx,
+            vy,
+            vz,
+            p,
+            loss_divergence,
+            loss_momentum_x,
+            loss_momentum_y,
+            loss_momentum_z,
+            loss_inlet_boundary,
+            loss_other_boundary,
+        ) = get_fields_and_losses(spline_coeff, train_points, train_labels)
 
-    loss_total = (
-        loss_divergence
-        + loss_momentum_x
-        + loss_momentum_y
-        + loss_momentum_z
-        + 100 * loss_inlet_boundary
-        + 100 * loss_other_boundary
-    )
+        loss_total = (
+            loss_divergence
+            + loss_momentum_x
+            + loss_momentum_y
+            + loss_momentum_z
+            + 100 * loss_inlet_boundary
+            + 100 * loss_other_boundary
+        )
 
-    wandb.log(
-        {
-            "Divergence Loss": np.log10(loss_divergence.item()),
-            "X Momentum Loss": np.log10(loss_momentum_x.item()),
-            "Y Momentum Loss": np.log10(loss_momentum_y.item()),
-            "Z Momentum Loss": np.log10(loss_momentum_z.item()),
-            "Inlet Boundary Loss": np.log10(loss_inlet_boundary.item()),
-            "Other Boundary Loss": np.log10(loss_other_boundary.item()),
-            "Total Loss": np.log10(loss_total.item()),
-        }
-    )
+        wandb.log(
+            {
+                "Divergence Loss": np.log10(loss_divergence.item()),
+                "X Momentum Loss": np.log10(loss_momentum_x.item()),
+                "Y Momentum Loss": np.log10(loss_momentum_y.item()),
+                "Z Momentum Loss": np.log10(loss_momentum_z.item()),
+                "Inlet Boundary Loss": np.log10(loss_inlet_boundary.item()),
+                "Other Boundary Loss": np.log10(loss_other_boundary.item()),
+                "Total Loss": np.log10(loss_total.item()),
+            }
+        )
 
-    training_loss_track.append(loss_total.item())
-    print(
-        f"Divergence Loss: {loss_divergence.item()}, "
-        f"X Momentum Loss: {loss_momentum_x.item()}, "
-        f"Y Momentum Loss: {loss_momentum_y.item()}, "
-        f"Z Momentum Loss: {loss_momentum_z.item()}, "
-        f"Inlet Boundary Loss: {loss_inlet_boundary.item()}, "
-        f"Other Boundary Loss: {loss_other_boundary.item()}, "
-        f"Total Loss: {loss_total.item()}"
-    )
-    optimizer.zero_grad()
-    loss_total.backward()
+        training_loss_track.append(loss_total.item())
+        print(
+            f"Divergence Loss: {loss_divergence.item()}, "
+            f"X Momentum Loss: {loss_momentum_x.item()}, "
+            f"Y Momentum Loss: {loss_momentum_y.item()}, "
+            f"Z Momentum Loss: {loss_momentum_z.item()}, "
+            f"Inlet Boundary Loss: {loss_inlet_boundary.item()}, "
+            f"Other Boundary Loss: {loss_other_boundary.item()}, "
+            f"Total Loss: {loss_total.item()}"
+        )
+
+        # Using LBFGS optimizer
+        optimizer.zero_grad()
+        loss_total.backward()
+        return loss_total
+
+    optimizer.step(closure)
 
     # Validation
     # Switch model to evaluation mode
