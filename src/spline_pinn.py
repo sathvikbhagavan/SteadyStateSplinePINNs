@@ -43,7 +43,7 @@ torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 
 # Check for Metal (MPS) device
-device = 'cuda'
+device = 'cpu'
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
@@ -304,11 +304,11 @@ for epoch in range(epochs):
         loss_total.backward()
         return loss_total
 
-    optimizer.step(closure)
-
     # Validation
     # Switch model to evaluation mode
     unet_model.eval()
+    unet_input = prepare_mesh_for_unet(binary_mask).to(device)
+    spline_coeff = unet_model(unet_input)[0]
     with torch.no_grad():
         (
             validation_vx,
@@ -360,7 +360,7 @@ for epoch in range(epochs):
         )
 
     unet_model.train()
-    optimizer.step()
+    optimizer.step(closure)
 
 stop_time = time.time()
 print(f"Time taken for training is: {stop_time - start_time}")
@@ -368,6 +368,8 @@ torch.save(unet_model.state_dict(), '../run/unet_model.pt')
 
 ## Plotting
 unet_model.eval()
+unet_input = prepare_mesh_for_unet(binary_mask).to(device)
+spline_coeff = unet_model(unet_input)[0]
 with torch.no_grad():
     (
         validation_vx,
@@ -407,4 +409,4 @@ for field in fields:
     ax.set_ylabel("Y")
     ax.set_zlabel("Z")
     plt.title(f"{field[0]}")
-    plt.savefig(f"{field[0]}.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"../run/{field[0]}.png", dpi=300, bbox_inches="tight")
