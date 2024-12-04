@@ -28,7 +28,7 @@ epochs = 100
 
 # Physics Constants
 inlet_velocity = 0.5
-p_outlet = 8.35
+p_outlet = 0.835
 rho = 1.010427
 mu = 2.02e-5
 debug = False
