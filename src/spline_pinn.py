@@ -98,15 +98,12 @@ def f(
                     support_point_ind = torch.vstack(
                         (x_supports_ind, y_support_ind, z_support_ind)
                     ).T
-
                     x_indices = support_point_ind[:, 0]
                     y_indices = support_point_ind[:, 1]
                     z_indices = support_point_ind[:, 2]
-
                     x_input = (x - x_indices * step[0]) / step[0]
                     y_input = (y - y_indices * step[1]) / step[1]
                     z_input = (z - z_indices * step[2]) / step[2]
-
                     conv_sum += (
                         spline_coeff_ijk[x_indices, y_indices, z_indices]
                     ) * hermite_kernel_3d(
@@ -146,35 +143,27 @@ def get_fields_and_losses(spline_coeff, points, labels):
     vy = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vz = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     p = f(spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-
     vx_x = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0)
     vx_y = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0)
     vx_z = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1)
-
     vy_x = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0)
     vy_y = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0)
     vy_z = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1)
-
     vz_x = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0)
     vz_y = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0)
     vz_z = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1)
-
     p_x = f(spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0)
     p_y = f(spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0)
     p_z = f(spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1)
-
     vx_xx = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0)
     vx_yy = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0)
     vx_zz = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2)
-
     vy_xx = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0)
     vy_yy = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0)
     vy_zz = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2)
-
     vz_xx = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0)
     vz_yy = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0)
     vz_zz = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2)
-
     # calculate losses
     loss_divergence = torch.mean((vx_x + vy_y + vz_z) ** 2)
     loss_momentum_x = torch.mean(
@@ -211,7 +200,6 @@ def get_fields_and_losses(spline_coeff, points, labels):
         + torch.mean((vy[labels == 2]) ** 2)
         + torch.mean((vz[labels == 2]) ** 2)
     )
-
     return (
         vx,
         vy,
@@ -225,6 +213,27 @@ def get_fields_and_losses(spline_coeff, points, labels):
         loss_other_boundary,
     )
 
+
+def plot_fields(fields):
+    for field in fields:
+        # Convert to numpy for plotting
+        points = validation_points.cpu().detach().numpy()
+        scalar_field = field[1].cpu().detach().numpy()
+
+        # Create a 3D scatter plot
+        fig = plt.figure(figsize=(10, 7))
+        ax = fig.add_subplot(111, projection="3d")
+        sc = ax.scatter(
+            points[:, 0], points[:, 1], points[:, 2], c=scalar_field, cmap="viridis", s=10
+        )
+
+        # Add color bar and labels
+        plt.colorbar(sc, label=f"{field[0]}")
+        ax.set_xlabel("X")
+        ax.set_ylabel("Y")
+        ax.set_zlabel("Z")
+        plt.title(f"{field[0]}")
+        plt.savefig(f"../run/{field[0]}.png", dpi=300, bbox_inches="tight")
 
 ##################################################################################################################################
 
@@ -337,6 +346,14 @@ for epoch in range(epochs):
             + validation_loss_other_boundary
         )
 
+        fields = [
+            ("vx", validation_vx),
+            ("vy", validation_vy),
+            ("vz", validation_vz),
+            ("p", validation_p),
+        ]
+        plot_fields(fields)
+
         wandb.log(
             {
                 "Validation Divergence Loss": np.log10(validation_loss_divergence.item()),
@@ -397,26 +414,7 @@ fields = [
     ("vz", validation_vz),
     ("p", validation_p),
 ]
-
-for field in fields:
-    # Convert to numpy for plotting
-    points = validation_points.cpu().detach().numpy()
-    scalar_field = field[1].cpu().detach().numpy()
-
-    # Create a 3D scatter plot
-    fig = plt.figure(figsize=(10, 7))
-    ax = fig.add_subplot(111, projection="3d")
-    sc = ax.scatter(
-        points[:, 0], points[:, 1], points[:, 2], c=scalar_field, cmap="viridis", s=10
-    )
-
-    # Add color bar and labels
-    plt.colorbar(sc, label=f"{field[0]}")
-    ax.set_xlabel("X")
-    ax.set_ylabel("Y")
-    ax.set_zlabel("Z")
-    plt.title(f"{field[0]}")
-    plt.savefig(f"../run/{field[0]}.png", dpi=300, bbox_inches="tight")
+plot_fields(fields)
 
 time.sleep(60)
 if repo.is_dirty(untracked_files=True):
