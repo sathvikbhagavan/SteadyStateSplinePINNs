@@ -28,21 +28,24 @@ epochs = 100
 
 # Physics Constants
 inlet_velocity = 0.5
+p_outlet = 8.35
 rho = 1.010427
 mu = 2.02e-5
+debug = True
 
-run = wandb.init(
-    # set the wandb project where this run will be logged
-    project="Spline-PINNs_with_validation",
-    # track hyperparameters and run metadata
-    config={
-        "optimizer": "LBFGS",
-        "architecture": "Unet",
-        "epochs": epochs,
-        "seed": seed,
-        "inlet_velocity": inlet_velocity,
-    },
-)
+if not debug:
+    run = wandb.init(
+        # set the wandb project where this run will be logged
+        project="Spline-PINNs_with_validation",
+        # track hyperparameters and run metadata
+        config={
+            "optimizer": "LBFGS",
+            "architecture": "Unet",
+            "epochs": epochs,
+            "seed": seed,
+            "inlet_velocity": inlet_velocity,
+        },
+    )
 
 np.random.seed(seed)
 random.seed(seed)
@@ -50,7 +53,7 @@ torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 
 # Check for Metal (MPS) device
-device = 'cuda'
+device = 'cpu'
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
@@ -113,11 +116,14 @@ def f(
 
 
 def sample_points(
-    num_volume_points, num_inlet_surface_points, num_other_surface_points, shuffle=True
+    num_volume_points, num_inlet_surface_points, num_outlet_surface_points, num_other_surface_points, shuffle=True
 ):
     # Prepare the sample points
     inlet_surface_points, inlet_surface_labels = get_inlet_surface_points(
         obj, num_inlet_surface_points
+    )
+    outlet_surface_points, outlet_surface_labels = get_outlet_surface_points(
+        obj, num_outlet_surface_points
     )
     other_surface_points, other_surface_labels = get_other_surface_points(
         obj, num_other_surface_points
@@ -125,10 +131,10 @@ def sample_points(
     volume_points, volume_labels = get_volume_points(obj, num_volume_points)
     # Combine points and labels
     all_points = torch.cat(
-        [inlet_surface_points, other_surface_points, volume_points], dim=0
+        [inlet_surface_points, outlet_surface_points, other_surface_points, volume_points], dim=0
     )
     all_labels = torch.cat(
-        [inlet_surface_labels, other_surface_labels, volume_labels], dim=0
+        [inlet_surface_labels, outlet_surface_labels, other_surface_labels, volume_labels], dim=0
     )
     if shuffle:
         permutation = torch.randperm(all_points.size(0))
@@ -195,6 +201,7 @@ def get_fields_and_losses(spline_coeff, points, labels):
         + torch.mean((vy[labels == 1]) ** 2)
         + torch.mean((vz[labels == 1]) ** 2)
     )
+    loss_outlet_boundary = torch.mean((p[labels == 3] - p_outlet)**2)
     loss_other_boundary = (
         torch.mean((vx[labels == 2]) ** 2)
         + torch.mean((vy[labels == 2]) ** 2)
@@ -210,6 +217,7 @@ def get_fields_and_losses(spline_coeff, points, labels):
         loss_momentum_y,
         loss_momentum_z,
         loss_inlet_boundary,
+        loss_outlet_boundary,
         loss_other_boundary,
     )
 
@@ -252,13 +260,13 @@ start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
-validation_points, validation_labels = sample_points(10000, 3000, 8000)
+validation_points, validation_labels = sample_points(10000, 3000, 3000, 8000)
 
 
 for epoch in range(epochs):
     print(f'{epoch+1}/{epochs}')
     def closure():
-        train_points, train_labels = sample_points(10000, 3000, 8000)
+        train_points, train_labels = sample_points(10000, 3000, 3000, 8000)
 
         # Ensure training points allow gradient computation
         train_points.requires_grad_(True)
@@ -278,6 +286,7 @@ for epoch in range(epochs):
             loss_momentum_y,
             loss_momentum_z,
             loss_inlet_boundary,
+            loss_outlet_boundary,
             loss_other_boundary,
         ) = get_fields_and_losses(spline_coeff, train_points, train_labels)
 
@@ -287,20 +296,23 @@ for epoch in range(epochs):
             + loss_momentum_y
             + loss_momentum_z
             + loss_inlet_boundary
+            + loss_outlet_boundary
             + loss_other_boundary
         )
 
-        wandb.log(
-            {
-                "Divergence Loss": np.log10(loss_divergence.item()),
-                "X Momentum Loss": np.log10(loss_momentum_x.item()),
-                "Y Momentum Loss": np.log10(loss_momentum_y.item()),
-                "Z Momentum Loss": np.log10(loss_momentum_z.item()),
-                "Inlet Boundary Loss": np.log10(loss_inlet_boundary.item()),
-                "Other Boundary Loss": np.log10(loss_other_boundary.item()),
-                "Total Loss": np.log10(loss_total.item()),
-            }
-        )
+        if not debug:
+            wandb.log(
+                {
+                    "Divergence Loss": np.log10(loss_divergence.item()),
+                    "X Momentum Loss": np.log10(loss_momentum_x.item()),
+                    "Y Momentum Loss": np.log10(loss_momentum_y.item()),
+                    "Z Momentum Loss": np.log10(loss_momentum_z.item()),
+                    "Inlet Boundary Loss": np.log10(loss_inlet_boundary.item()),
+                    "Outlet Boundary Loss": np.log10(loss_outlet_boundary.item()),
+                    "Other Boundary Loss": np.log10(loss_other_boundary.item()),
+                    "Total Loss": np.log10(loss_total.item()),
+                }
+            )
 
         training_loss_track.append(loss_total.item())
         print(
@@ -309,6 +321,7 @@ for epoch in range(epochs):
             f"Y Momentum Loss: {loss_momentum_y.item()}, "
             f"Z Momentum Loss: {loss_momentum_z.item()}, "
             f"Inlet Boundary Loss: {loss_inlet_boundary.item()}, "
+            f"Outlet Boundary Loss: {loss_outlet_boundary.item()}, "
             f"Other Boundary Loss: {loss_other_boundary.item()}, "
             f"Total Loss: {loss_total.item()}"
         )
@@ -334,6 +347,7 @@ for epoch in range(epochs):
             validation_loss_momentum_y,
             validation_loss_momentum_z,
             validation_loss_inlet_boundary,
+            validation_loss_outlet_boundary,
             validation_loss_other_boundary,
         ) = get_fields_and_losses(spline_coeff, validation_points, validation_labels)
 
@@ -343,6 +357,7 @@ for epoch in range(epochs):
             + validation_loss_momentum_y
             + validation_loss_momentum_z
             + validation_loss_inlet_boundary
+            + validation_loss_outlet_boundary
             + validation_loss_other_boundary
         )
 
@@ -354,21 +369,33 @@ for epoch in range(epochs):
         ]
         plot_fields(fields)
 
-        wandb.log(
-            {
-                "Validation Divergence Loss": np.log10(validation_loss_divergence.item()),
-                "Validation X Momentum Loss": np.log10(validation_loss_momentum_x.item()),
-                "Validation Y Momentum Loss": np.log10(validation_loss_momentum_y.item()),
-                "Validation Z Momentum Loss": np.log10(validation_loss_momentum_z.item()),
-                "Validation Inlet Boundary Loss": np.log10(
-                    validation_loss_inlet_boundary.item()
-                ),
-                "Validation Other Boundary Loss": np.log10(
-                    validation_loss_other_boundary.item()
-                ),
-                "Validation Total Loss": np.log10(validation_loss_total.item()),
-            }
-        )
+        fields = [
+            ("vx", validation_vx),
+            ("vy", validation_vy),
+            ("vz", validation_vz),
+            ("p", validation_p),
+        ]
+        plot_fields(fields)
+
+        if not debug:
+            wandb.log(
+                {
+                    "Validation Divergence Loss": np.log10(validation_loss_divergence.item()),
+                    "Validation X Momentum Loss": np.log10(validation_loss_momentum_x.item()),
+                    "Validation Y Momentum Loss": np.log10(validation_loss_momentum_y.item()),
+                    "Validation Z Momentum Loss": np.log10(validation_loss_momentum_z.item()),
+                    "Validation Inlet Boundary Loss": np.log10(
+                        validation_loss_inlet_boundary.item()
+                    ),
+                    "Validation outlet Boundary Loss": np.log10(
+                        validation_loss_outlet_boundary.item()
+                    ),
+                    "Validation Other Boundary Loss": np.log10(
+                        validation_loss_other_boundary.item()
+                    ),
+                    "Validation Total Loss": np.log10(validation_loss_total.item()),
+                }
+            )
 
         validation_loss_track.append(validation_loss_total.item())
         print(
@@ -377,6 +404,7 @@ for epoch in range(epochs):
             f"Validation Y Momentum Loss: {validation_loss_momentum_y.item()}, "
             f"Validation Z Momentum Loss: {validation_loss_momentum_z.item()}, "
             f"Validation Inlet Boundary Loss: {validation_loss_inlet_boundary.item()}, "
+            f"Validation Outlet Boundary Loss: {validation_loss_outlet_boundary.item()}, "
             f"Validation Other Boundary Loss: {validation_loss_other_boundary.item()}, "
             f"Validation Total Loss: {validation_loss_total.item()}"
         )
@@ -405,6 +433,7 @@ with torch.no_grad():
         validation_loss_momentum_y,
         validation_loss_momentum_z,
         validation_loss_inlet_boundary,
+        validation_loss_outlet_boundary,
         validation_loss_other_boundary,
     ) = get_fields_and_losses(spline_coeff, validation_points, validation_labels)
 
