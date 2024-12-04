@@ -269,12 +269,13 @@ def plot_fields(fields):
 
 obj = trimesh.load("./Baseline_ML4Science.stl")
 
-grid_resolution = np.array([64, 32, 16])
+grid_resolution = np.array([256, 32, 16])
 binary_mask = get_binary_mask(obj, grid_resolution)
 step = obj.bounding_box.extents / (grid_resolution - 1)
 
 # Instantiate the neural network
 unet_model = UNet3D().to(device)
+print(f'Number of parameters in the model is: {sum(p.numel() for p in unet_model.parameters())}')
 optimizer = LBFGS(unet_model.parameters(), line_search_fn='strong_wolfe')
 unet_model.apply(initialize_weights)
 
