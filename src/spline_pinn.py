@@ -55,7 +55,7 @@ torch.set_default_device(device)
 print(f"Using device: {device}")
 
 
-def get_supoort_points(points):
+def get_support_points(points):
     x = points[:, 0]
     y = points[:, 1]
     z = points[:, 2]
@@ -126,7 +126,6 @@ def sample_points(
         obj, num_other_surface_points
     )
     volume_points, volume_labels = get_volume_points(obj, num_volume_points)
-
     # Combine points and labels
     all_points = torch.cat(
         [inlet_surface_points, other_surface_points, volume_points], dim=0
@@ -134,7 +133,6 @@ def sample_points(
     all_labels = torch.cat(
         [inlet_surface_labels, other_surface_labels, volume_labels], dim=0
     )
-
     if shuffle:
         permutation = torch.randperm(all_points.size(0))
         return all_points[permutation], all_labels[permutation]
@@ -143,7 +141,7 @@ def sample_points(
 
 # Calculating various field terms using coefficients
 def get_fields_and_losses(spline_coeff, points, labels):
-    x, y, z, x_supports, y_supports, z_supports = get_supoort_points(points)
+    x, y, z, x_supports, y_supports, z_supports = get_support_points(points)
     vx = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vy = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vz = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)

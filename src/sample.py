@@ -39,7 +39,7 @@ def get_inlet_surface_points(obj, num_points):
     ]
     subset_mesh = obj.submesh([faces_x_zero], only_watertight=False)[0]
     points, _ = trimesh.sample.sample_surface(subset_mesh, count=num_points)
-    inlet_surface_points = torch.tensor(points / 1000.0, dtype=torch.float64)
+    inlet_surface_points = torch.tensor(points, dtype=torch.float64)
     inlet_surface_labels = torch.ones(inlet_surface_points.size(0), dtype=torch.int64)
     return inlet_surface_points, inlet_surface_labels
 
@@ -47,8 +47,11 @@ def get_inlet_surface_points(obj, num_points):
 def get_other_surface_points(obj, num_points):
     threshold = 1e-5
     points, _ = trimesh.sample.sample_surface(obj, count=num_points)
-    filtered_points = points[np.abs(points[:, 0]) > threshold]
-    other_surface_points = torch.tensor(filtered_points / 1000.0, dtype=torch.float64)
+    filtered_points = points[
+        (np.abs(points[:, 0]) > threshold) & 
+        ~((953 - threshold <= points[:, 0]) & (points[:, 0] <= 953 + threshold))
+    ]
+    other_surface_points = torch.tensor(filtered_points, dtype=torch.float64)
     other_surface_labels = 2 * torch.ones(
         other_surface_points.size(0), dtype=torch.int64
     )
@@ -57,7 +60,7 @@ def get_other_surface_points(obj, num_points):
 
 def get_volume_points(obj, num_points):
     volume_points = torch.tensor(
-        trimesh.sample.volume_mesh(obj, num_points) / 1000.0, dtype=torch.float64
+        trimesh.sample.volume_mesh(obj, num_points), dtype=torch.float64
     )
     volume_labels = torch.zeros(volume_points.size(0), dtype=torch.int64)
     return volume_points, volume_labels
