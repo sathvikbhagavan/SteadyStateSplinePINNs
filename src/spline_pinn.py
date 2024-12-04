@@ -144,6 +144,7 @@ def sample_points(
     all_labels = torch.cat(
         [inlet_surface_labels, outlet_surface_labels, other_surface_labels, volume_labels], dim=0
     )
+    print(f'Number of Inlet surface points: {inlet_surface_points.size()[0]}, Outlet surface points: {outlet_surface_points.size()[0]}, volume points: {volume_points.size()[0]}, surface points: {other_surface_points.size()[0]}')
     if shuffle:
         permutation = torch.randperm(all_points.size(0))
         return all_points[permutation], all_labels[permutation]
@@ -281,13 +282,13 @@ start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
-validation_points, validation_labels = sample_points(10000, 3000, 3000, 8000)
+validation_points, validation_labels = sample_points(30000, 3000, 3000, 10000)
 
 
 for epoch in range(epochs):
     print(f'{epoch+1}/{epochs}')
     def closure():
-        train_points, train_labels = sample_points(10000, 3000, 3000, 8000)
+        train_points, train_labels = sample_points(30000, 3000, 3000, 10000)
 
         # Ensure training points allow gradient computation
         train_points.requires_grad_(True)
