@@ -238,7 +238,7 @@ step = obj.bounding_box.extents / (grid_resolution - 1)
 
 # Instantiate the neural network
 unet_model = UNet3D().to(device)
-optimizer = Adam(unet_model.parameters())
+optimizer = LBFGS(unet_model.parameters(), line_search_fn='strong_wolfe')
 unet_model.apply(initialize_weights)
 
 start_time = time.time()
@@ -420,7 +420,7 @@ for field in fields:
     plt.title(f"{field[0]}")
     plt.savefig(f"../run/{field[0]}.png", dpi=300, bbox_inches="tight")
 
-time.sleep(30)
+time.sleep(60)
 if repo.is_dirty(untracked_files=True):
     print("Repository has changes, preparing to commit.")
 
