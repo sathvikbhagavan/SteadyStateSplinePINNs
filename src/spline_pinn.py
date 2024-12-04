@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import os
 from git import Repo
+import plotly.graph_objects as go
 
 # Path to the parent directory of the `src/` folder
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -27,10 +28,17 @@ seed = 42
 epochs = 100
 
 # Physics Constants
-inlet_velocity = 0.5
-p_outlet = 0.835
-rho = 1.010427
-mu = 2.02e-5
+inlet_velocity = 0.318
+p_outlet = (101325 - 17825)/(10**5)
+Tref = 273.15
+T = 298.15
+mu_ref = 1.716e-5
+S = 110.4
+mu = round(mu_ref*(T/Tref)**(1.5)*((Tref+S)/(T+S)), 8)
+M = 28.96/1000
+R = 8.314
+rho = ((p_outlet*10**5)*M)/(R*T)
+
 debug = False
 
 if not debug:
@@ -228,20 +236,33 @@ def plot_fields(fields):
         points = validation_points.cpu().detach().numpy()
         scalar_field = field[1].cpu().detach().numpy()
 
-        # Create a 3D scatter plot
-        fig = plt.figure(figsize=(10, 7))
-        ax = fig.add_subplot(111, projection="3d")
-        sc = ax.scatter(
-            points[:, 0], points[:, 1], points[:, 2], c=scalar_field, cmap="viridis", s=10
+        # Create a 3D scatter plot using Plotly
+        fig = go.Figure(data=[go.Scatter3d(
+            x=points[:, 0],
+            y=points[:, 1],
+            z=points[:, 2],
+            mode='markers',
+            marker=dict(
+                size=5,
+                color=scalar_field,  # Color by scalar field
+                colorscale='Viridis',  # Color map
+                colorbar=dict(title=f"{field[0]}")  # Colorbar with title
+            )
+        )])
+
+        # Update layout with aspectmode='data' to preserve aspect ratio
+        fig.update_layout(
+            scene=dict(
+                xaxis_title="X",
+                yaxis_title="Y",
+                zaxis_title="Z",
+                aspectmode='data'  # Ensures aspect ratio is based on data's extents
+            ),
+            title=f"{field[0]}"
         )
 
-        # Add color bar and labels
-        plt.colorbar(sc, label=f"{field[0]}")
-        ax.set_xlabel("X")
-        ax.set_ylabel("Y")
-        ax.set_zlabel("Z")
-        plt.title(f"{field[0]}")
-        plt.savefig(f"../run/{field[0]}.png", dpi=300, bbox_inches="tight")
+        # Save as HTML (interactive)
+        fig.write_html(f"../run/{field[0]}.html")
 
 ##################################################################################################################################
 
