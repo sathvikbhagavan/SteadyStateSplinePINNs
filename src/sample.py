@@ -46,14 +46,14 @@ def get_inlet_surface_points(obj, num_points):
 def get_outlet_surface_points(obj, num_points):
     threshold = 1e-5
     x_max = obj.vertices[:,0].max()
-    faces_x_zero = [
+    faces_x_max = [
         i
         for i, face in enumerate(obj.faces)
         if np.all(
-            np.abs(obj.vertices[face, 0]) < x_max - threshold
-        )  # Check if all vertices' x-coordinates are 0
+            np.abs(obj.vertices[face, 0] - x_max) < threshold
+        )  # Check if all vertices' x-coordinates are x_max
     ]
-    subset_mesh = obj.submesh([faces_x_zero], only_watertight=False)[0]
+    subset_mesh = obj.submesh([faces_x_max], only_watertight=False)[0]
     points, _ = trimesh.sample.sample_surface(subset_mesh, count=num_points)
     outlet_surface_points = torch.tensor(points, dtype=torch.float64)
     outlet_surface_labels = torch.ones(outlet_surface_points.size(0), dtype=torch.int64)*3
