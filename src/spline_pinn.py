@@ -31,7 +31,7 @@ inlet_velocity = 0.5
 p_outlet = 8.35
 rho = 1.010427
 mu = 2.02e-5
-debug = True
+debug = False
 
 if not debug:
     run = wandb.init(
@@ -53,7 +53,7 @@ torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 
 # Check for Metal (MPS) device
-device = 'cpu'
+device = 'cuda'
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
