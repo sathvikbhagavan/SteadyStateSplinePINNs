@@ -279,8 +279,8 @@ for epoch in range(epochs):
             + loss_momentum_x
             + loss_momentum_y
             + loss_momentum_z
-            + 100 * loss_inlet_boundary
-            + 100 * loss_other_boundary
+            + loss_inlet_boundary
+            + loss_other_boundary
         )
 
         wandb.log(
@@ -335,8 +335,8 @@ for epoch in range(epochs):
             + validation_loss_momentum_x
             + validation_loss_momentum_y
             + validation_loss_momentum_z
-            + 100 * validation_loss_inlet_boundary
-            + 100 * validation_loss_other_boundary
+            + validation_loss_inlet_boundary
+            + validation_loss_other_boundary
         )
 
         wandb.log(
