@@ -126,15 +126,14 @@ def f(
 
 def sample_points(
     num_volume_points,
-    num_inlet_surface_points,
     num_outlet_surface_points,
     num_other_surface_points,
     shuffle=True,
 ):
     # Prepare the sample points
-    inlet_surface_points, inlet_surface_labels = get_inlet_surface_points(
-        obj, num_inlet_surface_points
-    )
+    # inlet_surface_points, inlet_surface_labels = get_inlet_surface_points(
+    #     obj, num_inlet_surface_points
+    # )
     outlet_surface_points, outlet_surface_labels = get_outlet_surface_points(
         obj, num_outlet_surface_points
     )
@@ -145,7 +144,7 @@ def sample_points(
     # Combine points and labels
     all_points = torch.cat(
         [
-            inlet_surface_points,
+            # inlet_surface_points,
             outlet_surface_points,
             other_surface_points,
             volume_points,
@@ -154,7 +153,7 @@ def sample_points(
     )
     all_labels = torch.cat(
         [
-            inlet_surface_labels,
+            # inlet_surface_labels,
             outlet_surface_labels,
             other_surface_labels,
             volume_labels,
@@ -162,12 +161,21 @@ def sample_points(
         dim=0,
     )
     print(
-        f"Number of Inlet surface points: {inlet_surface_points.size()[0]}, Outlet surface points: {outlet_surface_points.size()[0]}, volume points: {volume_points.size()[0]}, surface points: {other_surface_points.size()[0]}"
+        f"Number of Outlet surface points: {outlet_surface_points.size()[0]}, volume points: {volume_points.size()[0]}, surface points: {other_surface_points.size()[0]}"
     )
     if shuffle:
         permutation = torch.randperm(all_points.size(0))
         return all_points[permutation], all_labels[permutation]
     return all_points, all_labels
+
+
+def get_fields(spline_coeff, points):
+    x, y, z, x_supports, y_supports, z_supports = get_support_points(points)
+    vx = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    vy = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    vz = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    p = f(spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    return vx, vy, vz, p
 
 
 # Calculating various field terms using coefficients
@@ -241,11 +249,11 @@ def get_fields_and_losses(spline_coeff, points, labels):
         )
         ** 2
     )
-    loss_inlet_boundary = (
-        torch.mean((vx[labels == 1] - inlet_velocity) ** 2)
-        + torch.mean((vy[labels == 1]) ** 2)
-        + torch.mean((vz[labels == 1]) ** 2)
-    )
+    # loss_inlet_boundary = (
+    #     torch.mean((vx[labels == 1] - inlet_vx) ** 2)
+    #     + torch.mean((vy[labels == 1] - inlet_vy) ** 2)
+    #     + torch.mean((vz[labels == 1] - inlet_vz) ** 2)
+    # )
     loss_outlet_boundary = torch.mean((p[labels == 3] - p_outlet) ** 2)
     loss_other_boundary = (
         torch.mean((vx[labels == 2]) ** 2)
@@ -261,7 +269,7 @@ def get_fields_and_losses(spline_coeff, points, labels):
         loss_momentum_x,
         loss_momentum_y,
         loss_momentum_z,
-        loss_inlet_boundary,
+        # loss_inlet_boundary,
         loss_outlet_boundary,
         loss_other_boundary,
     )
@@ -309,6 +317,30 @@ def plot_fields(fields, train=False):
             fig.write_html(f"../run/{field[0]}.html")
 
 
+inlet = np.load("./dp0/vel_x_inlet.npy")
+inlet_points = torch.tensor(inlet[:, 0:3] * 1000.0)
+vx_inlet_data = torch.tensor(np.load("./dp0/vel_x_inlet.npy")[:, 3])
+vy_inlet_data = torch.tensor(np.load("./dp0/vel_y_inlet.npy")[:, 3])
+vz_inlet_data = torch.tensor(np.load("./dp0/vel_z_inlet.npy")[:, 3])
+
+data_points = torch.tensor(np.load("./dp0/vel_x.npy")[:, 0:3] * 1000.0)
+vx_data = torch.tensor(np.load("./dp0/vel_x.npy")[:, 3])
+vy_data = torch.tensor(np.load("./dp0/vel_y.npy")[:, 3])
+vz_data = torch.tensor(np.load("./dp0/vel_z.npy")[:, 3])
+p_data = torch.tensor(np.load("./dp0/press.npy")[:, 3])
+num_samples = 50000
+# Generate random indices for sampling
+indices = torch.randint(0, data_points.shape[0], (num_samples,))
+
+# Sample points from the first line
+sampled_points = data_points[indices]
+
+# Get the corresponding velocities
+vx_sampled_data = vx_data[indices]
+vy_sampled_data = vy_data[indices]
+vz_sampled_data = vz_data[indices]
+p_sampled_data = p_data[indices] / 10**5
+
 ##################################################################################################################################
 
 obj = trimesh.load("./Baseline_ML4Science.stl")
@@ -329,14 +361,14 @@ start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
-validation_points, validation_labels = sample_points(100000, 3000, 3000, 10000)
+validation_points, validation_labels = sample_points(20000, 3000, 3000, 10000)
 
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
 
     def closure():
-        train_points, train_labels = sample_points(100000, 3000, 3000, 10000)
+        train_points, train_labels = sample_points(20000, 3000, 3000, 10000)
 
         # Ensure training points allow gradient computation
         train_points.requires_grad_(True)
@@ -355,10 +387,27 @@ for epoch in range(epochs):
             loss_momentum_x,
             loss_momentum_y,
             loss_momentum_z,
-            loss_inlet_boundary,
+            # loss_inlet_boundary,
             loss_outlet_boundary,
             loss_other_boundary,
         ) = get_fields_and_losses(spline_coeff, train_points, train_labels)
+
+        vx_inlet, vy_inlet, vz_inlet, _ = get_fields(spline_coeff, inlet_points)
+        loss_inlet_boundary = (
+            torch.mean((vx_inlet - vx_inlet_data) ** 2)
+            + torch.mean((vy_inlet - vy_inlet_data) ** 2)
+            + torch.mean((vz_inlet - vz_inlet_data) ** 2)
+        )
+
+        vx_supervised, vy_supervised, vz_supervised, p_supervised = get_fields(
+            spline_coeff, sampled_points
+        )
+        supervised_loss = (
+            torch.mean((vx_supervised - vx_sampled_data) ** 2)
+            + torch.mean((vy_supervised - vy_sampled_data) ** 2)
+            + torch.mean((vz_supervised - vz_sampled_data) ** 2)
+            + torch.mean((p_supervised - p_sampled_data) ** 2)
+        )
 
         loss_total = (
             loss_divergence
@@ -368,6 +417,7 @@ for epoch in range(epochs):
             + loss_inlet_boundary
             + loss_outlet_boundary
             + loss_other_boundary
+            + supervised_loss
         )
 
         if not debug:
@@ -380,6 +430,7 @@ for epoch in range(epochs):
                     "Inlet Boundary Loss": np.log10(loss_inlet_boundary.item()),
                     "Outlet Boundary Loss": np.log10(loss_outlet_boundary.item()),
                     "Other Boundary Loss": np.log10(loss_other_boundary.item()),
+                    "Supervised Loss": np.log10(supervised_loss.item()),
                     "Total Loss": np.log10(loss_total.item()),
                 }
             )
@@ -393,6 +444,7 @@ for epoch in range(epochs):
             f"Inlet Boundary Loss: {loss_inlet_boundary.item()}, "
             f"Outlet Boundary Loss: {loss_outlet_boundary.item()}, "
             f"Other Boundary Loss: {loss_other_boundary.item()}, "
+            f"Supervised Loss: {supervised_loss.item()}",
             f"Total Loss: {loss_total.item()}"
         )
 
@@ -416,7 +468,7 @@ for epoch in range(epochs):
             validation_loss_momentum_x,
             validation_loss_momentum_y,
             validation_loss_momentum_z,
-            validation_loss_inlet_boundary,
+            # validation_loss_inlet_boundary,
             validation_loss_outlet_boundary,
             validation_loss_other_boundary,
         ) = get_fields_and_losses(spline_coeff, validation_points, validation_labels)
@@ -426,7 +478,7 @@ for epoch in range(epochs):
             + validation_loss_momentum_x
             + validation_loss_momentum_y
             + validation_loss_momentum_z
-            + validation_loss_inlet_boundary
+            # + validation_loss_inlet_boundary
             + validation_loss_outlet_boundary
             + validation_loss_other_boundary
         )
@@ -454,9 +506,9 @@ for epoch in range(epochs):
                     "Validation Z Momentum Loss": np.log10(
                         validation_loss_momentum_z.item()
                     ),
-                    "Validation Inlet Boundary Loss": np.log10(
-                        validation_loss_inlet_boundary.item()
-                    ),
+                    # "Validation Inlet Boundary Loss": np.log10(
+                    #     validation_loss_inlet_boundary.item()
+                    # ),
                     "Validation outlet Boundary Loss": np.log10(
                         validation_loss_outlet_boundary.item()
                     ),
@@ -473,7 +525,7 @@ for epoch in range(epochs):
             f"Validation X Momentum Loss: {validation_loss_momentum_x.item()}, "
             f"Validation Y Momentum Loss: {validation_loss_momentum_y.item()}, "
             f"Validation Z Momentum Loss: {validation_loss_momentum_z.item()}, "
-            f"Validation Inlet Boundary Loss: {validation_loss_inlet_boundary.item()}, "
+            # f"Validation Inlet Boundary Loss: {validation_loss_inlet_boundary.item()}, "
             f"Validation Outlet Boundary Loss: {validation_loss_outlet_boundary.item()}, "
             f"Validation Other Boundary Loss: {validation_loss_other_boundary.item()}, "
             f"Validation Total Loss: {validation_loss_total.item()}"
@@ -502,7 +554,7 @@ with torch.no_grad():
         validation_loss_momentum_x,
         validation_loss_momentum_y,
         validation_loss_momentum_z,
-        validation_loss_inlet_boundary,
+        # validation_loss_inlet_boundary,
         validation_loss_outlet_boundary,
         validation_loss_other_boundary,
     ) = get_fields_and_losses(spline_coeff, validation_points, validation_labels)
