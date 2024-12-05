@@ -30,7 +30,7 @@ def h1(diff, der=0):
     elif der == 1:
         return 3 * abs_diff**2 - 4 * abs_diff + 1
     elif der == 2:
-        return 6 * diff - 4 * abs_diff
+        return 6 * diff - 4 * torch.sign(diff)
 
 
 hermite_kernel_1d = [h0, h1]
