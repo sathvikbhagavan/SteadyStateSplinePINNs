@@ -269,7 +269,7 @@ def plot_fields(fields):
 
 obj = trimesh.load("./Baseline_ML4Science.stl")
 
-grid_resolution = np.array([256, 32, 16])
+grid_resolution = np.array([512, 64, 16])
 binary_mask = get_binary_mask(obj, grid_resolution)
 step = obj.bounding_box.extents / (grid_resolution - 1)
 
