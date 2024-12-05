@@ -74,7 +74,7 @@ def get_support_points(points):
     x_floor = (x // step[0]).long()
     y_floor = (y // step[1]).long()
     z_floor = (z // step[2]).long()
-    x_supports_indices = torch.vstack(
+    x_support_indices = torch.vstack(
         (x_floor, torch.clamp(x_floor + 1, max=grid_resolution[0] - 1))
     )
     y_support_indices = torch.vstack(
@@ -83,7 +83,10 @@ def get_support_points(points):
     z_support_indices = torch.vstack(
         (z_floor, torch.clamp(z_floor + 1, max=grid_resolution[2] - 1))
     )
-    return x, y, z, x_supports_indices, y_support_indices, z_support_indices
+    x_support_indices[0, x_support_indices[0] == x_support_indices[1]] -= 1
+    y_support_indices[0, y_support_indices[0] == y_support_indices[1]] -= 1
+    z_support_indices[0, z_support_indices[0] == z_support_indices[1]] -= 1
+    return x, y, z, x_support_indices, y_support_indices, z_support_indices
 
 
 def f(
@@ -103,12 +106,12 @@ def f(
     for type in range(spline_coeff[channel].shape[0]):
         i, j, k = binary_array(type)
         spline_coeff_ijk = spline_coeff[channel][type]
-        for x_supports_ind in x_supports:
+        for x_support_ind in x_supports:
             for y_support_ind in y_supports:
                 for z_support_ind in z_supports:
                     # One of the 8 grid support points(enclosing cube vertices) for each sample point.
                     support_point_ind = torch.vstack(
-                        (x_supports_ind, y_support_ind, z_support_ind)
+                        (x_support_ind, y_support_ind, z_support_ind)
                     ).T
                     x_indices = support_point_ind[:, 0]
                     y_indices = support_point_ind[:, 1]
