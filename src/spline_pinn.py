@@ -7,6 +7,7 @@ from hermite_spline import *
 from unet import *
 from torch.optim import Adam, LBFGS
 from torch.optim.lr_scheduler import ReduceLROnPlateau
+
 # from tqdm import tqdm
 import time
 import wandb
@@ -29,15 +30,15 @@ epochs = 100
 
 # Physics Constants
 inlet_velocity = 0.318
-p_outlet = (101325 - 17825)/(10**5)
+p_outlet = (101325 - 17825) / (10**5)
 Tref = 273.15
 T = 298.15
 mu_ref = 1.716e-5
 S = 110.4
-mu = round(mu_ref*(T/Tref)**(1.5)*((Tref+S)/(T+S)), 8)
-M = 28.96/1000
+mu = round(mu_ref * (T / Tref) ** (1.5) * ((Tref + S) / (T + S)), 8)
+M = 28.96 / 1000
 R = 8.314
-rho = ((p_outlet*10**5)*M)/(R*T)
+rho = ((p_outlet * 10**5) * M) / (R * T)
 
 debug = False
 
@@ -61,7 +62,7 @@ torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 
 # Check for Metal (MPS) device
-device = 'cuda'
+device = "cuda"
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
@@ -124,7 +125,11 @@ def f(
 
 
 def sample_points(
-    num_volume_points, num_inlet_surface_points, num_outlet_surface_points, num_other_surface_points, shuffle=True
+    num_volume_points,
+    num_inlet_surface_points,
+    num_outlet_surface_points,
+    num_other_surface_points,
+    shuffle=True,
 ):
     # Prepare the sample points
     inlet_surface_points, inlet_surface_labels = get_inlet_surface_points(
@@ -139,12 +144,26 @@ def sample_points(
     volume_points, volume_labels = get_volume_points(obj, num_volume_points)
     # Combine points and labels
     all_points = torch.cat(
-        [inlet_surface_points, outlet_surface_points, other_surface_points, volume_points], dim=0
+        [
+            inlet_surface_points,
+            outlet_surface_points,
+            other_surface_points,
+            volume_points,
+        ],
+        dim=0,
     )
     all_labels = torch.cat(
-        [inlet_surface_labels, outlet_surface_labels, other_surface_labels, volume_labels], dim=0
+        [
+            inlet_surface_labels,
+            outlet_surface_labels,
+            other_surface_labels,
+            volume_labels,
+        ],
+        dim=0,
     )
-    print(f'Number of Inlet surface points: {inlet_surface_points.size()[0]}, Outlet surface points: {outlet_surface_points.size()[0]}, volume points: {volume_points.size()[0]}, surface points: {other_surface_points.size()[0]}')
+    print(
+        f"Number of Inlet surface points: {inlet_surface_points.size()[0]}, Outlet surface points: {outlet_surface_points.size()[0]}, volume points: {volume_points.size()[0]}, surface points: {other_surface_points.size()[0]}"
+    )
     if shuffle:
         permutation = torch.randperm(all_points.size(0))
         return all_points[permutation], all_labels[permutation]
@@ -180,28 +199,45 @@ def get_fields_and_losses(spline_coeff, points, labels):
     vz_yy = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0)
     vz_zz = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2)
     # calculate losses
-    loss_divergence = torch.mean((vx_x + vy_y + vz_z) ** 2)
+    loss_divergence = torch.mean(
+        (vx_x[labels == 0] + vy_y[labels == 0] + vz_z[labels == 0]) ** 2
+    )
     loss_momentum_x = torch.mean(
         (
-            (vx * vx_x + vy * vx_y + vz * vx_z)
-            + (1 / rho) * p_x
-            - (mu / rho) * (vx_xx + vx_yy + vx_zz)
+            (
+                vx[labels == 0] * vx_x[labels == 0]
+                + vy[labels == 0] * vx_y[labels == 0]
+                + vz[labels == 0] * vx_z[labels == 0]
+            )
+            + (1 / rho) * p_x[labels == 0]
+            - (mu / rho)
+            * (vx_xx[labels == 0] + vx_yy[labels == 0] + vx_zz[labels == 0])
         )
         ** 2
     )
     loss_momentum_y = torch.mean(
         (
-            (vx * vy_x + vy * vy_y + vz * vy_z)
-            + (1 / rho) * p_y
-            - (mu / rho) * (vy_xx + vy_yy + vy_zz)
+            (
+                vx[labels == 0] * vy_x[labels == 0]
+                + vy[labels == 0] * vy_y[labels == 0]
+                + vz[labels == 0] * vy_z[labels == 0]
+            )
+            + (1 / rho) * p_y[labels == 0]
+            - (mu / rho)
+            * (vy_xx[labels == 0] + vy_yy[labels == 0] + vy_zz[labels == 0])
         )
         ** 2
     )
     loss_momentum_z = torch.mean(
         (
-            (vx * vz_x + vy * vz_y + vz * vz_z)
-            + (1 / rho) * p_z
-            - (mu / rho) * (vz_xx + vz_yy + vz_zz)
+            (
+                vx[labels == 0] * vz_x[labels == 0]
+                + vy[labels == 0] * vz_y[labels == 0]
+                + vz[labels == 0] * vz_z[labels == 0]
+            )
+            + (1 / rho) * p_z[labels == 0]
+            - (mu / rho)
+            * (vz_xx[labels == 0] + vz_yy[labels == 0] + vz_zz[labels == 0])
         )
         ** 2
     )
@@ -210,7 +246,7 @@ def get_fields_and_losses(spline_coeff, points, labels):
         + torch.mean((vy[labels == 1]) ** 2)
         + torch.mean((vz[labels == 1]) ** 2)
     )
-    loss_outlet_boundary = torch.mean((p[labels == 3] - p_outlet)**2)
+    loss_outlet_boundary = torch.mean((p[labels == 3] - p_outlet) ** 2)
     loss_other_boundary = (
         torch.mean((vx[labels == 2]) ** 2)
         + torch.mean((vy[labels == 2]) ** 2)
@@ -231,25 +267,29 @@ def get_fields_and_losses(spline_coeff, points, labels):
     )
 
 
-def plot_fields(fields):
+def plot_fields(fields, train=False):
     for field in fields:
         # Convert to numpy for plotting
         points = validation_points.cpu().detach().numpy()
         scalar_field = field[1].cpu().detach().numpy()
 
         # Create a 3D scatter plot using Plotly
-        fig = go.Figure(data=[go.Scatter3d(
-            x=points[:, 0],
-            y=points[:, 1],
-            z=points[:, 2],
-            mode='markers',
-            marker=dict(
-                size=5,
-                color=scalar_field,  # Color by scalar field
-                colorscale='Viridis',  # Color map
-                colorbar=dict(title=f"{field[0]}")  # Colorbar with title
-            )
-        )])
+        fig = go.Figure(
+            data=[
+                go.Scatter3d(
+                    x=points[:, 0],
+                    y=points[:, 1],
+                    z=points[:, 2],
+                    mode="markers",
+                    marker=dict(
+                        size=5,
+                        color=scalar_field,  # Color by scalar field
+                        colorscale="Viridis",  # Color map
+                        colorbar=dict(title=f"{field[0]}"),  # Colorbar with title
+                    ),
+                )
+            ]
+        )
 
         # Update layout with aspectmode='data' to preserve aspect ratio
         fig.update_layout(
@@ -257,13 +297,17 @@ def plot_fields(fields):
                 xaxis_title="X",
                 yaxis_title="Y",
                 zaxis_title="Z",
-                aspectmode='data'  # Ensures aspect ratio is based on data's extents
+                aspectmode="data",  # Ensures aspect ratio is based on data's extents
             ),
-            title=f"{field[0]}"
+            title=f"{field[0]}",
         )
 
         # Save as HTML (interactive)
-        fig.write_html(f"../run/{field[0]}.html")
+        if train:
+            fig.write_html(f"../run/{field[0]}_train.html")
+        else:
+            fig.write_html(f"../run/{field[0]}.html")
+
 
 ##################################################################################################################################
 
@@ -275,8 +319,10 @@ step = obj.bounding_box.extents / (grid_resolution - 1)
 
 # Instantiate the neural network
 unet_model = UNet3D().to(device)
-print(f'Number of parameters in the model is: {sum(p.numel() for p in unet_model.parameters())}')
-optimizer = LBFGS(unet_model.parameters(), line_search_fn='strong_wolfe')
+print(
+    f"Number of parameters in the model is: {sum(p.numel() for p in unet_model.parameters())}"
+)
+optimizer = LBFGS(unet_model.parameters(), line_search_fn="strong_wolfe")
 unet_model.apply(initialize_weights)
 
 start_time = time.time()
@@ -287,7 +333,8 @@ validation_points, validation_labels = sample_points(30000, 3000, 3000, 10000)
 
 
 for epoch in range(epochs):
-    print(f'{epoch+1}/{epochs}')
+    print(f"{epoch+1}/{epochs}")
+
     def closure():
         train_points, train_labels = sample_points(30000, 3000, 3000, 10000)
 
@@ -392,21 +439,21 @@ for epoch in range(epochs):
         ]
         plot_fields(fields)
 
-        fields = [
-            ("vx", validation_vx),
-            ("vy", validation_vy),
-            ("vz", validation_vz),
-            ("p", validation_p),
-        ]
-        plot_fields(fields)
-
         if not debug:
             wandb.log(
                 {
-                    "Validation Divergence Loss": np.log10(validation_loss_divergence.item()),
-                    "Validation X Momentum Loss": np.log10(validation_loss_momentum_x.item()),
-                    "Validation Y Momentum Loss": np.log10(validation_loss_momentum_y.item()),
-                    "Validation Z Momentum Loss": np.log10(validation_loss_momentum_z.item()),
+                    "Validation Divergence Loss": np.log10(
+                        validation_loss_divergence.item()
+                    ),
+                    "Validation X Momentum Loss": np.log10(
+                        validation_loss_momentum_x.item()
+                    ),
+                    "Validation Y Momentum Loss": np.log10(
+                        validation_loss_momentum_y.item()
+                    ),
+                    "Validation Z Momentum Loss": np.log10(
+                        validation_loss_momentum_z.item()
+                    ),
                     "Validation Inlet Boundary Loss": np.log10(
                         validation_loss_inlet_boundary.item()
                     ),
@@ -437,7 +484,7 @@ for epoch in range(epochs):
 
 stop_time = time.time()
 print(f"Time taken for training is: {stop_time - start_time}")
-torch.save(unet_model.state_dict(), '../run/unet_model.pt')
+torch.save(unet_model.state_dict(), "../run/unet_model.pt")
 
 ## Plotting
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)

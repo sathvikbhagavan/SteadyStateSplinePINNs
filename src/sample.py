@@ -43,9 +43,10 @@ def get_inlet_surface_points(obj, num_points):
     inlet_surface_labels = torch.ones(inlet_surface_points.size(0), dtype=torch.int64)
     return inlet_surface_points, inlet_surface_labels
 
+
 def get_outlet_surface_points(obj, num_points):
     threshold = 1e-5
-    x_max = obj.vertices[:,0].max()
+    x_max = obj.vertices[:, 0].max()
     faces_x_max = [
         i
         for i, face in enumerate(obj.faces)
@@ -56,16 +57,19 @@ def get_outlet_surface_points(obj, num_points):
     subset_mesh = obj.submesh([faces_x_max], only_watertight=False)[0]
     points, _ = trimesh.sample.sample_surface(subset_mesh, count=num_points)
     outlet_surface_points = torch.tensor(points, dtype=torch.float64)
-    outlet_surface_labels = torch.ones(outlet_surface_points.size(0), dtype=torch.int64)*3
+    outlet_surface_labels = (
+        torch.ones(outlet_surface_points.size(0), dtype=torch.int64) * 3
+    )
     return outlet_surface_points, outlet_surface_labels
+
 
 def get_other_surface_points(obj, num_points):
     threshold = 1e-5
-    x_max = obj.vertices[:,0].max()
+    x_max = obj.vertices[:, 0].max()
     points, _ = trimesh.sample.sample_surface(obj, count=num_points)
     filtered_points = points[
-        (np.abs(points[:, 0]) > threshold) & 
-        ~((x_max - threshold <= points[:, 0]) & (points[:, 0] <= x_max + threshold))
+        (np.abs(points[:, 0]) > threshold)
+        & ~((x_max - threshold <= points[:, 0]) & (points[:, 0] <= x_max + threshold))
     ]
     other_surface_points = torch.tensor(filtered_points, dtype=torch.float64)
     other_surface_labels = 2 * torch.ones(
