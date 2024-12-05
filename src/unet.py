@@ -100,4 +100,3 @@ class UNet3D(nn.Module):
 def initialize_weights(m):
     if isinstance(m, torch.nn.Conv3d) or isinstance(m, torch.nn.Linear):
         torch.nn.init.xavier_uniform_(m.weight)
-
