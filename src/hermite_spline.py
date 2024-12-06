@@ -15,24 +15,22 @@ def binary_array(n):
 # Hermite Spline Kernels for 2nd Order
 def h0(diff, der=0):
     abs_diff = torch.abs(diff)
-    match der:
-        case 0:
-            return (1 - abs_diff) ** 2 * (1 + 2 * abs_diff)
-        case 1:
-            return 6 * diff * (abs_diff - 1)
-        case 2:
-            return 12 * abs_diff - 6
+    if der == 0:
+        return (1 - abs_diff) ** 2 * (1 + 2 * abs_diff)
+    elif der == 1:
+        return 6 * diff * (abs_diff - 1)
+    elif der == 2:
+        return 12 * abs_diff - 6
 
 
 def h1(diff, der=0):
     abs_diff = torch.abs(diff)
-    match der:
-        case 0:
-            return diff * (1 - abs_diff) ** 2
-        case 1:
-            return 3 * abs_diff**2 - 4 * abs_diff + 1
-        case 2:
-            return 6 * diff - 4 * abs_diff
+    if der == 0:
+        return diff * (1 - abs_diff) ** 2
+    elif der == 1:
+        return 3 * abs_diff**2 - 4 * abs_diff + 1
+    elif der == 2:
+        return 6 * diff - 4 * torch.sign(diff)
 
 
 hermite_kernel_1d = [h0, h1]
