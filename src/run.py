@@ -12,6 +12,7 @@ import time
 import wandb
 import os
 from git import Repo
+from inference import *
 
 # Path to the parent directory of the `src/` folder
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -253,7 +254,7 @@ for epoch in range(epochs):
             ("vz", validation_vz),
             ("p", validation_p),
         ]
-        plot_fields(fields)
+        plot_fields(fields, validation_points)
 
         if not debug:
             wandb.log(
@@ -338,9 +339,44 @@ fields = [
     ("vz", validation_vz),
     ("p", validation_p),
 ]
-plot_fields(fields)
+plot_fields(fields, validation_points)
 
-time.sleep(60)
+######## Inference
+unet_model.load_state_dict(
+    torch.load(
+        "../run/unet_model.pt",
+        weights_only=True,
+    )
+)
+unet_input = prepare_mesh_for_unet(binary_mask).to(device)
+spline_coeff = unet_model(unet_input)[0]
+
+data_folder_path = "./dp0"
+
+all_points = torch.tensor(
+    np.concatenate(
+        (
+            np.load(os.path.join(data_folder_path, "vel_x_inlet.npy"))[:, :3],
+            np.load(os.path.join(data_folder_path, "vel_x.npy"))[:, :3],
+        )
+    )
+    * 1000
+)
+
+x, y, z, x_supports, y_supports, z_supports = get_support_points(
+    all_points, step, grid_resolution
+)
+vx_pred, vy_pred, vz_pred, p_pred = get_fields(
+    spline_coeff, all_points, step, grid_resolution
+)
+vx_pred = vx_pred.cpu().detach().numpy()
+vy_pred = vy_pred.cpu().detach().numpy()
+vz_pred = vz_pred.cpu().detach().numpy()
+p_pred = p_pred.cpu().detach().numpy()
+
+plot_aginast_data(data_folder_path, vx_pred, vy_pred, vz_pred, p_pred)
+
+time.sleep(120)
 if repo.is_dirty(untracked_files=True):
     print("Repository has changes, preparing to commit.")
 
