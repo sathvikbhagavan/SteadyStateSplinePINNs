@@ -1,73 +1,11 @@
-import trimesh
-import numpy as np
-import random
 import torch
 from sample import *
 from hermite_spline import *
 from unet import *
-from torch.optim import Adam, LBFGS
-from torch.optim.lr_scheduler import ReduceLROnPlateau
-
-# from tqdm import tqdm
-import time
-import wandb
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-import os
-from git import Repo
 import plotly.graph_objects as go
 
-# Path to the parent directory of the `src/` folder
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
-# Initialize the repository at the parent directory level
-repo = Repo(parent_dir)
-
-seed = 42
-
-# Model Hyperparams
-epochs = 100
-
-# Physics Constants
-inlet_velocity = 0.318
-p_outlet = (101325 - 17825) / (10**5)
-Tref = 273.15
-T = 298.15
-mu_ref = 1.716e-5
-S = 110.4
-mu = round(mu_ref * (T / Tref) ** (1.5) * ((Tref + S) / (T + S)), 8)
-M = 28.96 / 1000
-R = 8.314
-rho = ((p_outlet * 10**5) * M) / (R * T)
-
-debug = False
-
-if not debug:
-    run = wandb.init(
-        # set the wandb project where this run will be logged
-        project="Spline-PINNs_with_validation",
-        # track hyperparameters and run metadata
-        config={
-            "optimizer": "LBFGS",
-            "architecture": "Unet",
-            "epochs": epochs,
-            "seed": seed,
-            "inlet_velocity": inlet_velocity,
-        },
-    )
-
-np.random.seed(seed)
-random.seed(seed)
-torch.manual_seed(seed)
-torch.cuda.manual_seed(seed)
-
-# Check for Metal (MPS) device
-device = "cuda"
-torch.set_default_device(device)
-print(f"Using device: {device}")
-
-
-def get_support_points(points):
+def get_support_points(points, step, grid_resolution):
     x = points[:, 0]
     y = points[:, 1]
     z = points[:, 2]
@@ -90,6 +28,7 @@ def get_support_points(points):
 
 
 def f(
+    step,
     spline_coeff,
     channel,
     x,
@@ -128,6 +67,7 @@ def f(
 
 
 def sample_points(
+    obj,
     num_volume_points,
     num_outlet_surface_points,
     num_other_surface_points,
@@ -172,43 +112,85 @@ def sample_points(
     return all_points, all_labels
 
 
-def get_fields(spline_coeff, points):
-    x, y, z, x_supports, y_supports, z_supports = get_support_points(points)
-    vx = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    vy = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    vz = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    p = f(spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+def get_fields(spline_coeff, points, step, grid_resolution):
+    x, y, z, x_supports, y_supports, z_supports = get_support_points(
+        points, step, grid_resolution
+    )
+    vx = f(step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    vy = f(step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     return vx, vy, vz, p
 
 
 # Calculating various field terms using coefficients
-def get_fields_and_losses(spline_coeff, points, labels):
-    x, y, z, x_supports, y_supports, z_supports = get_support_points(points)
-    vx = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    vy = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    vz = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    p = f(spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    vx_x = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0)
-    vx_y = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0)
-    vx_z = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1)
-    vy_x = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0)
-    vy_y = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0)
-    vy_z = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1)
-    vz_x = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0)
-    vz_y = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0)
-    vz_z = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1)
-    p_x = f(spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0)
-    p_y = f(spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0)
-    p_z = f(spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1)
-    vx_xx = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0)
-    vx_yy = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0)
-    vx_zz = f(spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2)
-    vy_xx = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0)
-    vy_yy = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0)
-    vy_zz = f(spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2)
-    vz_xx = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0)
-    vz_yy = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0)
-    vz_zz = f(spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2)
+def get_fields_and_losses(
+    spline_coeff, points, labels, step, grid_resolution, mu, rho, p_outlet
+):
+    x, y, z, x_supports, y_supports, z_supports = get_support_points(
+        points, step, grid_resolution
+    )
+    vx = f(step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    vy = f(step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    vx_x = f(
+        step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0
+    )
+    vx_y = f(
+        step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0
+    )
+    vx_z = f(
+        step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1
+    )
+    vy_x = f(
+        step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0
+    )
+    vy_y = f(
+        step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0
+    )
+    vy_z = f(
+        step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1
+    )
+    vz_x = f(
+        step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0
+    )
+    vz_y = f(
+        step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0
+    )
+    vz_z = f(
+        step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1
+    )
+    p_x = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0)
+    p_y = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0)
+    p_z = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1)
+    vx_xx = f(
+        step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0
+    )
+    vx_yy = f(
+        step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0
+    )
+    vx_zz = f(
+        step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2
+    )
+    vy_xx = f(
+        step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0
+    )
+    vy_yy = f(
+        step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0
+    )
+    vy_zz = f(
+        step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2
+    )
+    vz_xx = f(
+        step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0
+    )
+    vz_yy = f(
+        step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0
+    )
+    vz_zz = f(
+        step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2
+    )
     # calculate losses
     loss_divergence = torch.mean(
         (vx_x[labels == 0] + vy_y[labels == 0] + vz_z[labels == 0]) ** 2
@@ -278,7 +260,7 @@ def get_fields_and_losses(spline_coeff, points, labels):
     )
 
 
-def plot_fields(fields, train=False):
+def plot_fields(fields, validation_points, train=False):
     for field in fields:
         # Convert to numpy for plotting
         points = validation_points.cpu().detach().numpy()
@@ -318,273 +300,3 @@ def plot_fields(fields, train=False):
             fig.write_html(f"../run/{field[0]}_train.html")
         else:
             fig.write_html(f"../run/{field[0]}.html")
-
-
-inlet = np.load("./dp0/vel_x_inlet.npy")
-inlet_points = torch.tensor(inlet[:, 0:3] * 1000.0)
-vx_inlet_data = torch.tensor(np.load("./dp0/vel_x_inlet.npy")[:, 3])
-vy_inlet_data = torch.tensor(np.load("./dp0/vel_y_inlet.npy")[:, 3])
-vz_inlet_data = torch.tensor(np.load("./dp0/vel_z_inlet.npy")[:, 3])
-
-data_points = torch.tensor(np.load("./dp0/vel_x.npy")[:, 0:3] * 1000.0)
-vx_data = torch.tensor(np.load("./dp0/vel_x.npy")[:, 3])
-vy_data = torch.tensor(np.load("./dp0/vel_y.npy")[:, 3])
-vz_data = torch.tensor(np.load("./dp0/vel_z.npy")[:, 3])
-p_data = torch.tensor(np.load("./dp0/press.npy")[:, 3])
-num_samples = 50000
-# Generate random indices for sampling
-indices = torch.randint(0, data_points.shape[0], (num_samples,))
-
-# Sample points from the first line
-sampled_points = data_points[indices]
-
-# Get the corresponding velocities
-vx_sampled_data = vx_data[indices]
-vy_sampled_data = vy_data[indices]
-vz_sampled_data = vz_data[indices]
-p_sampled_data = p_data[indices] / 10**5
-
-##################################################################################################################################
-
-obj = trimesh.load("./Baseline_ML4Science.stl")
-
-grid_resolution = np.array([512, 64, 16])
-binary_mask = get_binary_mask(obj, grid_resolution)
-step = obj.bounding_box.extents / (grid_resolution - 1)
-
-# Instantiate the neural network
-unet_model = UNet3D().to(device)
-print(
-    f"Number of parameters in the model is: {sum(p.numel() for p in unet_model.parameters())}"
-)
-optimizer = LBFGS(unet_model.parameters(), line_search_fn="strong_wolfe")
-unet_model.apply(initialize_weights)
-
-start_time = time.time()
-training_loss_track = []
-validation_loss_track = []
-
-validation_points, validation_labels = sample_points(20000, 3000, 3000, 10000)
-
-
-for epoch in range(epochs):
-    print(f"{epoch+1}/{epochs}")
-
-    def closure():
-        train_points, train_labels = sample_points(20000, 3000, 3000, 10000)
-
-        # Ensure training points allow gradient computation
-        train_points.requires_grad_(True)
-
-        # Get Hermite Spline coefficients from the Unet
-        unet_input = prepare_mesh_for_unet(binary_mask).to(device)
-        spline_coeff = unet_model(unet_input)[0]
-
-        # Calculating various field terms using coefficients
-        (
-            vx,
-            vy,
-            vz,
-            p,
-            loss_divergence,
-            loss_momentum_x,
-            loss_momentum_y,
-            loss_momentum_z,
-            # loss_inlet_boundary,
-            loss_outlet_boundary,
-            loss_other_boundary,
-        ) = get_fields_and_losses(spline_coeff, train_points, train_labels)
-
-        vx_inlet, vy_inlet, vz_inlet, _ = get_fields(spline_coeff, inlet_points)
-        loss_inlet_boundary = (
-            torch.mean((vx_inlet - vx_inlet_data) ** 2)
-            + torch.mean((vy_inlet - vy_inlet_data) ** 2)
-            + torch.mean((vz_inlet - vz_inlet_data) ** 2)
-        )
-
-        vx_supervised, vy_supervised, vz_supervised, p_supervised = get_fields(
-            spline_coeff, sampled_points
-        )
-        supervised_loss = (
-            torch.mean((vx_supervised - vx_sampled_data) ** 2)
-            + torch.mean((vy_supervised - vy_sampled_data) ** 2)
-            + torch.mean((vz_supervised - vz_sampled_data) ** 2)
-            + torch.mean((p_supervised - p_sampled_data) ** 2)
-        )
-
-        loss_total = (
-            loss_divergence
-            + loss_momentum_x
-            + loss_momentum_y
-            + loss_momentum_z
-            + loss_inlet_boundary
-            + loss_outlet_boundary
-            + loss_other_boundary
-            + supervised_loss
-        )
-
-        if not debug:
-            wandb.log(
-                {
-                    "Divergence Loss": np.log10(loss_divergence.item()),
-                    "X Momentum Loss": np.log10(loss_momentum_x.item()),
-                    "Y Momentum Loss": np.log10(loss_momentum_y.item()),
-                    "Z Momentum Loss": np.log10(loss_momentum_z.item()),
-                    "Inlet Boundary Loss": np.log10(loss_inlet_boundary.item()),
-                    "Outlet Boundary Loss": np.log10(loss_outlet_boundary.item()),
-                    "Other Boundary Loss": np.log10(loss_other_boundary.item()),
-                    "Supervised Loss": np.log10(supervised_loss.item()),
-                    "Total Loss": np.log10(loss_total.item()),
-                }
-            )
-
-        training_loss_track.append(loss_total.item())
-        print(
-            f"Divergence Loss: {loss_divergence.item()}, "
-            f"X Momentum Loss: {loss_momentum_x.item()}, "
-            f"Y Momentum Loss: {loss_momentum_y.item()}, "
-            f"Z Momentum Loss: {loss_momentum_z.item()}, "
-            f"Inlet Boundary Loss: {loss_inlet_boundary.item()}, "
-            f"Outlet Boundary Loss: {loss_outlet_boundary.item()}, "
-            f"Other Boundary Loss: {loss_other_boundary.item()}, "
-            f"Supervised Loss: {supervised_loss.item()}",
-            f"Total Loss: {loss_total.item()}"
-        )
-
-        # Using LBFGS optimizer
-        optimizer.zero_grad()
-        loss_total.backward()
-        return loss_total
-
-    # Validation
-    # Switch model to evaluation mode
-    unet_model.eval()
-    unet_input = prepare_mesh_for_unet(binary_mask).to(device)
-    spline_coeff = unet_model(unet_input)[0]
-    with torch.no_grad():
-        (
-            validation_vx,
-            validation_vy,
-            validation_vz,
-            validation_p,
-            validation_loss_divergence,
-            validation_loss_momentum_x,
-            validation_loss_momentum_y,
-            validation_loss_momentum_z,
-            # validation_loss_inlet_boundary,
-            validation_loss_outlet_boundary,
-            validation_loss_other_boundary,
-        ) = get_fields_and_losses(spline_coeff, validation_points, validation_labels)
-
-        validation_loss_total = (
-            validation_loss_divergence
-            + validation_loss_momentum_x
-            + validation_loss_momentum_y
-            + validation_loss_momentum_z
-            # + validation_loss_inlet_boundary
-            + validation_loss_outlet_boundary
-            + validation_loss_other_boundary
-        )
-
-        fields = [
-            ("vx", validation_vx),
-            ("vy", validation_vy),
-            ("vz", validation_vz),
-            ("p", validation_p),
-        ]
-        plot_fields(fields)
-
-        if not debug:
-            wandb.log(
-                {
-                    "Validation Divergence Loss": np.log10(
-                        validation_loss_divergence.item()
-                    ),
-                    "Validation X Momentum Loss": np.log10(
-                        validation_loss_momentum_x.item()
-                    ),
-                    "Validation Y Momentum Loss": np.log10(
-                        validation_loss_momentum_y.item()
-                    ),
-                    "Validation Z Momentum Loss": np.log10(
-                        validation_loss_momentum_z.item()
-                    ),
-                    # "Validation Inlet Boundary Loss": np.log10(
-                    #     validation_loss_inlet_boundary.item()
-                    # ),
-                    "Validation outlet Boundary Loss": np.log10(
-                        validation_loss_outlet_boundary.item()
-                    ),
-                    "Validation Other Boundary Loss": np.log10(
-                        validation_loss_other_boundary.item()
-                    ),
-                    "Validation Total Loss": np.log10(validation_loss_total.item()),
-                }
-            )
-
-        validation_loss_track.append(validation_loss_total.item())
-        print(
-            f"Validation Divergence Loss: {validation_loss_divergence.item()}, "
-            f"Validation X Momentum Loss: {validation_loss_momentum_x.item()}, "
-            f"Validation Y Momentum Loss: {validation_loss_momentum_y.item()}, "
-            f"Validation Z Momentum Loss: {validation_loss_momentum_z.item()}, "
-            # f"Validation Inlet Boundary Loss: {validation_loss_inlet_boundary.item()}, "
-            f"Validation Outlet Boundary Loss: {validation_loss_outlet_boundary.item()}, "
-            f"Validation Other Boundary Loss: {validation_loss_other_boundary.item()}, "
-            f"Validation Total Loss: {validation_loss_total.item()}"
-        )
-
-    unet_model.train()
-    optimizer.step(closure)
-
-stop_time = time.time()
-print(f"Time taken for training is: {stop_time - start_time}")
-torch.save(unet_model.state_dict(), "../run/unet_model.pt")
-
-## Plotting
-unet_input = prepare_mesh_for_unet(binary_mask).to(device)
-spline_coeff = unet_model(unet_input)[0]
-unet_model.eval()
-unet_input = prepare_mesh_for_unet(binary_mask).to(device)
-spline_coeff = unet_model(unet_input)[0]
-with torch.no_grad():
-    (
-        validation_vx,
-        validation_vy,
-        validation_vz,
-        validation_p,
-        validation_loss_divergence,
-        validation_loss_momentum_x,
-        validation_loss_momentum_y,
-        validation_loss_momentum_z,
-        # validation_loss_inlet_boundary,
-        validation_loss_outlet_boundary,
-        validation_loss_other_boundary,
-    ) = get_fields_and_losses(spline_coeff, validation_points, validation_labels)
-
-fields = [
-    ("vx", validation_vx),
-    ("vy", validation_vy),
-    ("vz", validation_vz),
-    ("p", validation_p),
-]
-plot_fields(fields)
-
-time.sleep(60)
-if repo.is_dirty(untracked_files=True):
-    print("Repository has changes, preparing to commit.")
-
-    # Stage all changes in the parent directory
-    repo.git.add(A=True)  # Stages all changes
-
-    # Commit the changes
-    commit_message = f"Running job with run name: {run.name}, url: {run.url}"
-    repo.index.commit(commit_message)
-    print(f"Committed changes with message: {commit_message}")
-
-    # Push changes
-    origin = repo.remote(name="origin")
-    origin.push()
-    print("Pushed changes to the remote repository.")
-else:
-    print("No changes to commit.")
