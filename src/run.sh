@@ -4,5 +4,5 @@
 set -e
 
 # Submit the job to the batch script
-sbatch ./spline_pinn.batch
+sbatch ./inference.batch
 
