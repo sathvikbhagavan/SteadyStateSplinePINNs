@@ -37,7 +37,7 @@ M = 28.96 / 1000
 R = 8.314
 rho = ((p_outlet * 10**5) * M) / (R * T)
 
-debug = False
+debug = True
 
 if not debug:
     run = wandb.init(
@@ -63,18 +63,18 @@ device = "cuda"
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
-
-inlet = np.load("./dp0/vel_x_inlet.npy")
+data_directory = "./processedData/dp1/"
+inlet = np.load(data_directory + "vel_x_inlet.npy")
 inlet_points = torch.tensor(inlet[:, 0:3] * 1000.0)
-vx_inlet_data = torch.tensor(np.load("./dp0/vel_x_inlet.npy")[:, 3])
-vy_inlet_data = torch.tensor(np.load("./dp0/vel_y_inlet.npy")[:, 3])
-vz_inlet_data = torch.tensor(np.load("./dp0/vel_z_inlet.npy")[:, 3])
+vx_inlet_data = torch.tensor(np.load(data_directory + "vel_x_inlet.npy")[:, 3])
+vy_inlet_data = torch.tensor(np.load(data_directory + "vel_y_inlet.npy")[:, 3])
+vz_inlet_data = torch.tensor(np.load(data_directory + "vel_z_inlet.npy")[:, 3])
 
-data_points = torch.tensor(np.load("./dp0/vel_x.npy")[:, 0:3] * 1000.0)
-vx_data = torch.tensor(np.load("./dp0/vel_x.npy")[:, 3])
-vy_data = torch.tensor(np.load("./dp0/vel_y.npy")[:, 3])
-vz_data = torch.tensor(np.load("./dp0/vel_z.npy")[:, 3])
-p_data = torch.tensor(np.load("./dp0/press.npy")[:, 3])
+data_points = torch.tensor(np.load(data_directory + "vel_x.npy")[:, 0:3] * 1000.0)
+vx_data = torch.tensor(np.load(data_directory + "vel_x.npy")[:, 3])
+vy_data = torch.tensor(np.load(data_directory + "vel_y.npy")[:, 3])
+vz_data = torch.tensor(np.load(data_directory + "vel_z.npy")[:, 3])
+p_data = torch.tensor(np.load(data_directory + "press.npy")[:, 3])
 num_samples = 50000
 # Generate random indices for sampling
 indices = torch.randint(0, data_points.shape[0], (num_samples,))
