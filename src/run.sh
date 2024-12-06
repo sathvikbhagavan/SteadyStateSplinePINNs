@@ -4,5 +4,4 @@
 set -e
 
 # Submit the job to the batch script
-sbatch ./inference.batch
-
+sbatch ./run.batch
