@@ -77,6 +77,8 @@ vx_data = torch.tensor(np.load(data_directory + "vel_x.npy")[:, 3])
 vy_data = torch.tensor(np.load(data_directory + "vel_y.npy")[:, 3])
 vz_data = torch.tensor(np.load(data_directory + "vel_z.npy")[:, 3])
 p_data = torch.tensor(np.load(data_directory + "press.npy")[:, 3])
+temp_data = torch.tensor(np.load(data_directory + "temp.npy")[:, 3])
+
 num_samples = 50000
 # Generate random indices for sampling
 indices = torch.randint(0, data_points.shape[0], (num_samples,))
@@ -89,6 +91,8 @@ vx_sampled_data = vx_data[indices]
 vy_sampled_data = vy_data[indices]
 vz_sampled_data = vz_data[indices]
 p_sampled_data = p_data[indices] / 10**5
+temp_sampled_data = temp_data[indices]
+
 
 obj = trimesh.load("./Baseline_ML4Science.stl")
 
@@ -168,6 +172,7 @@ for epoch in range(epochs):
             + torch.mean((vy_supervised - vy_sampled_data) ** 2)
             + torch.mean((vz_supervised - vz_sampled_data) ** 2)
             + torch.mean((p_supervised - p_sampled_data) ** 2)
+            + torch.mean((t_supervised - temp_sampled_data) ** 2)
         )
 
         loss_total = (
