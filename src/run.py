@@ -26,7 +26,6 @@ seed = 42
 epochs = 100
 
 # Physics Constants
-inlet_velocity = 0.318
 p_outlet = (101325 - 17825) / (10**5)
 Tref = 273.15
 T = 298.15
@@ -37,19 +36,18 @@ M = 28.96 / 1000
 R = 8.314
 rho = ((p_outlet * 10**5) * M) / (R * T)
 
-debug = True
+debug = False
 
 if not debug:
     run = wandb.init(
         # set the wandb project where this run will be logged
-        project="Spline-PINNs_with_validation",
+        project="Spline-PINNs_without_heat_dp1",
         # track hyperparameters and run metadata
         config={
             "optimizer": "LBFGS",
             "architecture": "Unet",
             "epochs": epochs,
             "seed": seed,
-            "inlet_velocity": inlet_velocity,
         },
     )
 
