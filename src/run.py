@@ -14,13 +14,13 @@ import os
 from git import Repo
 from inference import *
 
-folder = "dp2"
-Project_name = "Spline-PINNs_without_heat"  # Full_Project_name will be {Project_name}_{folder}
+data_type = "dp2"
+project_name = "Spline-PINNs_without_heat"  # Full_Project_name will be {Project_name}_{folder}
 device = "cuda"                             # Turn this to "cpu" if you are debugging the flow on the CPU
 debug = False                               # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
 
-data_folder = "../preProcessedData/" + folder + "/"
-Full_Project_name = Project_name + "_" + folder
+data_folder = "../preProcessedData/" + data_type + "/"
+Full_Project_name = project_name + "_" + data_type
 
 # Model Hyperparams
 epochs = 100
@@ -38,6 +38,8 @@ rho = ((p_outlet * 10**5) * M) / (R * T)
 
 seed = 42
 
+reynolds_number = {'dp0':'2.2342E+03', 'dp1':'1.2352E+04', 'dp2':'2.5787E+04', 'dp4':'8.2397E+05', 'dp6':'1.4125E+05', 'dp8':'2.0111E+05'}
+
 # Path to the parent directory of the `src/` folder
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -54,6 +56,7 @@ if not debug:
             "architecture": "Unet",
             "epochs": epochs,
             "seed": seed,
+            "reynolds_number": reynolds_number[data_type]
         },
     )
 
