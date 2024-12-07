@@ -7,7 +7,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --output=../run/logs.txt
 
-source /home/bhagavan/CS433/pinns/bin/activate
+source /home/anagupta/CS433/pinns/bin/activate
 
 # Debugging: Check Python and PyTorch
 echo "Python binary: $(which python)"
