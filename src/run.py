@@ -14,13 +14,13 @@ import os
 from git import Repo
 from inference import *
 
-# Path to the parent directory of the `src/` folder
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+folder = "dp1"
+Project_name = "Spline-PINNs_without_heat"  # Full_Project_name will be {Project_name}_{folder}
+device = "cuda"                             # Turn this to "cpu" if you are debugging the flow on the CPU
+debug = False                               # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
 
-# Initialize the repository at the parent directory level
-repo = Repo(parent_dir)
-
-seed = 42
+data_folder = "./preProcessedData/" + folder + "/"
+Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
 epochs = 100
@@ -36,12 +36,18 @@ M = 28.96 / 1000
 R = 8.314
 rho = ((p_outlet * 10**5) * M) / (R * T)
 
-debug = False
+seed = 42
+
+# Path to the parent directory of the `src/` folder
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+# Initialize the repository at the parent directory level
+repo = Repo(parent_dir)
 
 if not debug:
     run = wandb.init(
         # set the wandb project where this run will be logged
-        project="Spline-PINNs_without_heat_dp1",
+        project=Full_Project_name,
         # track hyperparameters and run metadata
         config={
             "optimizer": "LBFGS",
@@ -57,22 +63,20 @@ torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 
 # Check for Metal (MPS) device
-device = "cuda"
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
-data_directory = "./processedData/dp1/"
-inlet = np.load(data_directory + "vel_x_inlet.npy")
+inlet = np.load(data_folder + "vel_x_inlet.npy")
 inlet_points = torch.tensor(inlet[:, 0:3] * 1000.0)
-vx_inlet_data = torch.tensor(np.load(data_directory + "vel_x_inlet.npy")[:, 3])
-vy_inlet_data = torch.tensor(np.load(data_directory + "vel_y_inlet.npy")[:, 3])
-vz_inlet_data = torch.tensor(np.load(data_directory + "vel_z_inlet.npy")[:, 3])
+vx_inlet_data = torch.tensor(np.load(data_folder + "vel_x_inlet.npy")[:, 3])
+vy_inlet_data = torch.tensor(np.load(data_folder + "vel_y_inlet.npy")[:, 3])
+vz_inlet_data = torch.tensor(np.load(data_folder + "vel_z_inlet.npy")[:, 3])
 
-data_points = torch.tensor(np.load(data_directory + "vel_x.npy")[:, 0:3] * 1000.0)
-vx_data = torch.tensor(np.load(data_directory + "vel_x.npy")[:, 3])
-vy_data = torch.tensor(np.load(data_directory + "vel_y.npy")[:, 3])
-vz_data = torch.tensor(np.load(data_directory + "vel_z.npy")[:, 3])
-p_data = torch.tensor(np.load(data_directory + "press.npy")[:, 3])
+data_points = torch.tensor(np.load(data_folder + "vel_x.npy")[:, 0:3] * 1000.0)
+vx_data = torch.tensor(np.load(data_folder + "vel_x.npy")[:, 3])
+vy_data = torch.tensor(np.load(data_folder + "vel_y.npy")[:, 3])
+vz_data = torch.tensor(np.load(data_folder + "vel_z.npy")[:, 3])
+p_data = torch.tensor(np.load(data_folder + "press.npy")[:, 3])
 num_samples = 50000
 # Generate random indices for sampling
 indices = torch.randint(0, data_points.shape[0], (num_samples,))
@@ -349,13 +353,11 @@ unet_model.load_state_dict(
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)
 spline_coeff = unet_model(unet_input)[0]
 
-data_folder_path = "./dp0"
-
 all_points = torch.tensor(
     np.concatenate(
         (
-            np.load(os.path.join(data_folder_path, "vel_x_inlet.npy"))[:, :3],
-            np.load(os.path.join(data_folder_path, "vel_x.npy"))[:, :3],
+            np.load(os.path.join(data_folder, "vel_x_inlet.npy"))[:, :3],
+            np.load(os.path.join(data_folder, "vel_x.npy"))[:, :3],
         )
     )
     * 1000
@@ -372,7 +374,7 @@ vy_pred = vy_pred.cpu().detach().numpy()
 vz_pred = vz_pred.cpu().detach().numpy()
 p_pred = p_pred.cpu().detach().numpy()
 
-plot_aginast_data(data_folder_path, vx_pred, vy_pred, vz_pred, p_pred)
+plot_aginast_data(data_folder, vx_pred, vy_pred, vz_pred, p_pred)
 
 time.sleep(120)
 if repo.is_dirty(untracked_files=True):
