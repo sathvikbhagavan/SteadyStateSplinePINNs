@@ -14,12 +14,12 @@ import os
 from git import Repo
 from inference import *
 
-folder = "dp1"
+folder = "dp2"
 Project_name = "Spline-PINNs_without_heat"  # Full_Project_name will be {Project_name}_{folder}
 device = "cuda"                             # Turn this to "cpu" if you are debugging the flow on the CPU
 debug = False                               # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
 
-data_folder = "./preProcessedData/" + folder + "/"
+data_folder = "../preProcessedData/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
