@@ -4,6 +4,20 @@ from hermite_spline import *
 from unet import *
 import plotly.graph_objects as go
 
+def dynamic_viscosity(T, mu_ref=1.716e-5, T_ref=273.15, S=110.4):
+    """
+    Calculate dynamic viscosity using Sutherland's law.
+    
+    Args:
+        T: Temperature field (tensor).
+        mu_ref: Reference viscosity (default: 1.716e-5 Pa.s).
+        T_ref: Reference temperature (default: 273.15 K).
+        S: Sutherland constant (default: 110.4 K).
+    
+    Returns:
+        Tensor of dynamic viscosity values.
+    """
+    return mu_ref * (T / T_ref) ** 1.5 * (T_ref + S) / (T + S)
 
 def get_support_points(points, step, grid_resolution):
     x = points[:, 0]
@@ -120,12 +134,14 @@ def get_fields(spline_coeff, points, step, grid_resolution):
     vy = f(step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    return vx, vy, vz, p
+    T = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+
+    return vx, vy, vz, p, T
 
 
 # Calculating various field terms using coefficients
 def get_fields_and_losses(
-    spline_coeff, points, labels, step, grid_resolution, mu, rho, p_outlet
+    spline_coeff, points, labels, step, grid_resolution, mu, rho, p_outlet, thermal_conductivity
 ):
     x, y, z, x_supports, y_supports, z_supports = get_support_points(
         points, step, grid_resolution
@@ -134,6 +150,7 @@ def get_fields_and_losses(
     vy = f(step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    T = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vx_x = f(
         step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0
     )
@@ -191,10 +208,22 @@ def get_fields_and_losses(
     vz_zz = f(
         step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2
     )
+    T_x =  f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0)
+    T_y = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0)
+    T_z = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1)
+    T_xx = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0)
+    T_yy = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0)
+    T_zz = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2)
+
     # calculate losses
+    # Divergence-free condition
     loss_divergence = torch.mean(
         (vx_x[labels == 0] + vy_y[labels == 0] + vz_z[labels == 0]) ** 2
     )
+
+    # Momentum equations (including temperature-dependent viscosity)
+    #mu = dynamic_viscosity(T)
+
     loss_momentum_x = torch.mean(
         (
             (
@@ -234,6 +263,12 @@ def get_fields_and_losses(
         )
         ** 2
     )
+
+    # Heat equation
+    loss_heat = torch.mean(
+        (thermal_conductivity * (T_xx[labels == 0] + T_yy[labels == 0] + T_zz[labels == 0])) ** 2
+    )
+
     # loss_inlet_boundary = (
     #     torch.mean((vx[labels == 1] - inlet_vx) ** 2)
     #     + torch.mean((vy[labels == 1] - inlet_vy) ** 2)
@@ -257,6 +292,7 @@ def get_fields_and_losses(
         # loss_inlet_boundary,
         loss_outlet_boundary,
         loss_other_boundary,
+        loss_heat
     )
 
 

@@ -19,7 +19,7 @@ def prepare_mesh_for_unet(binary_mask):
 
 
 class UNet3D(nn.Module):
-    def __init__(self, in_channels=1, out_channels=4, coefficients_per_channel=8):
+    def __init__(self, in_channels=1, out_channels=5, coefficients_per_channel=8):
         super(UNet3D, self).__init__()
 
         # Encoder (Contracting Path)

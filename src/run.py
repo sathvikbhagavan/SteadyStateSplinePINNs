@@ -32,10 +32,12 @@ Tref = 273.15
 T = 298.15
 mu_ref = 1.716e-5
 S = 110.4
-mu = round(mu_ref * (T / Tref) ** (1.5) * ((Tref + S) / (T + S)), 8)
+#mu = round(mu_ref * (T / Tref) ** (1.5) * ((Tref + S) / (T + S)), 8)
+mu = dynamic_viscosity(T)
 M = 28.96 / 1000
 R = 8.314
 rho = ((p_outlet * 10**5) * M) / (R * T)
+thermal_conductivity = 2.61E-02
 
 debug = True
 
@@ -135,6 +137,7 @@ for epoch in range(epochs):
             # loss_inlet_boundary,
             loss_outlet_boundary,
             loss_other_boundary,
+            loss_heat
         ) = get_fields_and_losses(
             spline_coeff,
             train_points,
@@ -144,9 +147,11 @@ for epoch in range(epochs):
             mu,
             rho,
             p_outlet,
+            thermal_conductivity,
+
         )
 
-        vx_inlet, vy_inlet, vz_inlet, _ = get_fields(
+        vx_inlet, vy_inlet, vz_inlet, _, T = get_fields(
             spline_coeff, inlet_points, step, grid_resolution
         )
         loss_inlet_boundary = (
@@ -155,7 +160,7 @@ for epoch in range(epochs):
             + torch.mean((vz_inlet - vz_inlet_data) ** 2)
         )
 
-        vx_supervised, vy_supervised, vz_supervised, p_supervised = get_fields(
+        vx_supervised, vy_supervised, vz_supervised, p_supervised, t_supervised = get_fields(
             spline_coeff, sampled_points, step, grid_resolution
         )
         supervised_loss = (
@@ -174,6 +179,7 @@ for epoch in range(epochs):
             + loss_outlet_boundary
             + loss_other_boundary
             + supervised_loss
+            + loss_heat
         )
 
         if not debug:
@@ -187,6 +193,7 @@ for epoch in range(epochs):
                     "Outlet Boundary Loss": np.log10(loss_outlet_boundary.item()),
                     "Other Boundary Loss": np.log10(loss_other_boundary.item()),
                     "Supervised Loss": np.log10(supervised_loss.item()),
+                    "Heat Loss": np.log10(loss_heat.item()),
                     "Total Loss": np.log10(loss_total.item()),
                 }
             )
@@ -201,6 +208,7 @@ for epoch in range(epochs):
             f"Outlet Boundary Loss: {loss_outlet_boundary.item()}, "
             f"Other Boundary Loss: {loss_other_boundary.item()}, "
             f"Supervised Loss: {supervised_loss.item()}",
+            f"Heat Loss: {loss_heat.item()}",
             f"Total Loss: {loss_total.item()}",
         )
 
@@ -227,6 +235,7 @@ for epoch in range(epochs):
             # validation_loss_inlet_boundary,
             validation_loss_outlet_boundary,
             validation_loss_other_boundary,
+            validation_loss_heat,
         ) = get_fields_and_losses(
             spline_coeff,
             validation_points,
@@ -236,6 +245,8 @@ for epoch in range(epochs):
             mu,
             rho,
             p_outlet,
+            thermal_conductivity,
+   
         )
 
         validation_loss_total = (
@@ -246,6 +257,7 @@ for epoch in range(epochs):
             # + validation_loss_inlet_boundary
             + validation_loss_outlet_boundary
             + validation_loss_other_boundary
+            + validation_loss_heat
         )
 
         fields = [
@@ -280,6 +292,9 @@ for epoch in range(epochs):
                     "Validation Other Boundary Loss": np.log10(
                         validation_loss_other_boundary.item()
                     ),
+                    "Validation Heat Loss": np.log10(
+                        validation_loss_heat.item()
+                    ),
                     "Validation Total Loss": np.log10(validation_loss_total.item()),
                 }
             )
@@ -293,6 +308,7 @@ for epoch in range(epochs):
             # f"Validation Inlet Boundary Loss: {validation_loss_inlet_boundary.item()}, "
             f"Validation Outlet Boundary Loss: {validation_loss_outlet_boundary.item()}, "
             f"Validation Other Boundary Loss: {validation_loss_other_boundary.item()}, "
+            f"Validation Heat Loss: {validation_loss_heat.item()}, "
             f"Validation Total Loss: {validation_loss_total.item()}"
         )
 
@@ -322,6 +338,7 @@ with torch.no_grad():
         # validation_loss_inlet_boundary,
         validation_loss_outlet_boundary,
         validation_loss_other_boundary,
+        validation_loss_heat,
     ) = get_fields_and_losses(
         spline_coeff,
         validation_points,
@@ -331,6 +348,8 @@ with torch.no_grad():
         mu,
         rho,
         p_outlet,
+        thermal_conductivity,
+
     )
 
 fields = [
