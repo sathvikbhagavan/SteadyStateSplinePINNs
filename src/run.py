@@ -19,7 +19,7 @@ Project_name = "Spline-PINNs_without_heat"  # Full_Project_name will be {Project
 device = "cuda"                             # Turn this to "cpu" if you are debugging the flow on the CPU
 debug = False                               # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
 
-data_folder = "./preProcessedData/" + folder + "/"
+data_folder = "./preProcessedData/without_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
