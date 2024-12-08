@@ -25,7 +25,7 @@ data_folder = "./preProcessedData/without_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
-epochs = 20
+epochs = 100
 
 # Physics Constants
 p_outlet = (101325 - 17825) / (10**5)
@@ -109,14 +109,14 @@ start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
-validation_points, validation_labels = sample_points(obj, 20000, 3000, 3000, 10000)
+validation_points, validation_labels = sample_points(obj, 30000, 3000, 20000)
 
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
 
     def closure():
-        train_points, train_labels = sample_points(obj, 20000, 3000, 3000, 10000)
+        train_points, train_labels = sample_points(obj, 30000, 3000, 20000)
 
         # Ensure training points allow gradient computation
         train_points.requires_grad_(True)
@@ -176,7 +176,7 @@ for epoch in range(epochs):
             + loss_inlet_boundary
             + loss_outlet_boundary
             + loss_other_boundary
-            + supervised_loss
+            + 10*supervised_loss
         )
 
         if not debug:
