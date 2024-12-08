@@ -15,15 +15,17 @@ from git import Repo
 from inference import *
 
 folder = "dp1"
-Project_name = "Spline-PINNs_without_heat"  # Full_Project_name will be {Project_name}_{folder}
-device = "cuda"                             # Turn this to "cpu" if you are debugging the flow on the CPU
-debug = False                               # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
+Project_name = (
+    "Spline-PINNs_without_heat"  # Full_Project_name will be {Project_name}_{folder}
+)
+device = "cuda"  # Turn this to "cpu" if you are debugging the flow on the CPU
+debug = False  # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
 
 data_folder = "./preProcessedData/without_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
-epochs = 100
+epochs = 20
 
 # Physics Constants
 p_outlet = (101325 - 17825) / (10**5)
@@ -62,7 +64,6 @@ random.seed(seed)
 torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 
-# Check for Metal (MPS) device
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
@@ -344,10 +345,12 @@ fields = [
 plot_fields(fields, validation_points)
 
 ######## Inference
+device = "cpu"
+torch.set_default_device(device)
+unet_model = UNet3D().to(device)
 unet_model.load_state_dict(
     torch.load(
-        "../run/unet_model.pt",
-        weights_only=True,
+        "../run/unet_model.pt", weights_only=True, map_location=torch.device("cpu")
     )
 )
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)
