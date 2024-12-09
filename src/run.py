@@ -168,7 +168,7 @@ for epoch in range(epochs):
             + loss_momentum_x
             + loss_momentum_y
             + loss_momentum_z
-            + 10*loss_inlet_boundary
+            + 20*loss_inlet_boundary
             + loss_outlet_boundary
             + loss_other_boundary
             + 10*supervised_loss
