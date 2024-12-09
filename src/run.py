@@ -2,6 +2,7 @@ import trimesh
 import numpy as np
 import random
 import torch
+torch.set_default_dtype(torch.float64)
 from sample import *
 from hermite_spline import *
 from unet import *
@@ -104,20 +105,20 @@ print(
 )
 optimizer = LBFGS(unet_model.parameters(), line_search_fn="strong_wolfe")
 unet_model.apply(initialize_weights)
+unet_model = unet_model.double()
 
 start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
 validation_points, validation_labels = sample_points(obj, 30000, 3000, 20000)
-
+unet_input = prepare_mesh_for_unet(binary_mask).to(device)
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
     train_points, train_labels = sample_points(obj, 30000, 3000, 20000)
     def closure():
         # Get Hermite Spline coefficients from the Unet
-        unet_input = prepare_mesh_for_unet(binary_mask).to(device)
         spline_coeff = unet_model(unet_input)[0]
 
         # Calculating various field terms using coefficients
@@ -210,7 +211,6 @@ for epoch in range(epochs):
     # Validation
     # Switch model to evaluation mode
     unet_model.eval()
-    unet_input = prepare_mesh_for_unet(binary_mask).to(device)
     spline_coeff = unet_model(unet_input)[0]
     with torch.no_grad():
         (
