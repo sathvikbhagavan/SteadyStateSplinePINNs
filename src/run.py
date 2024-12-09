@@ -114,13 +114,8 @@ validation_points, validation_labels = sample_points(obj, 30000, 3000, 20000)
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
-
+    train_points, train_labels = sample_points(obj, 30000, 3000, 20000)
     def closure():
-        train_points, train_labels = sample_points(obj, 30000, 3000, 20000)
-
-        # Ensure training points allow gradient computation
-        train_points.requires_grad_(True)
-
         # Get Hermite Spline coefficients from the Unet
         unet_input = prepare_mesh_for_unet(binary_mask).to(device)
         spline_coeff = unet_model(unet_input)[0]
@@ -173,7 +168,7 @@ for epoch in range(epochs):
             + loss_momentum_x
             + loss_momentum_y
             + loss_momentum_z
-            + loss_inlet_boundary
+            + 10*loss_inlet_boundary
             + loss_outlet_boundary
             + loss_other_boundary
             + 10*supervised_loss
