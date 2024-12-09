@@ -141,7 +141,7 @@ def get_fields(spline_coeff, points, step, grid_resolution):
 
 # Calculating various field terms using coefficients
 def get_fields_and_losses(
-    spline_coeff, points, labels, step, grid_resolution, mu, rho, p_outlet, thermal_conductivity, density, specific_heat
+    spline_coeff, points, labels, step, grid_resolution, T, rho, p_outlet, thermal_conductivity, density, specific_heat
 ):
     x, y, z, x_supports, y_supports, z_supports = get_support_points(
         points, step, grid_resolution
@@ -222,7 +222,7 @@ def get_fields_and_losses(
     )
 
     # Momentum equations (including temperature-dependent viscosity)
-    #mu = dynamic_viscosity(T)
+    mu = dynamic_viscosity(T)
 
     loss_momentum_x = torch.mean(
         (
@@ -232,7 +232,7 @@ def get_fields_and_losses(
                 + vz[labels == 0] * vx_z[labels == 0]
             )
             + (1 / rho) * p_x[labels == 0]
-            - (mu / rho)
+            - (mu[labels == 0] / rho)
             * (vx_xx[labels == 0] + vx_yy[labels == 0] + vx_zz[labels == 0])
         )
         ** 2
@@ -245,7 +245,7 @@ def get_fields_and_losses(
                 + vz[labels == 0] * vy_z[labels == 0]
             )
             + (1 / rho) * p_y[labels == 0]
-            - (mu / rho)
+            - (mu[labels == 0] / rho)
             * (vy_xx[labels == 0] + vy_yy[labels == 0] + vy_zz[labels == 0])
         )
         ** 2
@@ -258,7 +258,7 @@ def get_fields_and_losses(
                 + vz[labels == 0] * vz_z[labels == 0]
             )
             + (1 / rho) * p_z[labels == 0]
-            - (mu / rho)
+            - (mu[labels == 0] / rho)
             * (vz_xx[labels == 0] + vz_yy[labels == 0] + vz_zz[labels == 0])
         )
         ** 2

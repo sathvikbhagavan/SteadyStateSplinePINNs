@@ -29,14 +29,14 @@ epochs = 100
 inlet_velocity = 0.318
 p_outlet = (101325 - 17825) / (10**5)
 Tref = 273.15
-T = 298.15
+T_cons = 298.15
 mu_ref = 1.716e-5
 S = 110.4
 #mu = round(mu_ref * (T / Tref) ** (1.5) * ((Tref + S) / (T + S)), 8)
-mu = dynamic_viscosity(T)
+#mu = dynamic_viscosity(T)
 M = 28.96 / 1000
 R = 8.314
-rho = ((p_outlet * 10**5) * M) / (R * T)
+rho = ((p_outlet * 10**5) * M) / (R * T_cons)
 thermal_conductivity = 2.61E-02
 specific_heat = 1.00E+03  #at constant pressure
 density = 9.7118E-01  # kg/m^3
@@ -67,7 +67,7 @@ device = "cuda"
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
-data_directory = "./processedData/with_T/dp0"
+data_directory = "./processedData/with_T/dp0/"
 inlet = np.load(data_directory + "vel_x_inlet.npy")
 inlet_points = torch.tensor(inlet[:, 0:3] * 1000.0)
 vx_inlet_data = torch.tensor(np.load(data_directory + "vel_x_inlet.npy")[:, 3])
@@ -130,6 +130,11 @@ for epoch in range(epochs):
         unet_input = prepare_mesh_for_unet(binary_mask).to(device)
         spline_coeff = unet_model(unet_input)[0]
 
+
+        vx_inlet, vy_inlet, vz_inlet, _, T = get_fields(
+            spline_coeff, inlet_points, step, grid_resolution
+        )
+
         # Calculating various field terms using coefficients
         (
             _,
@@ -150,7 +155,7 @@ for epoch in range(epochs):
             train_labels,
             step,
             grid_resolution,
-            mu,
+            T,
             rho,
             p_outlet,
             thermal_conductivity,
@@ -159,9 +164,7 @@ for epoch in range(epochs):
 
         )
 
-        vx_inlet, vy_inlet, vz_inlet, _, T = get_fields(
-            spline_coeff, inlet_points, step, grid_resolution
-        )
+        
         loss_inlet_boundary = (
             torch.mean((vx_inlet - vx_inlet_data) ** 2)
             + torch.mean((vy_inlet - vy_inlet_data) ** 2)
@@ -231,6 +234,10 @@ for epoch in range(epochs):
     unet_model.eval()
     unet_input = prepare_mesh_for_unet(binary_mask).to(device)
     spline_coeff = unet_model(unet_input)[0]
+
+    # Recompute T outside the closure
+    _, _, _, _, T = get_fields(spline_coeff, validation_points, step, grid_resolution)
+
     with torch.no_grad():
         (
             validation_vx,
@@ -251,7 +258,7 @@ for epoch in range(epochs):
             validation_labels,
             step,
             grid_resolution,
-            mu,
+            T,
             rho,
             p_outlet,
             thermal_conductivity,
@@ -276,6 +283,7 @@ for epoch in range(epochs):
             ("vy", validation_vy),
             ("vz", validation_vz),
             ("p", validation_p),
+            ("temp", validation_loss_heat)
         ]
         plot_fields(fields, validation_points)
 
@@ -356,7 +364,7 @@ with torch.no_grad():
         validation_labels,
         step,
         grid_resolution,
-        mu,
+        T,
         rho,
         p_outlet,
         thermal_conductivity,
@@ -370,6 +378,7 @@ fields = [
     ("vy", validation_vy),
     ("vz", validation_vz),
     ("p", validation_p),
+    ("temp", validation_loss_heat)
 ]
 plot_fields(fields, validation_points)
 
@@ -398,7 +407,7 @@ all_points = torch.tensor(
 x, y, z, x_supports, y_supports, z_supports = get_support_points(
     all_points, step, grid_resolution
 )
-vx_pred, vy_pred, vz_pred, p_pred = get_fields(
+vx_pred, vy_pred, vz_pred, p_pred, T_pred = get_fields(
     spline_coeff, all_points, step, grid_resolution
 )
 vx_pred = vx_pred.cpu().detach().numpy()
