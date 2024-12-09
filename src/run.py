@@ -14,7 +14,7 @@ import os
 from git import Repo
 from inference import *
 
-data_type = "dp2"
+data_type = "dp4"
 project_name = "Spline-PINNs_without_heat"  # Full_Project_name will be {Project_name}_{folder}
 device = "cuda"                             # Turn this to "cpu" if you are debugging the flow on the CPU
 debug = False                               # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
