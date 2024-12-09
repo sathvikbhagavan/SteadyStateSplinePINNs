@@ -14,7 +14,7 @@ import os
 from git import Repo
 from inference import *
 
-folder = "dp1"
+folder = "dp2"
 Project_name = (
     "Spline-PINNs_without_heat"  # Full_Project_name will be {Project_name}_{folder}
 )
