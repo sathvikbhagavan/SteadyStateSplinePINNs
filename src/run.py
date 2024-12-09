@@ -67,7 +67,7 @@ device = "cuda"
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
-data_directory = "./processedData/dp1/"
+data_directory = "./processedData/dp0_withT/"
 inlet = np.load(data_directory + "vel_x_inlet.npy")
 inlet_points = torch.tensor(inlet[:, 0:3] * 1000.0)
 vx_inlet_data = torch.tensor(np.load(data_directory + "vel_x_inlet.npy")[:, 3])
