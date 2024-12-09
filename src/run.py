@@ -2,6 +2,7 @@ import trimesh
 import numpy as np
 import random
 import torch
+torch.set_default_dtype(torch.float64)
 from sample import *
 from hermite_spline import *
 from unet import *
@@ -14,10 +15,12 @@ import os
 from git import Repo
 from inference import *
 
-folder = "dp1"
-Project_name = "Spline-PINNs_without_heat"  # Full_Project_name will be {Project_name}_{folder}
-device = "cuda"                             # Turn this to "cpu" if you are debugging the flow on the CPU
-debug = False                               # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
+folder = "dp4"
+Project_name = (
+    "Spline-PINNs_without_heat"  # Full_Project_name will be {Project_name}_{folder}
+)
+device = "cuda"  # Turn this to "cpu" if you are debugging the flow on the CPU
+debug = False  # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
 
 data_folder = "./preProcessedData/without_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
@@ -62,7 +65,6 @@ random.seed(seed)
 torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 
-# Check for Metal (MPS) device
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
@@ -103,25 +105,20 @@ print(
 )
 optimizer = LBFGS(unet_model.parameters(), line_search_fn="strong_wolfe")
 unet_model.apply(initialize_weights)
+unet_model = unet_model.double()
 
 start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
-validation_points, validation_labels = sample_points(obj, 20000, 3000, 3000, 10000)
-
+validation_points, validation_labels = sample_points(obj, 30000, 3000, 20000)
+unet_input = prepare_mesh_for_unet(binary_mask).to(device)
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
-
+    train_points, train_labels = sample_points(obj, 30000, 3000, 20000)
     def closure():
-        train_points, train_labels = sample_points(obj, 20000, 3000, 3000, 10000)
-
-        # Ensure training points allow gradient computation
-        train_points.requires_grad_(True)
-
         # Get Hermite Spline coefficients from the Unet
-        unet_input = prepare_mesh_for_unet(binary_mask).to(device)
         spline_coeff = unet_model(unet_input)[0]
 
         # Calculating various field terms using coefficients
@@ -172,10 +169,10 @@ for epoch in range(epochs):
             + loss_momentum_x
             + loss_momentum_y
             + loss_momentum_z
-            + loss_inlet_boundary
+            + 20*loss_inlet_boundary
             + loss_outlet_boundary
             + loss_other_boundary
-            + supervised_loss
+            + 10*supervised_loss
         )
 
         if not debug:
@@ -214,7 +211,6 @@ for epoch in range(epochs):
     # Validation
     # Switch model to evaluation mode
     unet_model.eval()
-    unet_input = prepare_mesh_for_unet(binary_mask).to(device)
     spline_coeff = unet_model(unet_input)[0]
     with torch.no_grad():
         (
@@ -344,10 +340,12 @@ fields = [
 plot_fields(fields, validation_points)
 
 ######## Inference
+device = "cpu"
+torch.set_default_device(device)
+unet_model = UNet3D().to(device)
 unet_model.load_state_dict(
     torch.load(
-        "../run/unet_model.pt",
-        weights_only=True,
+        "../run/unet_model.pt", weights_only=True, map_location=torch.device("cpu")
     )
 )
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)
