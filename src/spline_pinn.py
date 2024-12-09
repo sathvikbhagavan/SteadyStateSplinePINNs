@@ -141,7 +141,7 @@ def get_fields(spline_coeff, points, step, grid_resolution):
 
 # Calculating various field terms using coefficients
 def get_fields_and_losses(
-    spline_coeff, points, labels, step, grid_resolution, mu, rho, p_outlet, thermal_conductivity
+    spline_coeff, points, labels, step, grid_resolution, mu, rho, p_outlet, thermal_conductivity, density, specific_heat
 ):
     x, y, z, x_supports, y_supports, z_supports = get_support_points(
         points, step, grid_resolution
@@ -264,11 +264,15 @@ def get_fields_and_losses(
         ** 2
     )
 
-    # Heat equation
-    loss_heat = torch.mean(
-        (thermal_conductivity * (T_xx[labels == 0] + T_yy[labels == 0] + T_zz[labels == 0])) ** 2
-    )
+    # Calculate thermal diffusivity using specific heat at constant pressure
+    alpha = thermal_conductivity / (density * specific_heat)
 
+    # Steady-state loss function (no time derivative)
+    loss_heat = torch.mean(
+        (alpha * (T_xx[labels == 0] + T_yy[labels == 0] + T_zz[labels == 0])  # Diffusion term (nabla^2 T)
+        + vx[labels == 0] * T_x[labels == 0] + vy[labels == 0] * T_y[labels == 0] + vz[labels == 0] * T_z[labels == 0]  # Advection term (v · nabla T)
+        ) ** 2
+    )
     # loss_inlet_boundary = (
     #     torch.mean((vx[labels == 1] - inlet_vx) ** 2)
     #     + torch.mean((vy[labels == 1] - inlet_vy) ** 2)

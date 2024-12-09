@@ -38,6 +38,8 @@ M = 28.96 / 1000
 R = 8.314
 rho = ((p_outlet * 10**5) * M) / (R * T)
 thermal_conductivity = 2.61E-02
+specific_heat = 1.00E+03  #at constant pressure
+density = 9.7118E-01  # kg/m^3
 
 debug = True
 
@@ -152,6 +154,8 @@ for epoch in range(epochs):
             rho,
             p_outlet,
             thermal_conductivity,
+            density,
+            specific_heat,
 
         )
 
@@ -251,6 +255,8 @@ for epoch in range(epochs):
             rho,
             p_outlet,
             thermal_conductivity,
+            density,
+            specific_heat,
    
         )
 
@@ -354,6 +360,8 @@ with torch.no_grad():
         rho,
         p_outlet,
         thermal_conductivity,
+        density,
+        specific_heat,
 
     )
 
