@@ -27,7 +27,7 @@ if repo.is_dirty(untracked_files=True):
     repo.git.add(A=True)  # Stages all changes
 
     # Commit the changes
-    commit_message = f"trying git push with ssh key"
+    commit_message = f"trying git push logs and previous run with ssh key"
     repo.index.commit(commit_message)
     print(f"Committed changes with message: {commit_message}")
 

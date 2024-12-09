@@ -2840,3 +2840,43 @@ Divergence Loss: 0.012812589535266521, X Momentum Loss: 0.37686162358133213, Y M
 Number of Outlet surface points: 3000, volume points: 19322, surface points: 2943
 Divergence Loss: 0.013733928357829779, X Momentum Loss: 0.4747040405531817, Y Momentum Loss: 0.05067037698389305, Z Momentum Loss: 0.057412833894856935, Inlet Boundary Loss: 4.961233956082828, Outlet Boundary Loss: 0.003027070834373134, Other Boundary Loss: 0.7728106431791139, Supervised Loss: 1.9013922564979406 Total Loss: 8.234985106384018
 Number of Outlet surface points: 3000, volume points: 19283, surface points: 2937
+Divergence Loss: 0.01212594555242341, X Momentum Loss: 0.41457429137233154, Y Momentum Loss: 0.04433345413350117, Z Momentum Loss: 0.05086452762504722, Inlet Boundary Loss: 4.9437128579560135, Outlet Boundary Loss: 0.0033099624761857085, Other Boundary Loss: 0.8366629990591085, Supervised Loss: 1.878227722669305 Total Loss: 8.183811760843916
+Number of Outlet surface points: 3000, volume points: 19327, surface points: 2936
+Divergence Loss: 0.01169213645893695, X Momentum Loss: 0.3908919491322718, Y Momentum Loss: 0.05072705410462018, Z Momentum Loss: 0.0581452476145495, Inlet Boundary Loss: 4.958129174704298, Outlet Boundary Loss: 0.0030600983965797792, Other Boundary Loss: 0.6732101280517623, Supervised Loss: 1.8979012704010165 Total Loss: 8.043757058864035
+Number of Outlet surface points: 3000, volume points: 19306, surface points: 2947
+Divergence Loss: 0.013512282977039288, X Momentum Loss: 0.4944209524521554, Y Momentum Loss: 0.07704618298018992, Z Momentum Loss: 0.0725043141593528, Inlet Boundary Loss: 4.961053722097108, Outlet Boundary Loss: 0.007445391079016043, Other Boundary Loss: 0.7486304158941965, Supervised Loss: 1.8411015463953198 Total Loss: 8.215714808034377
+Number of Outlet surface points: 3000, volume points: 19308, surface points: 2930
+Divergence Loss: 0.013507413439496851, X Momentum Loss: 0.5482557207422, Y Momentum Loss: 0.04374597075615575, Z Momentum Loss: 0.052586716847697376, Inlet Boundary Loss: 4.946660177568786, Outlet Boundary Loss: 0.003296914199205437, Other Boundary Loss: 0.7881303240663502, Supervised Loss: 1.8797260672981766 Total Loss: 8.27590930491807
+Number of Outlet surface points: 3000, volume points: 19326, surface points: 2943
+Divergence Loss: 0.012414958714437674, X Momentum Loss: 0.36994140437031786, Y Momentum Loss: 0.04724282912565165, Z Momentum Loss: 0.05147540179366404, Inlet Boundary Loss: 4.957552790709323, Outlet Boundary Loss: 0.003015662087568959, Other Boundary Loss: 0.8086510420755584, Supervised Loss: 1.8971303918715656 Total Loss: 8.147424480748088
+Number of Outlet surface points: 3000, volume points: 19323, surface points: 2934
+Divergence Loss: 0.012441059694152313, X Momentum Loss: 0.47690067471199094, Y Momentum Loss: 0.04819066948096579, Z Momentum Loss: 0.05457205378036384, Inlet Boundary Loss: 4.958070970263222, Outlet Boundary Loss: 0.003062986777184598, Other Boundary Loss: 0.7111071949473742, Supervised Loss: 1.8978239598024382 Total Loss: 8.162169569457692
+Number of Outlet surface points: 3000, volume points: 19365, surface points: 2934
+Divergence Loss: 0.013466246979926301, X Momentum Loss: 0.5126267320275116, Y Momentum Loss: 0.051206065272015704, Z Momentum Loss: 0.05317184291246803, Inlet Boundary Loss: 4.958129183408028, Outlet Boundary Loss: 0.003048027601807447, Other Boundary Loss: 0.7848157393841425, Supervised Loss: 1.8979012776952915 Total Loss: 8.27436511528119
+Number of Outlet surface points: 3000, volume points: 19281, surface points: 2939
+Divergence Loss: 0.01145859336206477, X Momentum Loss: 0.3138820036904797, Y Momentum Loss: 0.05012776948930494, Z Momentum Loss: 0.0540848912333627, Inlet Boundary Loss: 4.958129188064215, Outlet Boundary Loss: 0.002973627398878603, Other Boundary Loss: 0.8927992469367511, Supervised Loss: 1.897901280277371 Total Loss: 8.181356600452428
+Number of Outlet surface points: 3000, volume points: 19290, surface points: 2934
+Divergence Loss: 0.012148926281673678, X Momentum Loss: 0.4015545220251109, Y Momentum Loss: 0.04895317927484587, Z Momentum Loss: 0.05376310724765355, Inlet Boundary Loss: 4.958129174704298, Outlet Boundary Loss: 0.0029579273380035834, Other Boundary Loss: 0.6884467119286463, Supervised Loss: 1.8979012704010187 Total Loss: 8.06385481920125
+Time taken for training is: 4792.331959962845
+The mean of vx differences is: 0.36689448682911824
+The mean of vy differences is: -0.026248673783791095
+The mean of vz differences is: 0.00483712560316654
+The mean of pressure differences is: -4190.885946609542
+Repository has changes, preparing to commit.
+Committed changes with message: Running job with run name: pious-eon-1, url: https://wandb.ai/sathvikbhagavan-epfl/Spline-PINNs_without_heat_dp4/runs/ia8g3h0g
+Traceback (most recent call last):
+  File "/home/anagupta/SteadyStateSplinePINNs/src/run.py", line 396, in <module>
+    origin.push()
+  File "/home/anagupta/SteadyStateSplinePINNs/.venv/lib64/python3.9/site-packages/git/remote.py", line 1203, in push
+    return self._get_push_info(proc, progress, kill_after_timeout=kill_after_timeout)
+  File "/home/anagupta/SteadyStateSplinePINNs/.venv/lib64/python3.9/site-packages/git/remote.py", line 968, in _get_push_info
+    proc.wait(stderr=stderr_text)
+  File "/home/anagupta/SteadyStateSplinePINNs/.venv/lib64/python3.9/site-packages/git/cmd.py", line 834, in wait
+    raise GitCommandError(remove_password_if_present(self.args), status, errstr)
+git.exc.GitCommandError: Cmd('git') failed due to: exit code(128)
+  cmdline: git push --porcelain -- origin
+  stderr: 'fatal: Authentication failed for 'https://github.com/sathvikbhagavan/SteadyStateSplinePINNs/''
+[1;34mwandb[0m: 🚀 View run [33mpious-eon-1[0m at: [34mhttps://wandb.ai/sathvikbhagavan-epfl/Spline-PINNs_without_heat_dp4/runs/ia8g3h0g[0m
+[1;34mwandb[0m: Find logs at: [1;35mwandb/run-20241209_010603-ia8g3h0g/logs[0m
+srun: error: i19: task 0: Exited with exit code 1
+srun: Terminating StepId=2486436.0
