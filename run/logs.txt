@@ -52,3 +52,177 @@ Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Los
 Number of Outlet surface points: 3000, volume points: 19298, surface points: 2939
 Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
 Number of Outlet surface points: 3000, volume points: 19249, surface points: 2923
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19340, surface points: 2934
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19278, surface points: 2942
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19293, surface points: 2941
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19309, surface points: 2952
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19296, surface points: 2936
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19365, surface points: 2941
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19324, surface points: 2931
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+2/100
+Validation Divergence Loss: nan, Validation X Momentum Loss: nan, Validation Y Momentum Loss: nan, Validation Z Momentum Loss: nan, Validation Outlet Boundary Loss: nan, Validation Other Boundary Loss: nan, Validation Heat Loss: nan, Validation Surface Temperature Boundary Loss: nan, Validation Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19326, surface points: 2952
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19280, surface points: 2928
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19359, surface points: 2941
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19331, surface points: 2936
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19292, surface points: 2938
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19335, surface points: 2929
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19271, surface points: 2941
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19331, surface points: 2946
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19288, surface points: 2946
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19270, surface points: 2937
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19336, surface points: 2938
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19330, surface points: 2943
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19334, surface points: 2950
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19341, surface points: 2947
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19310, surface points: 2944
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19294, surface points: 2942
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19346, surface points: 2931
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19280, surface points: 2935
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19281, surface points: 2927
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19336, surface points: 2945
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19348, surface points: 2942
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19316, surface points: 2929
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19305, surface points: 2946
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19292, surface points: 2942
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19314, surface points: 2942
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19353, surface points: 2944
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19334, surface points: 2933
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+3/100
+Validation Divergence Loss: nan, Validation X Momentum Loss: nan, Validation Y Momentum Loss: nan, Validation Z Momentum Loss: nan, Validation Outlet Boundary Loss: nan, Validation Other Boundary Loss: nan, Validation Heat Loss: nan, Validation Surface Temperature Boundary Loss: nan, Validation Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19289, surface points: 2913
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19325, surface points: 2948
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19280, surface points: 2944
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19310, surface points: 2937
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19323, surface points: 2922
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19309, surface points: 2944
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19267, surface points: 2940
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19318, surface points: 2944
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19280, surface points: 2933
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19298, surface points: 2932
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19321, surface points: 2949
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19311, surface points: 2925
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19323, surface points: 2936
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19291, surface points: 2946
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19324, surface points: 2938
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19318, surface points: 2932
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19330, surface points: 2929
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19326, surface points: 2948
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19305, surface points: 2930
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19291, surface points: 2936
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19311, surface points: 2944
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19309, surface points: 2943
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19322, surface points: 2937
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19334, surface points: 2941
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19318, surface points: 2950
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19276, surface points: 2939
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19333, surface points: 2935
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+4/100
+Validation Divergence Loss: nan, Validation X Momentum Loss: nan, Validation Y Momentum Loss: nan, Validation Z Momentum Loss: nan, Validation Outlet Boundary Loss: nan, Validation Other Boundary Loss: nan, Validation Heat Loss: nan, Validation Surface Temperature Boundary Loss: nan, Validation Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19312, surface points: 2932
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19325, surface points: 2942
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19293, surface points: 2935
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19330, surface points: 2931
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19324, surface points: 2952
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19330, surface points: 2937
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19310, surface points: 2935
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19345, surface points: 2931
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19340, surface points: 2943
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19282, surface points: 2938
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19321, surface points: 2943
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19299, surface points: 2939
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19341, surface points: 2932
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19278, surface points: 2942
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19321, surface points: 2942
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19348, surface points: 2930
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19315, surface points: 2934
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19324, surface points: 2947
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19283, surface points: 2942
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19317, surface points: 2946
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19316, surface points: 2939
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19296, surface points: 2932
+Divergence Loss: nan, X Momentum Loss: nan, Y Momentum Loss: nan, Z Momentum Loss: nan, Inlet Boundary Loss: nan, Outlet Boundary Loss: nan, Other Boundary Loss: nan, Supervised Loss: nan Heat Loss: nan Inlet Temperature Boundary Loss: nan Surface Temperature Boundary Loss: nan Total Loss: nan
+Number of Outlet surface points: 3000, volume points: 19293, surface points: 2934
