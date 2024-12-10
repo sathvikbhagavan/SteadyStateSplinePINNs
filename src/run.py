@@ -15,7 +15,7 @@ import os
 from git import Repo
 from inference import *
 
-folder = "dp4"
+folder = "dp11"
 Project_name = (
     "Spline-PINNs_without_heat"  # Full_Project_name will be {Project_name}_{folder}
 )
@@ -111,12 +111,12 @@ start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
-validation_points, validation_labels = sample_points(obj, 30000, 3000, 20000)
+validation_points, validation_labels = sample_points(obj, 50000, 5000, 50000)
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
-    train_points, train_labels = sample_points(obj, 30000, 3000, 20000)
+    train_points, train_labels = sample_points(obj, 50000, 5000, 50000)
     def closure():
         # Get Hermite Spline coefficients from the Unet
         spline_coeff = unet_model(unet_input)[0]
