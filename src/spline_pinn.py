@@ -273,6 +273,7 @@ def get_fields_and_losses(
         + vx[labels == 0] * T_x[labels == 0] + vy[labels == 0] * T_y[labels == 0] + vz[labels == 0] * T_z[labels == 0]  # Advection term (v · nabla T)
         ) ** 2
     )
+
     # loss_inlet_boundary = (
     #     torch.mean((vx[labels == 1] - inlet_vx) ** 2)
     #     + torch.mean((vy[labels == 1] - inlet_vy) ** 2)
