@@ -141,7 +141,7 @@ def get_fields(spline_coeff, points, step, grid_resolution):
 
 # Calculating various field terms using coefficients
 def get_fields_and_losses(
-    spline_coeff, points, labels, step, grid_resolution, T, rho, p_outlet, thermal_conductivity, density, specific_heat
+    spline_coeff, points, labels, step, grid_resolution, T, rho, p_outlet, thermal_conductivity, density, specific_heat, T_wall
 ):
     x, y, z, x_supports, y_supports, z_supports = get_support_points(
         points, step, grid_resolution
@@ -279,12 +279,17 @@ def get_fields_and_losses(
     #     + torch.mean((vy[labels == 1] - inlet_vy) ** 2)
     #     + torch.mean((vz[labels == 1] - inlet_vz) ** 2)
     # )
+
     loss_outlet_boundary = torch.mean((p[labels == 3] - p_outlet) ** 2)
     loss_other_boundary = (
-        torch.mean((vx[labels == 2]) ** 2)
-        + torch.mean((vy[labels == 2]) ** 2)
-        + torch.mean((vz[labels == 2]) ** 2)
-    )
+    torch.mean((vx[labels == 2]) ** 2)
+    + torch.mean((vy[labels == 2]) ** 2)
+    + torch.mean((vz[labels == 2]) ** 2)
+)
+
+    loss_t_wall_boundary = torch.mean((T[labels == 2] - T_wall) ** 2)
+
+
     return (
         vx,
         vy,
@@ -297,7 +302,8 @@ def get_fields_and_losses(
         # loss_inlet_boundary,
         loss_outlet_boundary,
         loss_other_boundary,
-        loss_heat
+        loss_heat,
+        loss_t_wall_boundary
     )
 
 
