@@ -19,8 +19,8 @@ folder = "dp0"
 Project_name = (
     "PINNs-baseline_without_heat"  # Full_Project_name will be {Project_name}_{folder}
 )
-device = "cpu"  # Turn this to "cpu" if you are debugging the flow on the CPU
-debug = True  # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
+device = "cuda"  # Turn this to "cpu" if you are debugging the flow on the CPU
+debug = False  # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
 
 data_folder = "./preProcessedData/without_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
