@@ -26,7 +26,7 @@ data_folder = "./preProcessedData/without_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
-epochs = 100
+epochs = 500
 
 # Physics Constants
 p_outlet = (101325 - 17825) / (10**5)
@@ -111,12 +111,12 @@ start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
-validation_points, validation_labels = sample_points(obj, 50000, 5000, 50000)
+validation_points, validation_labels = sample_points(obj, 30000, 5000, 30000)
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
-    train_points, train_labels = sample_points(obj, 50000, 5000, 50000)
+    train_points, train_labels = sample_points(obj, 30000, 5000, 30000)
     def closure():
         # Get Hermite Spline coefficients from the Unet
         spline_coeff = unet_model(unet_input)[0]
@@ -166,13 +166,13 @@ for epoch in range(epochs):
 
         loss_total = (
             loss_divergence
-            + loss_momentum_x
+            + 10*loss_momentum_x
             + loss_momentum_y
             + loss_momentum_z
-            + 20*loss_inlet_boundary
+            + 10*loss_inlet_boundary
             + loss_outlet_boundary
-            + loss_other_boundary
-            + 10*supervised_loss
+            + 10*loss_other_boundary
+            + 20*supervised_loss
         )
 
         if not debug:
@@ -296,6 +296,7 @@ for epoch in range(epochs):
 
     unet_model.train()
     optimizer.step(closure)
+    torch.save(unet_model.state_dict(), "../run/unet_model.pt")
 
 stop_time = time.time()
 print(f"Time taken for training is: {stop_time - start_time}")
