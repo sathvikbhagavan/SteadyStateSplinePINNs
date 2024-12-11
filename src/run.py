@@ -26,7 +26,7 @@ data_folder = "./preProcessedData/without_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
-epochs = 500
+epochs = 100
 
 # Physics Constants
 p_outlet = (101325 - 17825) / (10**5)
@@ -70,12 +70,12 @@ print(f"Using device: {device}")
 
 inlet = np.load(data_folder + "vel_x_inlet.npy")
 inlet_points = torch.tensor(inlet[:, 0:3] * 1000.0)
-vx_inlet_data = torch.tensor(np.load(data_folder + "vel_x_inlet.npy")[:, 3])
+vx_inlet_data = torch.tensor(np.load(data_folder + "vel_x_inlet.npy")[:, 3] / 100.0)
 vy_inlet_data = torch.tensor(np.load(data_folder + "vel_y_inlet.npy")[:, 3])
 vz_inlet_data = torch.tensor(np.load(data_folder + "vel_z_inlet.npy")[:, 3])
 
 data_points = torch.tensor(np.load(data_folder + "vel_x.npy")[:, 0:3] * 1000.0)
-vx_data = torch.tensor(np.load(data_folder + "vel_x.npy")[:, 3])
+vx_data = torch.tensor(np.load(data_folder + "vel_x.npy")[:, 3] / 100.0)
 vy_data = torch.tensor(np.load(data_folder + "vel_y.npy")[:, 3])
 vz_data = torch.tensor(np.load(data_folder + "vel_z.npy")[:, 3])
 p_data = torch.tensor(np.load(data_folder + "press.npy")[:, 3])
@@ -368,7 +368,7 @@ x, y, z, x_supports, y_supports, z_supports = get_support_points(
 vx_pred, vy_pred, vz_pred, p_pred = get_fields(
     spline_coeff, all_points, step, grid_resolution
 )
-vx_pred = vx_pred.cpu().detach().numpy()
+vx_pred = vx_pred.cpu().detach().numpy()*100.0
 vy_pred = vy_pred.cpu().detach().numpy()
 vz_pred = vz_pred.cpu().detach().numpy()
 p_pred = p_pred.cpu().detach().numpy()
