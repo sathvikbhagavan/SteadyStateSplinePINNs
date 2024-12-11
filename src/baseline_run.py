@@ -367,7 +367,7 @@ for epoch in range(epochs):
         p_x,
         p_y,
         p_z,
-    ) = baseline.get_values_and_derivatives(validation_fields, validation_points, IsTrainMode=True)
+    ) = baseline.get_values_and_derivatives(validation_fields, validation_points)
 
     (
         validation_loss_divergence,

@@ -150,7 +150,7 @@ def get_values_and_derivatives(fields, points):
         outputs=grad_vz,
         inputs=points,
         grad_outputs=torch.ones_like(grad_vz),
-        retain_graph=IsTrainMode,
+        retain_graph=True,
         create_graph=True,
     )[0]
 
@@ -164,7 +164,7 @@ def get_values_and_derivatives(fields, points):
         outputs=p,
         inputs=points,
         grad_outputs=torch.ones_like(p),
-        retain_graph=IsTrainMode,
+        retain_graph=True,
         create_graph=True,
     )[0]
 
