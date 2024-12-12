@@ -79,7 +79,7 @@ vx_data = torch.tensor(np.load(data_folder + "vel_x.npy")[:, 3])
 vy_data = torch.tensor(np.load(data_folder + "vel_y.npy")[:, 3])
 vz_data = torch.tensor(np.load(data_folder + "vel_z.npy")[:, 3])
 p_data = torch.tensor(np.load(data_folder + "press.npy")[:, 3])
-num_samples = 50000
+num_samples = 100000
 # Generate random indices for sampling
 indices = torch.randint(0, data_points.shape[0], (num_samples,))
 
@@ -94,7 +94,7 @@ p_sampled_data = p_data[indices] / 10**5
 
 obj = trimesh.load("./Baseline_ML4Science.stl")
 
-grid_resolution = np.array([768, 64, 16])
+grid_resolution = np.array([512, 64, 16])
 binary_mask = get_binary_mask(obj, grid_resolution)
 step = obj.bounding_box.extents / (grid_resolution - 1)
 
