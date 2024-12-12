@@ -1,5 +1,3 @@
-import trimesh
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -8,8 +6,7 @@ from sample import *
 
 # Convert binary mask to PyTorch tensor and reshape for UNet
 def prepare_mesh_for_unet(binary_mask):
-    # Convert to float32 tensor
-    tensor_mask = torch.from_numpy(binary_mask).float()
+    tensor_mask = torch.from_numpy(binary_mask).double()
 
     # Add batch and channel dimensions
     # From (20, 20, 20) to (1, 1, 20, 20, 20)

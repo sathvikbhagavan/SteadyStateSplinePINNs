@@ -2,6 +2,7 @@ import trimesh
 import numpy as np
 import random
 import torch
+torch.set_default_dtype(torch.float64)
 from sample import *
 from hermite_spline import *
 from unet import *
@@ -14,19 +15,20 @@ import os
 from git import Repo
 from inference import *
 
-# Path to the parent directory of the `src/` folder
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+folder = "dp0"
+Project_name = (
+    "Spline-PINNs_withs_heat"  # Full_Project_name will be {Project_name}_{folder}
+)
+device = "cuda"  # Turn this to "cpu" if you are debugging the flow on the CPU
+debug = False  # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
 
-# Initialize the repository at the parent directory level
-repo = Repo(parent_dir)
-
-seed = 42
+data_folder = "./preProcessedData/with_T/" + folder + "/"
+Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
 epochs = 100
 
 # Physics Constants
-inlet_velocity = 0.318
 p_outlet = (101325 - 17825) / (10**5)
 T_ref = 273.15
 T_cons = 298.15
@@ -43,19 +45,24 @@ density = 9.7118E-01  # kg/m^3
 T_inlet = 293.15 #K
 T_wall = 338.15 #K
 
-debug = True
+seed = 42
+
+# Path to the parent directory of the `src/` folder
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+# Initialize the repository at the parent directory level
+repo = Repo(parent_dir)
 
 if not debug:
     run = wandb.init(
         # set the wandb project where this run will be logged
-        project="Spline-PINNs_with_validation",
+        project=Full_Project_name,
         # track hyperparameters and run metadata
         config={
             "optimizer": "LBFGS",
             "architecture": "Unet",
             "epochs": epochs,
             "seed": seed,
-            "inlet_velocity": inlet_velocity,
         },
     )
 
@@ -64,17 +71,15 @@ random.seed(seed)
 torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 
-# Check for Metal (MPS) device
-device = "cuda"
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
-data_directory = "./processedData/with_T/dp0/"
+data_directory = "./preProcessedData/with_T/dp0/"
 inlet = np.load(data_directory + "vel_x_inlet.npy")
 inlet_points = torch.tensor(inlet[:, 0:3] * 1000.0)
-vx_inlet_data = torch.tensor(np.load(data_directory + "vel_x_inlet.npy")[:, 3])
-vy_inlet_data = torch.tensor(np.load(data_directory + "vel_y_inlet.npy")[:, 3])
-vz_inlet_data = torch.tensor(np.load(data_directory + "vel_z_inlet.npy")[:, 3])
+vx_inlet_data = torch.tensor(np.load(data_folder + "vel_x_inlet.npy")[:, 3])
+vy_inlet_data = torch.tensor(np.load(data_folder + "vel_y_inlet.npy")[:, 3])
+vz_inlet_data = torch.tensor(np.load(data_folder + "vel_z_inlet.npy")[:, 3])
 
 data_points = torch.tensor(np.load(data_directory + "vel_x.npy")[:, 0:3] * 1000.0)
 vx_data = torch.tensor(np.load(data_directory + "vel_x.npy")[:, 3])
@@ -111,25 +116,20 @@ print(
 )
 optimizer = LBFGS(unet_model.parameters(), line_search_fn="strong_wolfe")
 unet_model.apply(initialize_weights)
+unet_model = unet_model.double()
 
 start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
-validation_points, validation_labels = sample_points(obj, 20000, 3000, 3000, 10000)
-
+validation_points, validation_labels = sample_points(obj, 30000, 3000, 20000)
+unet_input = prepare_mesh_for_unet(binary_mask).to(device)
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
-
+    train_points, train_labels = sample_points(obj, 30000, 3000, 20000)
     def closure():
-        train_points, train_labels = sample_points(obj, 20000, 3000, 3000, 10000)
-
-        # Ensure training points allow gradient computation
-        train_points.requires_grad_(True)
-
         # Get Hermite Spline coefficients from the Unet
-        unet_input = prepare_mesh_for_unet(binary_mask).to(device)
         spline_coeff = unet_model(unet_input)[0]
 
 
@@ -194,7 +194,7 @@ for epoch in range(epochs):
             + loss_momentum_x
             + loss_momentum_y
             + loss_momentum_z
-            + loss_inlet_boundary
+            + 20*loss_inlet_boundary
             + loss_outlet_boundary
             + loss_other_boundary
             + supervised_loss
@@ -217,8 +217,8 @@ for epoch in range(epochs):
                     "Other Boundary Loss": np.log10(loss_other_boundary.item()),
                     "Supervised Loss": np.log10(supervised_loss.item()),
                     "Heat Loss": np.log10(loss_heat.item()),
-                    "Inlet Temperature Boundary Loss": np.log10(loss_inlet_temp_boundary()),
-                    "Surface Temperature Boundary Loss": np.log10(loss_t_wall_boundary),
+                    "Inlet Temperature Boundary Loss": np.log10(loss_inlet_temp_boundary.item()),
+                    "Surface Temperature Boundary Loss": np.log10(loss_t_wall_boundary.item()),
                     "Total Loss": np.log10(loss_total.item()),
                 }
             )
@@ -247,7 +247,6 @@ for epoch in range(epochs):
     # Validation
     # Switch model to evaluation mode
     unet_model.eval()
-    unet_input = prepare_mesh_for_unet(binary_mask).to(device)
     spline_coeff = unet_model(unet_input)[0]
 
     # Recompute T outside the closure
@@ -418,22 +417,22 @@ fields = [
 plot_fields(fields, validation_points)
 
 ######## Inference
+device = "cpu"
+torch.set_default_device(device)
+unet_model = UNet3D().to(device)
 unet_model.load_state_dict(
     torch.load(
-        "../run/unet_model.pt",
-        weights_only=True,
+        "../run/unet_model.pt", weights_only=True, map_location=torch.device("cpu")
     )
 )
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)
 spline_coeff = unet_model(unet_input)[0]
 
-data_folder_path = "./dp0"
-
 all_points = torch.tensor(
     np.concatenate(
         (
-            np.load(os.path.join(data_folder_path, "vel_x_inlet.npy"))[:, :3],
-            np.load(os.path.join(data_folder_path, "vel_x.npy"))[:, :3],
+            np.load(os.path.join(data_folder, "vel_x_inlet.npy"))[:, :3],
+            np.load(os.path.join(data_folder, "vel_x.npy"))[:, :3],
         )
     )
     * 1000
