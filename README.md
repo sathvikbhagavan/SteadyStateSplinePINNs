@@ -1,1 +1,1 @@
-test hi
+# Steady State Spline PINNs
