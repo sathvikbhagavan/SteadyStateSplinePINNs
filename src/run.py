@@ -94,7 +94,7 @@ p_sampled_data = p_data[indices] / 10**5
 
 obj = trimesh.load("./Baseline_ML4Science.stl")
 
-grid_resolution = np.array([512, 64, 16])
+grid_resolution = np.array([768, 64, 16])
 binary_mask = get_binary_mask(obj, grid_resolution)
 step = obj.bounding_box.extents / (grid_resolution - 1)
 

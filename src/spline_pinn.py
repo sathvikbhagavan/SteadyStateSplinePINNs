@@ -116,7 +116,7 @@ def get_fields(spline_coeff, points, step, grid_resolution):
     x, y, z, x_supports, y_supports, z_supports = get_support_points(
         points, step, grid_resolution
     )
-    vx = f(step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)*100.0
+    vx = f(step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vy = f(step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
@@ -130,19 +130,19 @@ def get_fields_and_losses(
     x, y, z, x_supports, y_supports, z_supports = get_support_points(
         points, step, grid_resolution
     )
-    vx = f(step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)*100.0
+    vx = f(step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vy = f(step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vx_x = f(
         step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0
-    )*100.0
+    )
     vx_y = f(
         step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0
-    )*100.0
+    )
     vx_z = f(
         step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1
-    )*100.0
+    )
     vy_x = f(
         step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0
     )
@@ -166,13 +166,13 @@ def get_fields_and_losses(
     p_z = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1)
     vx_xx = f(
         step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0
-    )*100.0
+    )
     vx_yy = f(
         step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0
-    )*100.0
+    )
     vx_zz = f(
         step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2
-    )*100.0
+    )
     vy_xx = f(
         step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0
     )
