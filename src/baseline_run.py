@@ -511,7 +511,7 @@ validation_fields = pinn_model(validation_points)
     p_x,
     p_y,
     p_z,
-) = baseline.get_values_and_derivatives(validation_fields, validation_points, IsTrainMode=True)
+) = baseline.get_values_and_derivatives(validation_fields, validation_points)
 (
     validation_loss_divergence,
     validation_loss_momentum_x,
