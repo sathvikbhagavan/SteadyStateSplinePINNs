@@ -6,18 +6,36 @@ import plotly.graph_objects as go
 
 def dynamic_viscosity(T, mu_ref=1.716e-5, T_ref=273.15, S=110.4):
     """
-    Calculate dynamic viscosity using Sutherland's law.
+    Calculate dynamic viscosity using Sutherland's law with robust error handling.
     
     Args:
-        T: Temperature field (tensor).
-        mu_ref: Reference viscosity (default: 1.716e-5 Pa.s).
-        T_ref: Reference temperature (default: 273.15 K).
-        S: Sutherland constant (default: 110.4 K).
+    T: Temperature field (tensor)
+    mu_ref: Reference viscosity (default: 1.716e-5 Pa.s)
+    T_ref: Reference temperature (default: 273.15 K)
+    S: Sutherland constant (default: 110.4 K)
     
     Returns:
-        Tensor of dynamic viscosity values.
+    Tensor of dynamic viscosity values
     """
-    return mu_ref * (T / T_ref) ** 1.5 * (T_ref + S) / (T + S)
+    try:
+        # Ensure T is a floating point tensor
+        T = T.float()
+        
+        # Clamp temperature to prevent extreme values
+        T_clamped = torch.clamp(T, min=100, max=2000)
+        
+        # Compute viscosity with safe computation
+        mu = mu_ref * ((T_clamped / T_ref) ** 1.5) * ((T_ref + S) / (T_clamped + S))
+        
+        # Replace any remaining NaNs or infs with reference viscosity
+        mu = torch.nan_to_num(mu, nan=mu_ref, posinf=mu_ref, neginf=mu_ref)
+        
+        return mu
+
+    except Exception as e:
+        print(f"Viscosity calculation error: {e}")
+        print(f"Problematic temperature tensor: {T}")
+        return torch.full_like(T, mu_ref, dtype=T.dtype)
 
 def get_support_points(points, step, grid_resolution):
     x = points[:, 0]
@@ -143,6 +161,13 @@ def get_fields(spline_coeff, points, step, grid_resolution):
 def get_fields_and_losses(
     spline_coeff, points, labels, step, grid_resolution, T, rho, p_outlet, thermal_conductivity, density, specific_heat, T_wall
 ):
+
+    if torch.isnan(spline_coeff).any():
+        print("NaN in spline coefficients!")
+        return None
+
+    
+
     x, y, z, x_supports, y_supports, z_supports = get_support_points(
         points, step, grid_resolution
     )

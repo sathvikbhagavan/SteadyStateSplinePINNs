@@ -28,7 +28,7 @@ epochs = 100
 # Physics Constants
 inlet_velocity = 0.318
 p_outlet = (101325 - 17825) / (10**5)
-Tref = 273.15
+T_ref = 273.15
 T_cons = 298.15
 mu_ref = 1.716e-5
 S = 110.4
@@ -203,6 +203,8 @@ for epoch in range(epochs):
             + loss_t_wall_boundary
         )
 
+ 
+        
         if not debug:
             wandb.log(
                 {
@@ -232,7 +234,7 @@ for epoch in range(epochs):
             f"Other Boundary Loss: {loss_other_boundary.item()}, "
             f"Supervised Loss: {supervised_loss.item()}",
             f"Heat Loss: {loss_heat.item()}",
-            f"Inlet Temperature Boundary Loss: {loss_inlet_temp_boundary.item()}",
+         #   f"Inlet Temperature Boundary Loss: {loss_inlet_temp_boundary.item()}",
             f"Surface Temperature Boundary Loss: {loss_t_wall_boundary.item()}",
             f"Total Loss: {loss_total.item()}",
         )
@@ -349,6 +351,16 @@ for epoch in range(epochs):
             f"Validation Surface Temperature Boundary Loss: {validation_loss_t_wall_boundary.item()}, "
             f"Validation Total Loss: {validation_loss_total.item()}"
         )
+
+
+    for name, param in unet_model.named_parameters():
+            if param.grad is not None:
+                print(f"{name} grad stats:", 
+                    param.grad.abs().min(), 
+                    param.grad.abs().max(), 
+                    param.grad.abs().mean())
+                if torch.isnan(param.grad).any():
+                    print(f"NaN gradient in {name}")
 
     unet_model.train()
     optimizer.step(closure)
