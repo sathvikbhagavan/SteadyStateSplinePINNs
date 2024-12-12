@@ -191,3 +191,446 @@ Number of Outlet surface points: 3000, volume points: 19288, surface points: 294
 Divergence Loss: 0.11821958094433782, X Momentum Loss: 0.7106509571684231, Y Momentum Loss: 0.24778480691162552, Z Momentum Loss: 3.9498898258923996, Inlet Boundary Loss: 2.67589062020096, Outlet Boundary Loss: 0.12029950095354525, Other Boundary Loss: 6.807905670483893, Supervised Loss: 24855.396891933393 Heat Loss: 217.91844540097628 Surface Temperature Boundary Loss: 19236.42783632196 Total Loss: 44992.23938057154
 Number of Outlet surface points: 3000, volume points: 19270, surface points: 2937
 Divergence Loss: 0.228539987186082, X Momentum Loss: 0.7696421847734674, Y Momentum Loss: 0.30208306408159813, Z Momentum Loss: 3.6319164654015235, Inlet Boundary Loss: 6.378818909046221, Outlet Boundary Loss: 0.18459887743115652, Other Boundary Loss: 2.7047600250833215, Supervised Loss: 24965.33041931774 Heat Loss: 773.4108649060857 Surface Temperature Boundary Loss: 18132.66611979871 Total Loss: 44482.31775073418
+Number of Outlet surface points: 3000, volume points: 19336, surface points: 2938
+Divergence Loss: 0.13185605409000353, X Momentum Loss: 0.64283879016279, Y Momentum Loss: 0.24354331633891277, Z Momentum Loss: 3.615404321425326, Inlet Boundary Loss: 2.3863155693027345, Outlet Boundary Loss: 0.15981782967453292, Other Boundary Loss: 3.8254512225044692, Supervised Loss: 23680.49746176114 Heat Loss: 321.09132585626327 Surface Temperature Boundary Loss: 19687.37103041576 Total Loss: 44131.07761296692
+Number of Outlet surface points: 3000, volume points: 19330, surface points: 2943
+Divergence Loss: 0.11253100749088743, X Momentum Loss: 0.6490140964322607, Y Momentum Loss: 0.2277533228988532, Z Momentum Loss: 3.657634850203148, Inlet Boundary Loss: 2.2347670926559573, Outlet Boundary Loss: 0.16348979826271642, Other Boundary Loss: 5.4155028896338075, Supervised Loss: 24172.9240206447 Heat Loss: 85.17443625488418 Surface Temperature Boundary Loss: 19162.319940706373 Total Loss: 43891.34459315771
+Number of Outlet surface points: 3000, volume points: 19334, surface points: 2950
+Divergence Loss: 0.1027535932272591, X Momentum Loss: 0.6086098358193147, Y Momentum Loss: 0.2141669001467638, Z Momentum Loss: 3.648606111474567, Inlet Boundary Loss: 1.8640671883596336, Outlet Boundary Loss: 0.17811094606724207, Other Boundary Loss: 4.718819236096079, Supervised Loss: 24684.727298435777 Heat Loss: 94.16185345917364 Surface Temperature Boundary Loss: 18072.619855242956 Total Loss: 43358.13862857889
+Number of Outlet surface points: 3000, volume points: 19341, surface points: 2947
+Divergence Loss: 0.11427952328942964, X Momentum Loss: 0.5716428963071075, Y Momentum Loss: 0.20146556903616838, Z Momentum Loss: 3.9690142858993065, Inlet Boundary Loss: 0.9875566073331095, Outlet Boundary Loss: 0.21509328855695045, Other Boundary Loss: 2.823819464930246, Supervised Loss: 25864.035660252055 Heat Loss: 148.6829642143051 Surface Temperature Boundary Loss: 16684.779000621988 Total Loss: 43178.99005405714
+Number of Outlet surface points: 3000, volume points: 19310, surface points: 2944
+Divergence Loss: 0.13975492379778173, X Momentum Loss: 0.5349081014806092, Y Momentum Loss: 0.1833793831701348, Z Momentum Loss: 3.903331949903018, Inlet Boundary Loss: 1.4490650361414605, Outlet Boundary Loss: 0.19115861946417423, Other Boundary Loss: 2.528928618750543, Supervised Loss: 25076.18494890969 Heat Loss: 248.0720131609395 Surface Temperature Boundary Loss: 17291.91223468276 Total Loss: 42970.71554984474
+Number of Outlet surface points: 3000, volume points: 19294, surface points: 2942
+Divergence Loss: 0.1320783611731943, X Momentum Loss: 0.5380233693336032, Y Momentum Loss: 0.18481714199530866, Z Momentum Loss: 3.7958583360168263, Inlet Boundary Loss: 1.30971136355606, Outlet Boundary Loss: 0.19125071238775188, Other Boundary Loss: 2.536705140032281, Supervised Loss: 25551.198871625864 Heat Loss: 179.57201147408762 Surface Temperature Boundary Loss: 17066.850239180614 Total Loss: 43135.86793246266
+Number of Outlet surface points: 3000, volume points: 19346, surface points: 2931
+Divergence Loss: 0.14049509373054184, X Momentum Loss: 0.5569011066981929, Y Momentum Loss: 0.18107992306522322, Z Momentum Loss: 3.7005231458327894, Inlet Boundary Loss: 1.4262321922315961, Outlet Boundary Loss: 0.18128291535563895, Other Boundary Loss: 2.568667911997835, Supervised Loss: 25136.282563533317 Heat Loss: 234.88257974578073 Surface Temperature Boundary Loss: 17223.67427379144 Total Loss: 42947.01288850723
+Number of Outlet surface points: 3000, volume points: 19280, surface points: 2935
+Divergence Loss: 0.13937428700220444, X Momentum Loss: 0.5135256088265372, Y Momentum Loss: 0.18282332308123933, Z Momentum Loss: 3.5805652698030586, Inlet Boundary Loss: 0.8646989251069084, Outlet Boundary Loss: 0.17862888397184, Other Boundary Loss: 1.9416473719817664, Supervised Loss: 26020.342686678316 Heat Loss: 186.7484667922965 Surface Temperature Boundary Loss: 16216.396920709578 Total Loss: 42758.62674167248
+Number of Outlet surface points: 3000, volume points: 19281, surface points: 2927
+Divergence Loss: 0.13760572126184706, X Momentum Loss: 0.4619715211058682, Y Momentum Loss: 0.1726162110346981, Z Momentum Loss: 3.4901266793148396, Inlet Boundary Loss: 0.830073114911993, Outlet Boundary Loss: 0.17057888329175347, Other Boundary Loss: 1.788105465142091, Supervised Loss: 26066.6032325763 Heat Loss: 191.8935454272482 Surface Temperature Boundary Loss: 15991.054111809857 Total Loss: 42576.873222806484
+Number of Outlet surface points: 3000, volume points: 19336, surface points: 2945
+Divergence Loss: 0.1408176908068408, X Momentum Loss: 0.43921371532635656, Y Momentum Loss: 0.17792043369457675, Z Momentum Loss: 3.3225618293018453, Inlet Boundary Loss: 0.7089939837734585, Outlet Boundary Loss: 0.16178136429496054, Other Boundary Loss: 1.3916819466011419, Supervised Loss: 25952.60544411575 Heat Loss: 99.12013450291876 Surface Temperature Boundary Loss: 16177.994749114576 Total Loss: 42576.952828561894
+Number of Outlet surface points: 3000, volume points: 19348, surface points: 2942
+Divergence Loss: 0.13952820963869855, X Momentum Loss: 0.47228735779550074, Y Momentum Loss: 0.1853677117482214, Z Momentum Loss: 3.560158835647345, Inlet Boundary Loss: 0.7887571396978925, Outlet Boundary Loss: 0.18426603947078588, Other Boundary Loss: 1.6600792291808617, Supervised Loss: 26032.457518974592 Heat Loss: 153.65967048740677 Surface Temperature Boundary Loss: 16088.888269345654 Total Loss: 42600.677721503926
+Number of Outlet surface points: 3000, volume points: 19316, surface points: 2929
+Divergence Loss: 0.14584164757500223, X Momentum Loss: 0.4822346897904535, Y Momentum Loss: 0.19472764920604166, Z Momentum Loss: 3.5199886400736697, Inlet Boundary Loss: 0.8242002051493817, Outlet Boundary Loss: 0.18402184456730375, Other Boundary Loss: 1.7408903881785833, Supervised Loss: 26061.956125577144 Heat Loss: 170.1282470711542 Surface Temperature Boundary Loss: 16216.761693530236 Total Loss: 42775.61462941459
+Number of Outlet surface points: 3000, volume points: 19305, surface points: 2946
+Divergence Loss: 0.1443586473315373, X Momentum Loss: 0.5064999077128995, Y Momentum Loss: 0.17939966430295098, Z Momentum Loss: 3.596216152709567, Inlet Boundary Loss: 0.8300400300690706, Outlet Boundary Loss: 0.17421644128194133, Other Boundary Loss: 1.7520837353641172, Supervised Loss: 26066.57640778529 Heat Loss: 179.36251417519054 Surface Temperature Boundary Loss: 16154.587695490005 Total Loss: 42727.976973164914
+Number of Outlet surface points: 3000, volume points: 19292, surface points: 2942
+Divergence Loss: 0.14322058665697243, X Momentum Loss: 0.47304902226301676, Y Momentum Loss: 0.18276038116719182, Z Momentum Loss: 3.3922378001267575, Inlet Boundary Loss: 0.8300697110699403, Outlet Boundary Loss: 0.17232836803835558, Other Boundary Loss: 1.7754509663987157, Supervised Loss: 26066.59964705076 Heat Loss: 167.44092378882422 Surface Temperature Boundary Loss: 16061.94537714657 Total Loss: 42623.22601934662
+Number of Outlet surface points: 3000, volume points: 19314, surface points: 2942
+Divergence Loss: 0.14458761296137845, X Momentum Loss: 0.462905786540462, Y Momentum Loss: 0.17821908902455916, Z Momentum Loss: 3.512601637736199, Inlet Boundary Loss: 0.830073114911993, Outlet Boundary Loss: 0.17948257886601693, Other Boundary Loss: 1.7788216235756196, Supervised Loss: 26066.6032325763 Heat Loss: 161.56349772858167 Surface Temperature Boundary Loss: 15982.383836871204 Total Loss: 42537.908514016715
+Number of Outlet surface points: 3000, volume points: 19353, surface points: 2944
+Divergence Loss: 0.140252177783647, X Momentum Loss: 0.43154188568457597, Y Momentum Loss: 0.17835636786725328, Z Momentum Loss: 3.513399771962358, Inlet Boundary Loss: 0.8300726414757837, Outlet Boundary Loss: 0.1740245198603896, Other Boundary Loss: 1.792152593383274, Supervised Loss: 26066.60319856469 Heat Loss: 163.36579571544678 Surface Temperature Boundary Loss: 15906.13158535977 Total Loss: 42463.43162747935
+Number of Outlet surface points: 3000, volume points: 19334, surface points: 2933
+Divergence Loss: 0.17064361997252803, X Momentum Loss: 0.39150661568875855, Y Momentum Loss: 0.17833474462560103, Z Momentum Loss: 2.779555049768498, Inlet Boundary Loss: 1.7615581463621406, Outlet Boundary Loss: 0.12725436082044048, Other Boundary Loss: 1.1420171052564065, Supervised Loss: 25042.01307033756 Heat Loss: 417.78915480010767 Surface Temperature Boundary Loss: 16970.908108454652 Total Loss: 43787.94060505807
+Number of Outlet surface points: 3000, volume points: 19289, surface points: 2913
+Divergence Loss: 0.13318334073783583, X Momentum Loss: 0.4688207346362587, Y Momentum Loss: 0.1749742429064481, Z Momentum Loss: 3.2529605830343096, Inlet Boundary Loss: 1.011916414227528, Outlet Boundary Loss: 0.16205216189500185, Other Boundary Loss: 1.6021545856167976, Supervised Loss: 25843.027581526614 Heat Loss: 129.32498889388052 Surface Temperature Boundary Loss: 16147.152371412976 Total Loss: 42464.65267746654
+Number of Outlet surface points: 3000, volume points: 19325, surface points: 2948
+Divergence Loss: 0.13858655270497888, X Momentum Loss: 0.45733456752390006, Y Momentum Loss: 0.17722479369165392, Z Momentum Loss: 3.350440499214893, Inlet Boundary Loss: 0.891614413411691, Outlet Boundary Loss: 0.1633184674651416, Other Boundary Loss: 1.7128105784898477, Supervised Loss: 25987.175841968965 Heat Loss: 136.75871892546013 Surface Temperature Boundary Loss: 15816.805025903166 Total Loss: 42264.61182254688
+Number of Outlet surface points: 3000, volume points: 19280, surface points: 2944
+Divergence Loss: 0.13978078674671407, X Momentum Loss: 0.40319914413971863, Y Momentum Loss: 0.18012743640223805, Z Momentum Loss: 3.202915817017213, Inlet Boundary Loss: 0.8981433170069252, Outlet Boundary Loss: 0.15317919211835004, Other Boundary Loss: 1.4383621267874607, Supervised Loss: 25839.095676803605 Heat Loss: 112.82749878592601 Surface Temperature Boundary Loss: 15936.945366097236 Total Loss: 42211.7569120282
+Number of Outlet surface points: 3000, volume points: 19310, surface points: 2937
+Divergence Loss: 0.15292854365005223, X Momentum Loss: 0.3909245580399736, Y Momentum Loss: 0.1688726496543844, Z Momentum Loss: 2.7722015179636803, Inlet Boundary Loss: 0.692321374121547, Outlet Boundary Loss: 0.13216173524171748, Other Boundary Loss: 0.8467482714576845, Supervised Loss: 25807.30328290461 Heat Loss: 85.86529551576534 Surface Temperature Boundary Loss: 16136.964953271687 Total Loss: 42351.64781239195
+Number of Outlet surface points: 3000, volume points: 19323, surface points: 2922
+Divergence Loss: 0.1456304754901613, X Momentum Loss: 0.43235258493847734, Y Momentum Loss: 0.1755626980487132, Z Momentum Loss: 3.237285400503323, Inlet Boundary Loss: 0.8699738197440483, Outlet Boundary Loss: 0.14840447414224456, Other Boundary Loss: 1.3332116189536836, Supervised Loss: 25837.209062613216 Heat Loss: 113.80723794964605 Surface Temperature Boundary Loss: 16346.508943209485 Total Loss: 42618.855484764965
+Number of Outlet surface points: 3000, volume points: 19309, surface points: 2944
+Divergence Loss: 0.13736754286630587, X Momentum Loss: 0.3879459656191896, Y Momentum Loss: 0.17378386969031503, Z Momentum Loss: 3.1789599357741576, Inlet Boundary Loss: 0.8979261437333779, Outlet Boundary Loss: 0.15235307746539323, Other Boundary Loss: 1.4125057651446968, Supervised Loss: 25839.084561735726 Heat Loss: 121.93773623301804 Surface Temperature Boundary Loss: 16259.111702194123 Total Loss: 42542.93478565968
+Number of Outlet surface points: 3000, volume points: 19267, surface points: 2940
+Divergence Loss: 0.14225141254674803, X Momentum Loss: 0.4276776402480707, Y Momentum Loss: 0.17967685166976213, Z Momentum Loss: 3.2917671677272864, Inlet Boundary Loss: 0.8981214096668843, Outlet Boundary Loss: 0.1593962601779023, Other Boundary Loss: 1.434330148334352, Supervised Loss: 25839.093894343045 Heat Loss: 115.61313466943662 Surface Temperature Boundary Loss: 16387.809517346035 Total Loss: 42665.52115363117
+Number of Outlet surface points: 3000, volume points: 19318, surface points: 2944
+Divergence Loss: 0.15022353999420376, X Momentum Loss: 0.4918212217769104, Y Momentum Loss: 0.17693374039219434, Z Momentum Loss: 3.213202552803887, Inlet Boundary Loss: 0.8981433170069252, Outlet Boundary Loss: 0.15103643444067716, Other Boundary Loss: 1.4151349561184965, Supervised Loss: 25839.095676803605 Heat Loss: 143.65610128302617 Surface Temperature Boundary Loss: 16171.700343036355 Total Loss: 42477.42127940674
+4/100
+Validation Divergence Loss: 0.1424633044092251, Validation X Momentum Loss: 0.42973386127638935, Validation Y Momentum Loss: 0.16324183282148053, Validation Z Momentum Loss: 3.2518597983827195, Validation Outlet Boundary Loss: 0.14753006656098933, Validation Other Boundary Loss: 1.361281564223369, Validation Heat Loss: 116.24617489192612, Validation Surface Temperature Boundary Loss: 17385.479442273692, Validation Total Loss: 17507.221727593293
+enc1.0.weight grad stats: tensor(0.0018, device='cuda:0') tensor(53.6581, device='cuda:0') tensor(7.9084, device='cuda:0')
+enc1.0.bias grad stats: tensor(4.7684e-07, device='cuda:0') tensor(5.6267e-05, device='cuda:0') tensor(1.1052e-05, device='cuda:0')
+enc1.1.weight grad stats: tensor(0.6651, device='cuda:0') tensor(244.8335, device='cuda:0') tensor(45.4624, device='cuda:0')
+enc1.1.bias grad stats: tensor(2.4369, device='cuda:0') tensor(64.9489, device='cuda:0') tensor(28.1012, device='cuda:0')
+enc1.3.weight grad stats: tensor(1.2301e-05, device='cuda:0') tensor(43.2554, device='cuda:0') tensor(3.2530, device='cuda:0')
+enc1.3.bias grad stats: tensor(0., device='cuda:0') tensor(1.1086e-05, device='cuda:0') tensor(1.9846e-06, device='cuda:0')
+enc1.4.weight grad stats: tensor(1.6895, device='cuda:0') tensor(159.7277, device='cuda:0') tensor(53.7744, device='cuda:0')
+enc1.4.bias grad stats: tensor(1.2941, device='cuda:0') tensor(65.7834, device='cuda:0') tensor(26.4274, device='cuda:0')
+enc2.0.weight grad stats: tensor(3.6508e-06, device='cuda:0') tensor(9.1332, device='cuda:0') tensor(0.5777, device='cuda:0')
+enc2.0.bias grad stats: tensor(0., device='cuda:0') tensor(5.9605e-07, device='cuda:0') tensor(1.7765e-07, device='cuda:0')
+enc2.1.weight grad stats: tensor(0.0286, device='cuda:0') tensor(11.1710, device='cuda:0') tensor(2.3832, device='cuda:0')
+enc2.1.bias grad stats: tensor(0.0146, device='cuda:0') tensor(6.3024, device='cuda:0') tensor(1.8340, device='cuda:0')
+enc2.3.weight grad stats: tensor(2.1681e-06, device='cuda:0') tensor(6.4046, device='cuda:0') tensor(0.5563, device='cuda:0')
+enc2.3.bias grad stats: tensor(0., device='cuda:0') tensor(9.5367e-07, device='cuda:0') tensor(3.0117e-07, device='cuda:0')
+enc2.4.weight grad stats: tensor(0.0388, device='cuda:0') tensor(9.3252, device='cuda:0') tensor(2.0763, device='cuda:0')
+enc2.4.bias grad stats: tensor(0.0258, device='cuda:0') tensor(4.8203, device='cuda:0') tensor(1.4951, device='cuda:0')
+bottleneck.0.weight grad stats: tensor(1.9744e-07, device='cuda:0') tensor(2.2004, device='cuda:0') tensor(0.1025, device='cuda:0')
+bottleneck.0.bias grad stats: tensor(0., device='cuda:0') tensor(2.0862e-07, device='cuda:0') tensor(3.0781e-08, device='cuda:0')
+bottleneck.1.weight grad stats: tensor(0.0024, device='cuda:0') tensor(2.4439, device='cuda:0') tensor(0.2774, device='cuda:0')
+bottleneck.1.bias grad stats: tensor(0.0032, device='cuda:0') tensor(0.6522, device='cuda:0') tensor(0.1849, device='cuda:0')
+bottleneck.3.weight grad stats: tensor(0., device='cuda:0') tensor(3.6958, device='cuda:0') tensor(0.1091, device='cuda:0')
+bottleneck.3.bias grad stats: tensor(0., device='cuda:0') tensor(1.7881e-07, device='cuda:0') tensor(4.4631e-08, device='cuda:0')
+bottleneck.4.weight grad stats: tensor(0.0036, device='cuda:0') tensor(3.8649, device='cuda:0') tensor(0.3702, device='cuda:0')
+bottleneck.4.bias grad stats: tensor(0.0019, device='cuda:0') tensor(0.9870, device='cuda:0') tensor(0.2504, device='cuda:0')
+upconv2.0.weight grad stats: tensor(1.7136e-06, device='cuda:0') tensor(5.8158, device='cuda:0') tensor(0.3184, device='cuda:0')
+upconv2.0.bias grad stats: tensor(0., device='cuda:0') tensor(3.8147e-06, device='cuda:0') tensor(5.2073e-07, device='cuda:0')
+upconv2.1.weight grad stats: tensor(0.0035, device='cuda:0') tensor(2.9395, device='cuda:0') tensor(0.8443, device='cuda:0')
+upconv2.1.bias grad stats: tensor(0.0063, device='cuda:0') tensor(1.8262, device='cuda:0') tensor(0.4882, device='cuda:0')
+dec2.0.weight grad stats: tensor(5.5681e-07, device='cuda:0') tensor(8.6839, device='cuda:0') tensor(0.4974, device='cuda:0')
+dec2.0.bias grad stats: tensor(0., device='cuda:0') tensor(8.3447e-07, device='cuda:0') tensor(2.4424e-07, device='cuda:0')
+dec2.1.weight grad stats: tensor(0.0211, device='cuda:0') tensor(18.1329, device='cuda:0') tensor(4.2680, device='cuda:0')
+dec2.1.bias grad stats: tensor(0.2684, device='cuda:0') tensor(7.7759, device='cuda:0') tensor(3.2847, device='cuda:0')
+dec2.3.weight grad stats: tensor(5.3644e-06, device='cuda:0') tensor(48.6378, device='cuda:0') tensor(0.9420, device='cuda:0')
+dec2.3.bias grad stats: tensor(0., device='cuda:0') tensor(4.2915e-06, device='cuda:0') tensor(4.0361e-07, device='cuda:0')
+dec2.4.weight grad stats: tensor(0.0610, device='cuda:0') tensor(33.7879, device='cuda:0') tensor(6.5458, device='cuda:0')
+dec2.4.bias grad stats: tensor(0.2433, device='cuda:0') tensor(18.2278, device='cuda:0') tensor(5.7576, device='cuda:0')
+upconv1.0.weight grad stats: tensor(2.3100e-05, device='cuda:0') tensor(49.9456, device='cuda:0') tensor(3.3150, device='cuda:0')
+upconv1.0.bias grad stats: tensor(4.7684e-07, device='cuda:0') tensor(1.0490e-05, device='cuda:0') tensor(4.0364e-06, device='cuda:0')
+upconv1.1.weight grad stats: tensor(1.8846, device='cuda:0') tensor(80.0598, device='cuda:0') tensor(23.4302, device='cuda:0')
+upconv1.1.bias grad stats: tensor(0.5397, device='cuda:0') tensor(13.1573, device='cuda:0') tensor(6.2320, device='cuda:0')
+dec1.0.weight grad stats: tensor(7.4133e-06, device='cuda:0') tensor(57.8020, device='cuda:0') tensor(3.0636, device='cuda:0')
+dec1.0.bias grad stats: tensor(0., device='cuda:0') tensor(6.6757e-06, device='cuda:0') tensor(9.0795e-07, device='cuda:0')
+dec1.1.weight grad stats: tensor(1.0698, device='cuda:0') tensor(250.3201, device='cuda:0') tensor(63.3412, device='cuda:0')
+dec1.1.bias grad stats: tensor(2.4511, device='cuda:0') tensor(87.1476, device='cuda:0') tensor(34.4410, device='cuda:0')
+dec1.3.weight grad stats: tensor(9.8673e-06, device='cuda:0') tensor(67.3218, device='cuda:0') tensor(3.0632, device='cuda:0')
+dec1.3.bias grad stats: tensor(0., device='cuda:0') tensor(2.3842e-06, device='cuda:0') tensor(5.4832e-07, device='cuda:0')
+dec1.4.weight grad stats: tensor(1.1440, device='cuda:0') tensor(236.5853, device='cuda:0') tensor(44.7498, device='cuda:0')
+dec1.4.bias grad stats: tensor(0.9101, device='cuda:0') tensor(143.0224, device='cuda:0') tensor(35.3256, device='cuda:0')
+final_conv.weight grad stats: tensor(4.8790e-09, device='cuda:0') tensor(1533.0667, device='cuda:0') tensor(24.3230, device='cuda:0')
+final_conv.bias grad stats: tensor(1.8774e-05, device='cuda:0') tensor(304.8705, device='cuda:0') tensor(18.4094, device='cuda:0')
+Number of Outlet surface points: 3000, volume points: 19280, surface points: 2933
+Divergence Loss: 0.14481645092508952, X Momentum Loss: 0.42173288405399123, Y Momentum Loss: 0.17938206501516207, Z Momentum Loss: 3.1456484959210376, Inlet Boundary Loss: 0.8981433170069252, Outlet Boundary Loss: 0.15694819542602279, Other Boundary Loss: 1.4232995971676827, Supervised Loss: 25839.095676803605 Heat Loss: 119.39229088628196 Surface Temperature Boundary Loss: 16224.275098550903 Total Loss: 42505.60569976752
+Number of Outlet surface points: 3000, volume points: 19298, surface points: 2932
+Divergence Loss: 0.16844734213562693, X Momentum Loss: 0.361053650237967, Y Momentum Loss: 0.17052947474232344, Z Momentum Loss: 2.751961359116454, Inlet Boundary Loss: 0.6534369670082919, Outlet Boundary Loss: 0.12389110273350394, Other Boundary Loss: 0.7627847105249455, Supervised Loss: 25752.982738132716 Heat Loss: 91.9286132009178 Surface Temperature Boundary Loss: 16092.632622243342 Total Loss: 42260.05785015774
+Number of Outlet surface points: 3000, volume points: 19321, surface points: 2949
+Divergence Loss: 0.1609629159919919, X Momentum Loss: 0.23455787012530996, Y Momentum Loss: 0.154764661089116, Z Momentum Loss: 2.2564039865613563, Inlet Boundary Loss: 0.41091915946681634, Outlet Boundary Loss: 0.10835101650765344, Other Boundary Loss: 0.3355752513723641, Supervised Loss: 25663.99864842676 Heat Loss: 38.414823926728616 Surface Temperature Boundary Loss: 15951.899255379167 Total Loss: 41943.97512834887
+Number of Outlet surface points: 3000, volume points: 19311, surface points: 2925
+Divergence Loss: 0.17667298140444354, X Momentum Loss: 0.23160255726319542, Y Momentum Loss: 0.15451085310623416, Z Momentum Loss: 2.1868457944544213, Inlet Boundary Loss: 0.3521739936521662, Outlet Boundary Loss: 0.09966171435740369, Other Boundary Loss: 0.23829226440986614, Supervised Loss: 26564.91856120324 Heat Loss: 29.460065617279692 Surface Temperature Boundary Loss: 15361.491088137738 Total Loss: 42219.594714722865
+Number of Outlet surface points: 3000, volume points: 19323, surface points: 2936
+Divergence Loss: 0.18429311968512854, X Momentum Loss: 0.3163072221898475, Y Momentum Loss: 0.16987010561446467, Z Momentum Loss: 2.3347903527103635, Inlet Boundary Loss: 0.407337778091491, Outlet Boundary Loss: 0.10507683999369355, Other Boundary Loss: 0.329896245343262, Supervised Loss: 25708.033794484578 Heat Loss: 49.97902563738421 Surface Temperature Boundary Loss: 16151.846938370627 Total Loss: 42198.0850129346
+Number of Outlet surface points: 3000, volume points: 19291, surface points: 2946
+Divergence Loss: 0.1655190051848161, X Momentum Loss: 0.2492273802289837, Y Momentum Loss: 0.15311976158076288, Z Momentum Loss: 2.28597643648434, Inlet Boundary Loss: 0.4105575128560394, Outlet Boundary Loss: 0.10194068055911257, Other Boundary Loss: 0.324395939796846, Supervised Loss: 25668.39954369548 Heat Loss: 50.89648210243087 Surface Temperature Boundary Loss: 16372.033456794376 Total Loss: 42380.85752597562
+Number of Outlet surface points: 3000, volume points: 19324, surface points: 2938
+Divergence Loss: 0.16689330705360508, X Momentum Loss: 0.2665266144638456, Y Momentum Loss: 0.14907574732994225, Z Momentum Loss: 2.327204922954917, Inlet Boundary Loss: 0.41091905646828464, Outlet Boundary Loss: 0.10710410821172092, Other Boundary Loss: 0.33054843019918484, Supervised Loss: 25663.998952457434 Heat Loss: 51.95934184411296 Surface Temperature Boundary Loss: 16317.689321576594 Total Loss: 42323.40670520207
+Number of Outlet surface points: 3000, volume points: 19318, surface points: 2932
+Divergence Loss: 0.17072455295488453, X Momentum Loss: 0.2494536662264694, Y Momentum Loss: 0.15080275767081644, Z Momentum Loss: 2.3012624736052136, Inlet Boundary Loss: 0.4109190535506487, Outlet Boundary Loss: 0.10676228710469589, Other Boundary Loss: 0.3287850013396508, Supervised Loss: 25663.998025386165 Heat Loss: 46.957597684894615 Surface Temperature Boundary Loss: 16177.747172963893 Total Loss: 42178.42236240777
+Number of Outlet surface points: 3000, volume points: 19330, surface points: 2929
+Divergence Loss: 0.17481350836783566, X Momentum Loss: 0.2585805982741261, Y Momentum Loss: 0.1586362039641224, Z Momentum Loss: 2.337059012300289, Inlet Boundary Loss: 0.4109191594681089, Outlet Boundary Loss: 0.10549298265037445, Other Boundary Loss: 0.34170890470138165, Supervised Loss: 25663.99864842902 Heat Loss: 46.88476547324744 Surface Temperature Boundary Loss: 16703.143536238444 Total Loss: 42703.81502626554
+5/100
+Validation Divergence Loss: 0.16929678437804788, Validation X Momentum Loss: 0.2580437392071453, Validation Y Momentum Loss: 0.14575126044351244, Validation Z Momentum Loss: 2.3610750693569904, Validation Outlet Boundary Loss: 0.10926095669079693, Validation Other Boundary Loss: 0.3085442556532395, Validation Heat Loss: 39.07794563862238, Validation Surface Temperature Boundary Loss: 17491.61505943491, Validation Total Loss: 17534.04497713926
+enc1.0.weight grad stats: tensor(7.9751e-05, device='cuda:0') tensor(25.8622, device='cuda:0') tensor(3.2123, device='cuda:0')
+enc1.0.bias grad stats: tensor(4.1723e-07, device='cuda:0') tensor(5.3406e-05, device='cuda:0') tensor(7.1154e-06, device='cuda:0')
+enc1.1.weight grad stats: tensor(0.2987, device='cuda:0') tensor(64.1123, device='cuda:0') tensor(17.4388, device='cuda:0')
+enc1.1.bias grad stats: tensor(0.2382, device='cuda:0') tensor(39.9260, device='cuda:0') tensor(12.8741, device='cuda:0')
+enc1.3.weight grad stats: tensor(7.1670e-06, device='cuda:0') tensor(21.7698, device='cuda:0') tensor(1.9745, device='cuda:0')
+enc1.3.bias grad stats: tensor(0., device='cuda:0') tensor(8.2254e-06, device='cuda:0') tensor(1.6252e-06, device='cuda:0')
+enc1.4.weight grad stats: tensor(0.2433, device='cuda:0') tensor(104.9385, device='cuda:0') tensor(29.4868, device='cuda:0')
+enc1.4.bias grad stats: tensor(1.5636, device='cuda:0') tensor(76.6750, device='cuda:0') tensor(19.1189, device='cuda:0')
+enc2.0.weight grad stats: tensor(1.6438e-06, device='cuda:0') tensor(12.0377, device='cuda:0') tensor(0.6266, device='cuda:0')
+enc2.0.bias grad stats: tensor(0., device='cuda:0') tensor(1.7285e-06, device='cuda:0') tensor(2.7180e-07, device='cuda:0')
+enc2.1.weight grad stats: tensor(0.1065, device='cuda:0') tensor(18.3020, device='cuda:0') tensor(2.8362, device='cuda:0')
+enc2.1.bias grad stats: tensor(0.0563, device='cuda:0') tensor(5.8102, device='cuda:0') tensor(1.9048, device='cuda:0')
+enc2.3.weight grad stats: tensor(7.3239e-06, device='cuda:0') tensor(11.6291, device='cuda:0') tensor(0.5746, device='cuda:0')
+enc2.3.bias grad stats: tensor(0., device='cuda:0') tensor(8.3447e-07, device='cuda:0') tensor(2.5565e-07, device='cuda:0')
+enc2.4.weight grad stats: tensor(0.0153, device='cuda:0') tensor(20.9475, device='cuda:0') tensor(2.7984, device='cuda:0')
+enc2.4.bias grad stats: tensor(0.0183, device='cuda:0') tensor(5.8202, device='cuda:0') tensor(1.6551, device='cuda:0')
+bottleneck.0.weight grad stats: tensor(2.2911e-07, device='cuda:0') tensor(3.9418, device='cuda:0') tensor(0.1735, device='cuda:0')
+bottleneck.0.bias grad stats: tensor(0., device='cuda:0') tensor(3.8743e-07, device='cuda:0') tensor(3.8399e-08, device='cuda:0')
+bottleneck.1.weight grad stats: tensor(0.0121, device='cuda:0') tensor(3.3638, device='cuda:0') tensor(0.4446, device='cuda:0')
+bottleneck.1.bias grad stats: tensor(0.0052, device='cuda:0') tensor(1.1468, device='cuda:0') tensor(0.3175, device='cuda:0')
+bottleneck.3.weight grad stats: tensor(0., device='cuda:0') tensor(7.6102, device='cuda:0') tensor(0.1518, device='cuda:0')
+bottleneck.3.bias grad stats: tensor(0., device='cuda:0') tensor(3.5763e-07, device='cuda:0') tensor(5.1135e-08, device='cuda:0')
+bottleneck.4.weight grad stats: tensor(0.0058, device='cuda:0') tensor(3.4249, device='cuda:0') tensor(0.7097, device='cuda:0')
+bottleneck.4.bias grad stats: tensor(0.0049, device='cuda:0') tensor(2.6541, device='cuda:0') tensor(0.5251, device='cuda:0')
+upconv2.0.weight grad stats: tensor(2.9076e-06, device='cuda:0') tensor(9.5396, device='cuda:0') tensor(0.3992, device='cuda:0')
+upconv2.0.bias grad stats: tensor(0., device='cuda:0') tensor(3.0994e-06, device='cuda:0') tensor(7.5402e-07, device='cuda:0')
+upconv2.1.weight grad stats: tensor(0.0496, device='cuda:0') tensor(2.2506, device='cuda:0') tensor(0.6811, device='cuda:0')
+upconv2.1.bias grad stats: tensor(0.0009, device='cuda:0') tensor(2.8685, device='cuda:0') tensor(0.5557, device='cuda:0')
+dec2.0.weight grad stats: tensor(2.5040e-06, device='cuda:0') tensor(10.2236, device='cuda:0') tensor(0.4492, device='cuda:0')
+dec2.0.bias grad stats: tensor(0., device='cuda:0') tensor(8.3447e-07, device='cuda:0') tensor(2.5821e-07, device='cuda:0')
+dec2.1.weight grad stats: tensor(0.0768, device='cuda:0') tensor(16.0099, device='cuda:0') tensor(2.8109, device='cuda:0')
+dec2.1.bias grad stats: tensor(0.0021, device='cuda:0') tensor(6.5061, device='cuda:0') tensor(2.3389, device='cuda:0')
+dec2.3.weight grad stats: tensor(2.0722e-06, device='cuda:0') tensor(29.7979, device='cuda:0') tensor(0.6987, device='cuda:0')
+dec2.3.bias grad stats: tensor(0., device='cuda:0') tensor(2.9802e-06, device='cuda:0') tensor(3.8260e-07, device='cuda:0')
+dec2.4.weight grad stats: tensor(0.1260, device='cuda:0') tensor(27.5043, device='cuda:0') tensor(4.2461, device='cuda:0')
+dec2.4.bias grad stats: tensor(0.1246, device='cuda:0') tensor(10.7544, device='cuda:0') tensor(3.8769, device='cuda:0')
+upconv1.0.weight grad stats: tensor(9.2193e-05, device='cuda:0') tensor(26.4223, device='cuda:0') tensor(1.7962, device='cuda:0')
+upconv1.0.bias grad stats: tensor(0., device='cuda:0') tensor(1.8001e-05, device='cuda:0') tensor(4.5914e-06, device='cuda:0')
+upconv1.1.weight grad stats: tensor(0.3330, device='cuda:0') tensor(60.7493, device='cuda:0') tensor(13.7078, device='cuda:0')
+upconv1.1.bias grad stats: tensor(0.1234, device='cuda:0') tensor(12.9563, device='cuda:0') tensor(4.2547, device='cuda:0')
+dec1.0.weight grad stats: tensor(1.0133e-05, device='cuda:0') tensor(35.0013, device='cuda:0') tensor(1.8338, device='cuda:0')
+dec1.0.bias grad stats: tensor(2.2352e-08, device='cuda:0') tensor(4.2915e-06, device='cuda:0') tensor(8.0343e-07, device='cuda:0')
+dec1.1.weight grad stats: tensor(0.3672, device='cuda:0') tensor(235.8342, device='cuda:0') tensor(45.5009, device='cuda:0')
+dec1.1.bias grad stats: tensor(0.9818, device='cuda:0') tensor(88.4470, device='cuda:0') tensor(28.8995, device='cuda:0')
+dec1.3.weight grad stats: tensor(3.4149e-06, device='cuda:0') tensor(34.1687, device='cuda:0') tensor(2.1164, device='cuda:0')
+dec1.3.bias grad stats: tensor(1.2078e-09, device='cuda:0') tensor(9.2983e-06, device='cuda:0') tensor(7.7580e-07, device='cuda:0')
+dec1.4.weight grad stats: tensor(1.2799, device='cuda:0') tensor(285.3850, device='cuda:0') tensor(53.0791, device='cuda:0')
+dec1.4.bias grad stats: tensor(1.0880, device='cuda:0') tensor(96.7949, device='cuda:0') tensor(28.7456, device='cuda:0')
+final_conv.weight grad stats: tensor(6.2244e-08, device='cuda:0') tensor(962.9873, device='cuda:0') tensor(13.8525, device='cuda:0')
+final_conv.bias grad stats: tensor(3.5792e-05, device='cuda:0') tensor(265.4356, device='cuda:0') tensor(10.3027, device='cuda:0')
+Number of Outlet surface points: 3000, volume points: 19326, surface points: 2948
+Divergence Loss: 0.16852669686646995, X Momentum Loss: 0.22490941642876636, Y Momentum Loss: 0.16639320789656142, Z Momentum Loss: 2.3910274446402395, Inlet Boundary Loss: 0.41091915946681634, Outlet Boundary Loss: 0.11478490305645038, Other Boundary Loss: 0.3252282207093798, Supervised Loss: 25663.99864842676 Heat Loss: 44.80161473211974 Surface Temperature Boundary Loss: 16418.36523587435 Total Loss: 42416.9681538374
+Number of Outlet surface points: 3000, volume points: 19305, surface points: 2930
+Divergence Loss: 0.17498437689367935, X Momentum Loss: 0.1847648143807213, Y Momentum Loss: 0.14453233912154748, Z Momentum Loss: 2.0968406048732464, Inlet Boundary Loss: 0.33153525482720037, Outlet Boundary Loss: 0.10502957868943999, Other Boundary Loss: 0.20017465130190507, Supervised Loss: 26602.873390765875 Heat Loss: 30.012172950655746 Surface Temperature Boundary Loss: 15236.078057488237 Total Loss: 42134.462057710625
+Number of Outlet surface points: 3000, volume points: 19291, surface points: 2936
+Divergence Loss: 0.179236339445578, X Momentum Loss: 0.20730732445570976, Y Momentum Loss: 0.1443594486073303, Z Momentum Loss: 2.092104140708711, Inlet Boundary Loss: 0.3194437091887718, Outlet Boundary Loss: 0.09970487532722652, Other Boundary Loss: 0.166082395092265, Supervised Loss: 26599.885380639847 Heat Loss: 28.86344135523182 Surface Temperature Boundary Loss: 15596.240611888352 Total Loss: 42483.460676279516
+Number of Outlet surface points: 3000, volume points: 19311, surface points: 2944
+Divergence Loss: 0.1809798118667, X Momentum Loss: 0.24149741497829075, Y Momentum Loss: 0.14303884019326268, Z Momentum Loss: 2.017934590451702, Inlet Boundary Loss: 0.3312780431828841, Outlet Boundary Loss: 0.10613450199026882, Other Boundary Loss: 0.20048745340393292, Supervised Loss: 26602.835748825633 Heat Loss: 32.24627357650909 Surface Temperature Boundary Loss: 15263.15184964197 Total Loss: 42163.5097243022
+Number of Outlet surface points: 3000, volume points: 19309, surface points: 2943
+Divergence Loss: 0.1711931898953916, X Momentum Loss: 0.1898690003982307, Y Momentum Loss: 0.14356154449680325, Z Momentum Loss: 2.005364167218781, Inlet Boundary Loss: 0.3315093308590985, Outlet Boundary Loss: 0.10192225284609534, Other Boundary Loss: 0.19833406291639327, Supervised Loss: 26602.870907782977 Heat Loss: 31.881155547064015 Surface Temperature Boundary Loss: 15262.012238936228 Total Loss: 42162.14585436129
+Number of Outlet surface points: 3000, volume points: 19322, surface points: 2937
+Divergence Loss: 0.17288875980979643, X Momentum Loss: 0.24056529772782023, Y Momentum Loss: 0.14868390425380257, Z Momentum Loss: 2.0257289068209414, Inlet Boundary Loss: 0.3315351594518503, Outlet Boundary Loss: 0.11074855625625336, Other Boundary Loss: 0.19894298746184788, Supervised Loss: 26602.873136494447 Heat Loss: 31.40280673864226 Surface Temperature Boundary Loss: 15332.192888738804 Total Loss: 42231.958533320925
+Number of Outlet surface points: 3000, volume points: 19334, surface points: 2941
+Divergence Loss: 0.18276023995235346, X Momentum Loss: 0.2475828774438039, Y Momentum Loss: 0.15512642838080654, Z Momentum Loss: 2.120730603457881, Inlet Boundary Loss: 0.3315352548268641, Outlet Boundary Loss: 0.09994345635343602, Other Boundary Loss: 0.19586396381054355, Supervised Loss: 26602.873390735418 Heat Loss: 36.039180641838534 Surface Temperature Boundary Loss: 15399.554109489389 Total Loss: 42304.06079857664
+6/100
+Validation Divergence Loss: 0.18517490839097597, Validation X Momentum Loss: 0.22605047932437955, Validation Y Momentum Loss: 0.14324986913438034, Validation Z Momentum Loss: 2.1350649829295536, Validation Outlet Boundary Loss: 0.11112188192166743, Validation Other Boundary Loss: 0.20109714992539365, Validation Heat Loss: 33.228919778802016, Validation Surface Temperature Boundary Loss: 15660.217766296944, Validation Total Loss: 15696.448445347372
+enc1.0.weight grad stats: tensor(0.0005, device='cuda:0') tensor(35.3050, device='cuda:0') tensor(3.5035, device='cuda:0')
+enc1.0.bias grad stats: tensor(0., device='cuda:0') tensor(4.8161e-05, device='cuda:0') tensor(1.0407e-05, device='cuda:0')
+enc1.1.weight grad stats: tensor(0.3831, device='cuda:0') tensor(50.7462, device='cuda:0') tensor(15.4602, device='cuda:0')
+enc1.1.bias grad stats: tensor(0.6180, device='cuda:0') tensor(40.3778, device='cuda:0') tensor(12.4046, device='cuda:0')
+enc1.3.weight grad stats: tensor(2.4080e-05, device='cuda:0') tensor(20.9497, device='cuda:0') tensor(1.5077, device='cuda:0')
+enc1.3.bias grad stats: tensor(0., device='cuda:0') tensor(9.0599e-06, device='cuda:0') tensor(1.9204e-06, device='cuda:0')
+enc1.4.weight grad stats: tensor(0.1639, device='cuda:0') tensor(75.7008, device='cuda:0') tensor(18.8241, device='cuda:0')
+enc1.4.bias grad stats: tensor(0.1169, device='cuda:0') tensor(65.9400, device='cuda:0') tensor(16.1225, device='cuda:0')
+enc2.0.weight grad stats: tensor(5.5139e-06, device='cuda:0') tensor(11.0251, device='cuda:0') tensor(0.4067, device='cuda:0')
+enc2.0.bias grad stats: tensor(0., device='cuda:0') tensor(9.5367e-07, device='cuda:0') tensor(2.1131e-07, device='cuda:0')
+enc2.1.weight grad stats: tensor(0.0593, device='cuda:0') tensor(15.9577, device='cuda:0') tensor(1.7712, device='cuda:0')
+enc2.1.bias grad stats: tensor(0.0629, device='cuda:0') tensor(5.3463, device='cuda:0') tensor(1.3131, device='cuda:0')
+enc2.3.weight grad stats: tensor(3.9339e-06, device='cuda:0') tensor(15.0368, device='cuda:0') tensor(0.4010, device='cuda:0')
+enc2.3.bias grad stats: tensor(0., device='cuda:0') tensor(2.0266e-06, device='cuda:0') tensor(2.9436e-07, device='cuda:0')
+enc2.4.weight grad stats: tensor(0.1413, device='cuda:0') tensor(6.3336, device='cuda:0') tensor(1.8356, device='cuda:0')
+enc2.4.bias grad stats: tensor(0.0002, device='cuda:0') tensor(4.2783, device='cuda:0') tensor(1.0980, device='cuda:0')
+bottleneck.0.weight grad stats: tensor(1.3504e-07, device='cuda:0') tensor(3.4222, device='cuda:0') tensor(0.1282, device='cuda:0')
+bottleneck.0.bias grad stats: tensor(0., device='cuda:0') tensor(2.8312e-07, device='cuda:0') tensor(3.6562e-08, device='cuda:0')
+bottleneck.1.weight grad stats: tensor(0.0023, device='cuda:0') tensor(2.7456, device='cuda:0') tensor(0.3475, device='cuda:0')
+bottleneck.1.bias grad stats: tensor(0.0008, device='cuda:0') tensor(1.1430, device='cuda:0') tensor(0.2967, device='cuda:0')
+bottleneck.3.weight grad stats: tensor(1.5320e-07, device='cuda:0') tensor(5.5368, device='cuda:0') tensor(0.1270, device='cuda:0')
+bottleneck.3.bias grad stats: tensor(0., device='cuda:0') tensor(4.1723e-07, device='cuda:0') tensor(6.1067e-08, device='cuda:0')
+bottleneck.4.weight grad stats: tensor(0.0031, device='cuda:0') tensor(3.2346, device='cuda:0') tensor(0.4475, device='cuda:0')
+bottleneck.4.bias grad stats: tensor(0.0033, device='cuda:0') tensor(1.2688, device='cuda:0') tensor(0.2644, device='cuda:0')
+upconv2.0.weight grad stats: tensor(1.0335e-06, device='cuda:0') tensor(8.6388, device='cuda:0') tensor(0.2716, device='cuda:0')
+upconv2.0.bias grad stats: tensor(0., device='cuda:0') tensor(2.6226e-06, device='cuda:0') tensor(6.3400e-07, device='cuda:0')
+upconv2.1.weight grad stats: tensor(0.0256, device='cuda:0') tensor(2.4524, device='cuda:0') tensor(0.6584, device='cuda:0')
+upconv2.1.bias grad stats: tensor(0.0009, device='cuda:0') tensor(1.2183, device='cuda:0') tensor(0.3771, device='cuda:0')
+dec2.0.weight grad stats: tensor(1.2997e-06, device='cuda:0') tensor(7.3216, device='cuda:0') tensor(0.3506, device='cuda:0')
+dec2.0.bias grad stats: tensor(0., device='cuda:0') tensor(1.3113e-06, device='cuda:0') tensor(2.4028e-07, device='cuda:0')
+dec2.1.weight grad stats: tensor(0.0133, device='cuda:0') tensor(16.3769, device='cuda:0') tensor(2.9418, device='cuda:0')
+dec2.1.bias grad stats: tensor(0.1122, device='cuda:0') tensor(4.9698, device='cuda:0') tensor(1.5792, device='cuda:0')
+dec2.3.weight grad stats: tensor(7.8231e-08, device='cuda:0') tensor(23.8555, device='cuda:0') tensor(0.5849, device='cuda:0')
+dec2.3.bias grad stats: tensor(0., device='cuda:0') tensor(2.1458e-06, device='cuda:0') tensor(2.9779e-07, device='cuda:0')
+dec2.4.weight grad stats: tensor(0.0122, device='cuda:0') tensor(16.9178, device='cuda:0') tensor(3.4176, device='cuda:0')
+dec2.4.bias grad stats: tensor(0.0767, device='cuda:0') tensor(7.8114, device='cuda:0') tensor(2.2449, device='cuda:0')
+upconv1.0.weight grad stats: tensor(4.6067e-05, device='cuda:0') tensor(22.8206, device='cuda:0') tensor(1.1166, device='cuda:0')
+upconv1.0.bias grad stats: tensor(0., device='cuda:0') tensor(1.2875e-05, device='cuda:0') tensor(4.1518e-06, device='cuda:0')
+upconv1.1.weight grad stats: tensor(0.5047, device='cuda:0') tensor(15.2011, device='cuda:0') tensor(5.6208, device='cuda:0')
+upconv1.1.bias grad stats: tensor(0.0830, device='cuda:0') tensor(7.5314, device='cuda:0') tensor(2.2472, device='cuda:0')
+dec1.0.weight grad stats: tensor(3.9210e-06, device='cuda:0') tensor(21.6655, device='cuda:0') tensor(1.1847, device='cuda:0')
+dec1.0.bias grad stats: tensor(0., device='cuda:0') tensor(5.2452e-06, device='cuda:0') tensor(8.5728e-07, device='cuda:0')
+dec1.1.weight grad stats: tensor(0.2644, device='cuda:0') tensor(108.6393, device='cuda:0') tensor(24.6632, device='cuda:0')
+dec1.1.bias grad stats: tensor(1.1766, device='cuda:0') tensor(66.8626, device='cuda:0') tensor(23.8550, device='cuda:0')
+dec1.3.weight grad stats: tensor(6.4184e-06, device='cuda:0') tensor(21.6567, device='cuda:0') tensor(1.4593, device='cuda:0')
+dec1.3.bias grad stats: tensor(2.0882e-09, device='cuda:0') tensor(5.0068e-06, device='cuda:0') tensor(8.6933e-07, device='cuda:0')
+dec1.4.weight grad stats: tensor(1.3076, device='cuda:0') tensor(96.4518, device='cuda:0') tensor(29.6380, device='cuda:0')
+dec1.4.bias grad stats: tensor(1.1011, device='cuda:0') tensor(112.4609, device='cuda:0') tensor(26.8426, device='cuda:0')
+final_conv.weight grad stats: tensor(2.3481e-08, device='cuda:0') tensor(331.1619, device='cuda:0') tensor(7.8650, device='cuda:0')
+final_conv.bias grad stats: tensor(3.8962e-05, device='cuda:0') tensor(57.6277, device='cuda:0') tensor(4.8416, device='cuda:0')
+Number of Outlet surface points: 3000, volume points: 19318, surface points: 2950
+Divergence Loss: 0.18189822101531794, X Momentum Loss: 0.21016973403484693, Y Momentum Loss: 0.15231372762314835, Z Momentum Loss: 2.144705752290254, Inlet Boundary Loss: 0.33153525482720037, Outlet Boundary Loss: 0.10351836942199667, Other Boundary Loss: 0.20388177439629365, Supervised Loss: 26602.873390765875 Heat Loss: 27.82325662194314 Surface Temperature Boundary Loss: 15074.213694784878 Total Loss: 41970.49893989207
+Number of Outlet surface points: 3000, volume points: 19276, surface points: 2939
+Divergence Loss: 0.17679246229205817, X Momentum Loss: 0.17569545264459085, Y Momentum Loss: 0.1462098403751028, Z Momentum Loss: 2.1012090292613723, Inlet Boundary Loss: 0.30789134322762834, Outlet Boundary Loss: 0.09591876655455456, Other Boundary Loss: 0.16437735786766142, Supervised Loss: 26551.046909591176 Heat Loss: 26.5260708925571 Surface Temperature Boundary Loss: 15368.133002750601 Total Loss: 42204.849943508685
+Number of Outlet surface points: 3000, volume points: 19333, surface points: 2935
+Divergence Loss: 0.17081000838447702, X Momentum Loss: 0.22293679283251472, Y Momentum Loss: 0.15198343750246515, Z Momentum Loss: 2.1507288338287447, Inlet Boundary Loss: 0.33075382734348724, Outlet Boundary Loss: 0.09931498487804828, Other Boundary Loss: 0.19450343887936597, Supervised Loss: 26601.515573690474 Heat Loss: 31.244831774851413 Surface Temperature Boundary Loss: 15300.844347423481 Total Loss: 42198.84119703926
+Number of Outlet surface points: 3000, volume points: 19312, surface points: 2932
+Divergence Loss: 0.180350506475855, X Momentum Loss: 0.20539613143694319, Y Momentum Loss: 0.14638621457147002, Z Momentum Loss: 2.1566471519161707, Inlet Boundary Loss: 0.3314566104791772, Outlet Boundary Loss: 0.10269556020672543, Other Boundary Loss: 0.20395516319327323, Supervised Loss: 26602.736048677918 Heat Loss: 29.74578533642728 Surface Temperature Boundary Loss: 15375.830469059243 Total Loss: 42273.864886370815
+Number of Outlet surface points: 3000, volume points: 19325, surface points: 2942
+Divergence Loss: 0.18727354799550625, X Momentum Loss: 0.24288296060296316, Y Momentum Loss: 0.15235354104191004, Z Momentum Loss: 2.147721368790962, Inlet Boundary Loss: 0.3315352452317927, Outlet Boundary Loss: 0.10659750275296404, Other Boundary Loss: 0.2023650948211432, Supervised Loss: 26602.873399744545 Heat Loss: 33.03495137102059 Surface Temperature Boundary Loss: 15274.848335966135 Total Loss: 42176.38804512515
+Number of Outlet surface points: 3000, volume points: 19293, surface points: 2935
+Divergence Loss: 0.18127797923217703, X Momentum Loss: 0.2178787038392499, Y Momentum Loss: 0.1447759465952546, Z Momentum Loss: 2.008528440339312, Inlet Boundary Loss: 0.33153525482720037, Outlet Boundary Loss: 0.10195769297392102, Other Boundary Loss: 0.19680890286515054, Supervised Loss: 26602.87339075838 Heat Loss: 27.435895316297007 Surface Temperature Boundary Loss: 15322.95665975177 Total Loss: 42218.70928363288
+7/100
+Validation Divergence Loss: 0.182612672805789, Validation X Momentum Loss: 0.22440955674195928, Validation Y Momentum Loss: 0.1428283419954384, Validation Z Momentum Loss: 2.1092835439050415, Validation Outlet Boundary Loss: 0.10744132087209986, Validation Other Boundary Loss: 0.20145143310106198, Validation Heat Loss: 30.531381221481592, Validation Surface Temperature Boundary Loss: 15553.035482139405, Validation Total Loss: 15586.534890230309
+enc1.0.weight grad stats: tensor(0.0057, device='cuda:0') tensor(21.6766, device='cuda:0') tensor(3.0571, device='cuda:0')
+enc1.0.bias grad stats: tensor(0., device='cuda:0') tensor(2.5749e-05, device='cuda:0') tensor(4.5733e-06, device='cuda:0')
+enc1.1.weight grad stats: tensor(0.0883, device='cuda:0') tensor(29.7259, device='cuda:0') tensor(9.7512, device='cuda:0')
+enc1.1.bias grad stats: tensor(0.0978, device='cuda:0') tensor(21.8972, device='cuda:0') tensor(6.8474, device='cuda:0')
+enc1.3.weight grad stats: tensor(3.0644e-05, device='cuda:0') tensor(21.0388, device='cuda:0') tensor(1.3348, device='cuda:0')
+enc1.3.bias grad stats: tensor(7.4506e-08, device='cuda:0') tensor(2.8610e-06, device='cuda:0') tensor(1.0850e-06, device='cuda:0')
+enc1.4.weight grad stats: tensor(0.2767, device='cuda:0') tensor(52.1869, device='cuda:0') tensor(15.0078, device='cuda:0')
+enc1.4.bias grad stats: tensor(0.3844, device='cuda:0') tensor(73.3854, device='cuda:0') tensor(14.8050, device='cuda:0')
+enc2.0.weight grad stats: tensor(7.1540e-07, device='cuda:0') tensor(15.9840, device='cuda:0') tensor(0.5213, device='cuda:0')
+enc2.0.bias grad stats: tensor(0., device='cuda:0') tensor(9.5367e-07, device='cuda:0') tensor(2.2200e-07, device='cuda:0')
+enc2.1.weight grad stats: tensor(0.0035, device='cuda:0') tensor(18.2089, device='cuda:0') tensor(2.3559, device='cuda:0')
+enc2.1.bias grad stats: tensor(0.0113, device='cuda:0') tensor(6.1684, device='cuda:0') tensor(1.6237, device='cuda:0')
+enc2.3.weight grad stats: tensor(1.8626e-08, device='cuda:0') tensor(13.0323, device='cuda:0') tensor(0.4843, device='cuda:0')
+enc2.3.bias grad stats: tensor(0., device='cuda:0') tensor(1.5199e-06, device='cuda:0') tensor(3.1781e-07, device='cuda:0')
+enc2.4.weight grad stats: tensor(0.0148, device='cuda:0') tensor(10.2498, device='cuda:0') tensor(2.3515, device='cuda:0')
+enc2.4.bias grad stats: tensor(0.0982, device='cuda:0') tensor(4.8024, device='cuda:0') tensor(1.2914, device='cuda:0')
+bottleneck.0.weight grad stats: tensor(3.3528e-08, device='cuda:0') tensor(3.4486, device='cuda:0') tensor(0.1266, device='cuda:0')
+bottleneck.0.bias grad stats: tensor(0., device='cuda:0') tensor(2.2352e-07, device='cuda:0') tensor(3.4968e-08, device='cuda:0')
+bottleneck.1.weight grad stats: tensor(0.0035, device='cuda:0') tensor(3.1349, device='cuda:0') tensor(0.3426, device='cuda:0')
+bottleneck.1.bias grad stats: tensor(0.0005, device='cuda:0') tensor(1.2149, device='cuda:0') tensor(0.2961, device='cuda:0')
+bottleneck.3.weight grad stats: tensor(2.0489e-08, device='cuda:0') tensor(5.3363, device='cuda:0') tensor(0.1279, device='cuda:0')
+bottleneck.3.bias grad stats: tensor(0., device='cuda:0') tensor(5.9605e-07, device='cuda:0') tensor(6.9973e-08, device='cuda:0')
+bottleneck.4.weight grad stats: tensor(0.0135, device='cuda:0') tensor(3.1542, device='cuda:0') tensor(0.4531, device='cuda:0')
+bottleneck.4.bias grad stats: tensor(0.0034, device='cuda:0') tensor(0.9818, device='cuda:0') tensor(0.2825, device='cuda:0')
+upconv2.0.weight grad stats: tensor(2.1258e-06, device='cuda:0') tensor(9.1094, device='cuda:0') tensor(0.2960, device='cuda:0')
+upconv2.0.bias grad stats: tensor(0., device='cuda:0') tensor(2.1458e-06, device='cuda:0') tensor(5.9325e-07, device='cuda:0')
+upconv2.1.weight grad stats: tensor(0.0127, device='cuda:0') tensor(3.0570, device='cuda:0') tensor(0.6944, device='cuda:0')
+upconv2.1.bias grad stats: tensor(0.0008, device='cuda:0') tensor(1.4307, device='cuda:0') tensor(0.4436, device='cuda:0')
+dec2.0.weight grad stats: tensor(1.8656e-07, device='cuda:0') tensor(8.1503, device='cuda:0') tensor(0.3701, device='cuda:0')
+dec2.0.bias grad stats: tensor(0., device='cuda:0') tensor(1.3113e-06, device='cuda:0') tensor(2.6065e-07, device='cuda:0')
+dec2.1.weight grad stats: tensor(0.0352, device='cuda:0') tensor(16.0895, device='cuda:0') tensor(3.2466, device='cuda:0')
+dec2.1.bias grad stats: tensor(0.0193, device='cuda:0') tensor(4.9459, device='cuda:0') tensor(1.6327, device='cuda:0')
+dec2.3.weight grad stats: tensor(4.6790e-06, device='cuda:0') tensor(24.2834, device='cuda:0') tensor(0.5801, device='cuda:0')
+dec2.3.bias grad stats: tensor(0., device='cuda:0') tensor(2.8610e-06, device='cuda:0') tensor(4.0227e-07, device='cuda:0')
+dec2.4.weight grad stats: tensor(0.0239, device='cuda:0') tensor(16.6043, device='cuda:0') tensor(3.3889, device='cuda:0')
+dec2.4.bias grad stats: tensor(0.0142, device='cuda:0') tensor(6.8057, device='cuda:0') tensor(2.3091, device='cuda:0')
+upconv1.0.weight grad stats: tensor(4.5635e-06, device='cuda:0') tensor(25.0607, device='cuda:0') tensor(1.0777, device='cuda:0')
+upconv1.0.bias grad stats: tensor(1.7881e-07, device='cuda:0') tensor(1.7792e-05, device='cuda:0') tensor(3.4831e-06, device='cuda:0')
+upconv1.1.weight grad stats: tensor(0.3942, device='cuda:0') tensor(16.9380, device='cuda:0') tensor(6.8559, device='cuda:0')
+upconv1.1.bias grad stats: tensor(0.4124, device='cuda:0') tensor(5.8152, device='cuda:0') tensor(2.4754, device='cuda:0')
+dec1.0.weight grad stats: tensor(1.5294e-05, device='cuda:0') tensor(22.3375, device='cuda:0') tensor(1.0263, device='cuda:0')
+dec1.0.bias grad stats: tensor(0., device='cuda:0') tensor(8.8215e-06, device='cuda:0') tensor(7.4442e-07, device='cuda:0')
+dec1.1.weight grad stats: tensor(0.4653, device='cuda:0') tensor(47.1792, device='cuda:0') tensor(16.5700, device='cuda:0')
+dec1.1.bias grad stats: tensor(0.2662, device='cuda:0') tensor(68.1980, device='cuda:0') tensor(24.4800, device='cuda:0')
+dec1.3.weight grad stats: tensor(3.7537e-06, device='cuda:0') tensor(19.4537, device='cuda:0') tensor(1.2618, device='cuda:0')
+dec1.3.bias grad stats: tensor(0., device='cuda:0') tensor(3.3975e-06, device='cuda:0') tensor(5.5863e-07, device='cuda:0')
+dec1.4.weight grad stats: tensor(1.3078, device='cuda:0') tensor(75.7241, device='cuda:0') tensor(27.6530, device='cuda:0')
+dec1.4.bias grad stats: tensor(1.1013, device='cuda:0') tensor(113.7921, device='cuda:0') tensor(26.6089, device='cuda:0')
+final_conv.weight grad stats: tensor(3.4607e-08, device='cuda:0') tensor(222.2663, device='cuda:0') tensor(5.4800, device='cuda:0')
+final_conv.bias grad stats: tensor(0.0002, device='cuda:0') tensor(32.6006, device='cuda:0') tensor(3.0716, device='cuda:0')
+Number of Outlet surface points: 3000, volume points: 19330, surface points: 2931
+Divergence Loss: 0.1827081971810923, X Momentum Loss: 0.25134131342098165, Y Momentum Loss: 0.14504457446226648, Z Momentum Loss: 2.0535421141796366, Inlet Boundary Loss: 0.33153525482720037, Outlet Boundary Loss: 0.1120244851230334, Other Boundary Loss: 0.20652340181191314, Supervised Loss: 26602.873390765875 Heat Loss: 32.25342272149598 Surface Temperature Boundary Loss: 15214.976009824315 Total Loss: 42115.64611753846
+Number of Outlet surface points: 3000, volume points: 19324, surface points: 2952
+Divergence Loss: 0.18583245281403718, X Momentum Loss: 0.1974594486712157, Y Momentum Loss: 0.1468356648402355, Z Momentum Loss: 2.021117762249114, Inlet Boundary Loss: 0.3128412981057792, Outlet Boundary Loss: 0.10170520320998033, Other Boundary Loss: 0.15345094948232005, Supervised Loss: 26541.180785257377 Heat Loss: 33.518951695662324 Surface Temperature Boundary Loss: 15312.725404969091 Total Loss: 42145.00989260871
+Number of Outlet surface points: 3000, volume points: 19330, surface points: 2937
+Divergence Loss: 0.18730615993821276, X Momentum Loss: 0.21923997847012688, Y Momentum Loss: 0.1478172897709821, Z Momentum Loss: 2.0802880579996232, Inlet Boundary Loss: 0.3282369630305564, Outlet Boundary Loss: 0.10482636600602571, Other Boundary Loss: 0.18999118114941177, Supervised Loss: 26595.738103514894 Heat Loss: 31.408018460101157 Surface Temperature Boundary Loss: 15342.337770967079 Total Loss: 42233.65217403213
+Number of Outlet surface points: 3000, volume points: 19310, surface points: 2935
+Divergence Loss: 0.16808213972403738, X Momentum Loss: 0.22816026725807054, Y Momentum Loss: 0.14506570919664075, Z Momentum Loss: 2.0923010497324763, Inlet Boundary Loss: 0.33151487365910615, Outlet Boundary Loss: 0.10520829494750916, Other Boundary Loss: 0.20544587002523615, Supervised Loss: 26602.832335547486 Heat Loss: 29.586737400280892 Surface Temperature Boundary Loss: 15220.505805918274 Total Loss: 42118.45318764154
+Number of Outlet surface points: 3000, volume points: 19345, surface points: 2931
+Divergence Loss: 0.1802479189459746, X Momentum Loss: 0.19611383791012224, Y Momentum Loss: 0.14670125538344486, Z Momentum Loss: 2.153895417793367, Inlet Boundary Loss: 0.33153316582865283, Outlet Boundary Loss: 0.10227084036635802, Other Boundary Loss: 0.20103980705867594, Supervised Loss: 26602.87058555047 Heat Loss: 28.337793969465373 Surface Temperature Boundary Loss: 15321.877300517983 Total Loss: 42218.65724213462
+Number of Outlet surface points: 3000, volume points: 19340, surface points: 2943
+Divergence Loss: 0.18259494550088934, X Momentum Loss: 0.19841033191069307, Y Momentum Loss: 0.14828120101738088, Z Momentum Loss: 2.079968460377208, Inlet Boundary Loss: 0.33153525482720037, Outlet Boundary Loss: 0.10206608971753216, Other Boundary Loss: 0.19649442753483995, Supervised Loss: 26602.873390765875 Heat Loss: 25.96400369597575 Surface Temperature Boundary Loss: 15343.355595855752 Total Loss: 42237.69291591426
+8/100
+Validation Divergence Loss: 0.18161236823198937, Validation X Momentum Loss: 0.22351666995875297, Validation Y Momentum Loss: 0.1424412685930524, Validation Z Momentum Loss: 2.093145956304099, Validation Outlet Boundary Loss: 0.10578749971975014, Validation Other Boundary Loss: 0.2015241859080598, Validation Heat Loss: 29.150123346309112, Validation Surface Temperature Boundary Loss: 15500.554977028336, Validation Total Loss: 15532.653128323362
+enc1.0.weight grad stats: tensor(0.0065, device='cuda:0') tensor(27.1790, device='cuda:0') tensor(2.7326, device='cuda:0')
+enc1.0.bias grad stats: tensor(1.1921e-07, device='cuda:0') tensor(8.2970e-05, device='cuda:0') tensor(8.8960e-06, device='cuda:0')
+enc1.1.weight grad stats: tensor(0.0260, device='cuda:0') tensor(34.5039, device='cuda:0') tensor(12.5798, device='cuda:0')
+enc1.1.bias grad stats: tensor(0.6648, device='cuda:0') tensor(30.7504, device='cuda:0') tensor(9.9226, device='cuda:0')
+enc1.3.weight grad stats: tensor(2.1325e-05, device='cuda:0') tensor(18.6407, device='cuda:0') tensor(1.5893, device='cuda:0')
+enc1.3.bias grad stats: tensor(2.3842e-07, device='cuda:0') tensor(7.3910e-06, device='cuda:0') tensor(2.3218e-06, device='cuda:0')
+enc1.4.weight grad stats: tensor(0.2190, device='cuda:0') tensor(136.2580, device='cuda:0') tensor(29.5025, device='cuda:0')
+enc1.4.bias grad stats: tensor(0.0983, device='cuda:0') tensor(73.5857, device='cuda:0') tensor(17.9967, device='cuda:0')
+enc2.0.weight grad stats: tensor(2.8312e-06, device='cuda:0') tensor(15.7690, device='cuda:0') tensor(0.4829, device='cuda:0')
+enc2.0.bias grad stats: tensor(0., device='cuda:0') tensor(1.6689e-06, device='cuda:0') tensor(2.2945e-07, device='cuda:0')
+enc2.1.weight grad stats: tensor(0.0218, device='cuda:0') tensor(18.9836, device='cuda:0') tensor(2.1499, device='cuda:0')
+enc2.1.bias grad stats: tensor(0.0411, device='cuda:0') tensor(5.5411, device='cuda:0') tensor(1.4232, device='cuda:0')
+enc2.3.weight grad stats: tensor(7.4133e-07, device='cuda:0') tensor(14.9366, device='cuda:0') tensor(0.4853, device='cuda:0')
+enc2.3.bias grad stats: tensor(0., device='cuda:0') tensor(1.4305e-06, device='cuda:0') tensor(3.4191e-07, device='cuda:0')
+enc2.4.weight grad stats: tensor(0.0819, device='cuda:0') tensor(13.6840, device='cuda:0') tensor(3.0713, device='cuda:0')
+enc2.4.bias grad stats: tensor(0.0310, device='cuda:0') tensor(4.3142, device='cuda:0') tensor(1.4567, device='cuda:0')
+bottleneck.0.weight grad stats: tensor(8.5682e-08, device='cuda:0') tensor(3.6614, device='cuda:0') tensor(0.1322, device='cuda:0')
+bottleneck.0.bias grad stats: tensor(0., device='cuda:0') tensor(4.1723e-07, device='cuda:0') tensor(4.3819e-08, device='cuda:0')
+bottleneck.1.weight grad stats: tensor(0.0029, device='cuda:0') tensor(4.8096, device='cuda:0') tensor(0.3985, device='cuda:0')
+bottleneck.1.bias grad stats: tensor(0.0014, device='cuda:0') tensor(1.1448, device='cuda:0') tensor(0.2709, device='cuda:0')
+bottleneck.3.weight grad stats: tensor(8.4678e-08, device='cuda:0') tensor(5.2503, device='cuda:0') tensor(0.1255, device='cuda:0')
+bottleneck.3.bias grad stats: tensor(0., device='cuda:0') tensor(4.7684e-07, device='cuda:0') tensor(5.7356e-08, device='cuda:0')
+bottleneck.4.weight grad stats: tensor(0.0037, device='cuda:0') tensor(4.1399, device='cuda:0') tensor(0.4657, device='cuda:0')
+bottleneck.4.bias grad stats: tensor(0.0012, device='cuda:0') tensor(0.9978, device='cuda:0') tensor(0.2925, device='cuda:0')
+upconv2.0.weight grad stats: tensor(7.6406e-06, device='cuda:0') tensor(9.7746, device='cuda:0') tensor(0.2966, device='cuda:0')
+upconv2.0.bias grad stats: tensor(0., device='cuda:0') tensor(2.6226e-06, device='cuda:0') tensor(5.9803e-07, device='cuda:0')
+upconv2.1.weight grad stats: tensor(0.0028, device='cuda:0') tensor(3.4661, device='cuda:0') tensor(0.7988, device='cuda:0')
+upconv2.1.bias grad stats: tensor(0.0038, device='cuda:0') tensor(1.8992, device='cuda:0') tensor(0.4690, device='cuda:0')
+dec2.0.weight grad stats: tensor(1.5446e-06, device='cuda:0') tensor(8.9833, device='cuda:0') tensor(0.3891, device='cuda:0')
+dec2.0.bias grad stats: tensor(0., device='cuda:0') tensor(2.0266e-06, device='cuda:0') tensor(3.0198e-07, device='cuda:0')
+dec2.1.weight grad stats: tensor(0.1353, device='cuda:0') tensor(20.1859, device='cuda:0') tensor(3.9892, device='cuda:0')
+dec2.1.bias grad stats: tensor(0.0076, device='cuda:0') tensor(4.4441, device='cuda:0') tensor(1.4425, device='cuda:0')
+dec2.3.weight grad stats: tensor(8.2571e-06, device='cuda:0') tensor(26.3089, device='cuda:0') tensor(0.6600, device='cuda:0')
+dec2.3.bias grad stats: tensor(0., device='cuda:0') tensor(3.0696e-06, device='cuda:0') tensor(3.1880e-07, device='cuda:0')
+dec2.4.weight grad stats: tensor(0.0073, device='cuda:0') tensor(23.5294, device='cuda:0') tensor(4.5837, device='cuda:0')
+dec2.4.bias grad stats: tensor(0.0525, device='cuda:0') tensor(7.3540, device='cuda:0') tensor(2.1926, device='cuda:0')
+upconv1.0.weight grad stats: tensor(2.7299e-05, device='cuda:0') tensor(25.0399, device='cuda:0') tensor(1.3531, device='cuda:0')
+upconv1.0.bias grad stats: tensor(1.1921e-07, device='cuda:0') tensor(1.7762e-05, device='cuda:0') tensor(3.9367e-06, device='cuda:0')
+upconv1.1.weight grad stats: tensor(0.1855, device='cuda:0') tensor(17.3672, device='cuda:0') tensor(4.8799, device='cuda:0')
+upconv1.1.bias grad stats: tensor(0.0037, device='cuda:0') tensor(11.1138, device='cuda:0') tensor(3.5591, device='cuda:0')
+dec1.0.weight grad stats: tensor(1.4566e-05, device='cuda:0') tensor(30.6494, device='cuda:0') tensor(1.3872, device='cuda:0')
+dec1.0.bias grad stats: tensor(0., device='cuda:0') tensor(9.5367e-06, device='cuda:0') tensor(9.9695e-07, device='cuda:0')
+dec1.1.weight grad stats: tensor(0.0488, device='cuda:0') tensor(119.4329, device='cuda:0') tensor(27.9302, device='cuda:0')
+dec1.1.bias grad stats: tensor(1.2332, device='cuda:0') tensor(80.5912, device='cuda:0') tensor(29.8212, device='cuda:0')
+dec1.3.weight grad stats: tensor(3.2987e-06, device='cuda:0') tensor(23.2239, device='cuda:0') tensor(1.3286, device='cuda:0')
+dec1.3.bias grad stats: tensor(2.9177e-09, device='cuda:0') tensor(2.9802e-06, device='cuda:0') tensor(7.2326e-07, device='cuda:0')
+dec1.4.weight grad stats: tensor(1.3057, device='cuda:0') tensor(93.8509, device='cuda:0') tensor(27.1206, device='cuda:0')
+dec1.4.bias grad stats: tensor(1.0994, device='cuda:0') tensor(113.1922, device='cuda:0') tensor(25.8913, device='cuda:0')
+final_conv.weight grad stats: tensor(1.7028e-08, device='cuda:0') tensor(283.1014, device='cuda:0') tensor(4.9425, device='cuda:0')
+final_conv.bias grad stats: tensor(1.5248e-05, device='cuda:0') tensor(27.7607, device='cuda:0') tensor(2.9353, device='cuda:0')
+Number of Outlet surface points: 3000, volume points: 19282, surface points: 2938
+Divergence Loss: 0.17518169635085362, X Momentum Loss: 0.23271404616335198, Y Momentum Loss: 0.14910313859688393, Z Momentum Loss: 2.059754134207253, Inlet Boundary Loss: 0.33153525482720037, Outlet Boundary Loss: 0.0971840042473907, Other Boundary Loss: 0.19815841196460393, Supervised Loss: 26602.873390765875 Heat Loss: 30.403752610827006 Surface Temperature Boundary Loss: 15193.642009396859 Total Loss: 42092.42335834568
+Number of Outlet surface points: 3000, volume points: 19321, surface points: 2943
+Divergence Loss: 0.17276612322858673, X Momentum Loss: 0.1860287110730804, Y Momentum Loss: 0.14178883935977166, Z Momentum Loss: 1.894287466813438, Inlet Boundary Loss: 0.3133906060135267, Outlet Boundary Loss: 0.10104824216137286, Other Boundary Loss: 0.15542262042617408, Supervised Loss: 26593.111113616746 Heat Loss: 26.540777891099847 Surface Temperature Boundary Loss: 15390.159310375875 Total Loss: 42268.31796223593
+Number of Outlet surface points: 3000, volume points: 19299, surface points: 2939
+Divergence Loss: 0.17709130488061833, X Momentum Loss: 0.22414043450586835, Y Momentum Loss: 0.143635534942909, Z Momentum Loss: 2.0617061307642173, Inlet Boundary Loss: 0.33069354889724584, Outlet Boundary Loss: 0.10932926768316775, Other Boundary Loss: 0.19404505767363966, Supervised Loss: 26602.577155860683 Heat Loss: 29.990076586509844 Surface Temperature Boundary Loss: 15287.419424026322 Total Loss: 42185.14066519201
+Number of Outlet surface points: 3000, volume points: 19341, surface points: 2932
+Divergence Loss: 0.17436013895112962, X Momentum Loss: 0.2197017220797826, Y Momentum Loss: 0.1471400582340918, Z Momentum Loss: 2.1371442250154518, Inlet Boundary Loss: 0.3314501792837056, Outlet Boundary Loss: 0.09668430065436882, Other Boundary Loss: 0.20487974221227453, Supervised Loss: 26602.8427694367 Heat Loss: 32.56753463577717 Surface Temperature Boundary Loss: 15297.32847394837 Total Loss: 42198.27574903661
+Number of Outlet surface points: 3000, volume points: 19278, surface points: 2942
+Divergence Loss: 0.17665579532191822, X Momentum Loss: 0.2352871745071126, Y Momentum Loss: 0.15230137236791697, Z Momentum Loss: 2.097323798929225, Inlet Boundary Loss: 0.33153517690230905, Outlet Boundary Loss: 0.101672426384343, Other Boundary Loss: 0.202240824226441, Supervised Loss: 26602.873140440905 Heat Loss: 29.868483598528165 Surface Temperature Boundary Loss: 15460.787026687696 Total Loss: 42359.08623745627
+Number of Outlet surface points: 3000, volume points: 19321, surface points: 2942
+Divergence Loss: 0.18324289964970542, X Momentum Loss: 0.2023277749849178, Y Momentum Loss: 0.14318342940466372, Z Momentum Loss: 2.0359161919395428, Inlet Boundary Loss: 0.33153525486114016, Outlet Boundary Loss: 0.1032921621097902, Other Boundary Loss: 0.2015002895408178, Supervised Loss: 26602.87339077833 Heat Loss: 27.17202931256906 Surface Temperature Boundary Loss: 14959.653347185797 Total Loss: 41855.1603401667
+Number of Outlet surface points: 3000, volume points: 19348, surface points: 2930
+Divergence Loss: 0.1794639198519097, X Momentum Loss: 0.20409406536504893, Y Momentum Loss: 0.1477315703148662, Z Momentum Loss: 2.080261032666145, Inlet Boundary Loss: 0.33153525486114016, Outlet Boundary Loss: 0.10780663370527796, Other Boundary Loss: 0.19883227175737023, Supervised Loss: 26602.87339077833 Heat Loss: 29.937968277378843 Surface Temperature Boundary Loss: 15333.219152247479 Total Loss: 42231.54081093922
+9/100
+Validation Divergence Loss: 0.18115206162368977, Validation X Momentum Loss: 0.22306603159489968, Validation Y Momentum Loss: 0.1421533269746608, Validation Z Momentum Loss: 2.083675031497114, Validation Outlet Boundary Loss: 0.1049471202856573, Validation Other Boundary Loss: 0.2015097778483854, Validation Heat Loss: 28.470640403197848, Validation Surface Temperature Boundary Loss: 15470.028911686715, Validation Total Loss: 15501.436055439737
+enc1.0.weight grad stats: tensor(0.0013, device='cuda:0') tensor(18.5594, device='cuda:0') tensor(2.4680, device='cuda:0')
+enc1.0.bias grad stats: tensor(5.9605e-08, device='cuda:0') tensor(2.5272e-05, device='cuda:0') tensor(6.6478e-06, device='cuda:0')
+enc1.1.weight grad stats: tensor(0.1060, device='cuda:0') tensor(39.4619, device='cuda:0') tensor(11.3364, device='cuda:0')
+enc1.1.bias grad stats: tensor(0.0829, device='cuda:0') tensor(30.7515, device='cuda:0') tensor(9.0606, device='cuda:0')
+enc1.3.weight grad stats: tensor(1.1543e-05, device='cuda:0') tensor(25.8306, device='cuda:0') tensor(1.3924, device='cuda:0')
+enc1.3.bias grad stats: tensor(0., device='cuda:0') tensor(1.1086e-05, device='cuda:0') tensor(1.8498e-06, device='cuda:0')
+enc1.4.weight grad stats: tensor(0.3536, device='cuda:0') tensor(76.5724, device='cuda:0') tensor(18.1508, device='cuda:0')
+enc1.4.bias grad stats: tensor(0.0201, device='cuda:0') tensor(70.0375, device='cuda:0') tensor(15.9675, device='cuda:0')
+enc2.0.weight grad stats: tensor(5.5358e-06, device='cuda:0') tensor(15.1144, device='cuda:0') tensor(0.4729, device='cuda:0')
+enc2.0.bias grad stats: tensor(0., device='cuda:0') tensor(1.6689e-06, device='cuda:0') tensor(2.4177e-07, device='cuda:0')
+enc2.1.weight grad stats: tensor(0.0487, device='cuda:0') tensor(17.0345, device='cuda:0') tensor(2.1538, device='cuda:0')
+enc2.1.bias grad stats: tensor(0.0013, device='cuda:0') tensor(5.8587, device='cuda:0') tensor(1.4267, device='cuda:0')
+enc2.3.weight grad stats: tensor(2.2091e-06, device='cuda:0') tensor(14.7170, device='cuda:0') tensor(0.4661, device='cuda:0')
+enc2.3.bias grad stats: tensor(0., device='cuda:0') tensor(1.1921e-06, device='cuda:0') tensor(2.8778e-07, device='cuda:0')
+enc2.4.weight grad stats: tensor(0.0054, device='cuda:0') tensor(11.1719, device='cuda:0') tensor(2.6673, device='cuda:0')
+enc2.4.bias grad stats: tensor(0.0034, device='cuda:0') tensor(3.8197, device='cuda:0') tensor(1.2106, device='cuda:0')
+bottleneck.0.weight grad stats: tensor(7.7486e-07, device='cuda:0') tensor(3.5879, device='cuda:0') tensor(0.1385, device='cuda:0')
+bottleneck.0.bias grad stats: tensor(0., device='cuda:0') tensor(2.7195e-07, device='cuda:0') tensor(3.6238e-08, device='cuda:0')
+bottleneck.1.weight grad stats: tensor(0.0003, device='cuda:0') tensor(3.7780, device='cuda:0') tensor(0.4048, device='cuda:0')
+bottleneck.1.bias grad stats: tensor(0.0025, device='cuda:0') tensor(1.1400, device='cuda:0') tensor(0.3073, device='cuda:0')
+bottleneck.3.weight grad stats: tensor(1.2084e-07, device='cuda:0') tensor(5.5147, device='cuda:0') tensor(0.1288, device='cuda:0')
+bottleneck.3.bias grad stats: tensor(0., device='cuda:0') tensor(4.9174e-07, device='cuda:0') tensor(6.2093e-08, device='cuda:0')
+bottleneck.4.weight grad stats: tensor(0.0073, device='cuda:0') tensor(4.2439, device='cuda:0') tensor(0.5559, device='cuda:0')
+bottleneck.4.bias grad stats: tensor(0.0075, device='cuda:0') tensor(1.0762, device='cuda:0') tensor(0.3057, device='cuda:0')
+upconv2.0.weight grad stats: tensor(1.9441e-08, device='cuda:0') tensor(9.8533, device='cuda:0') tensor(0.3073, device='cuda:0')
+upconv2.0.bias grad stats: tensor(0., device='cuda:0') tensor(2.8610e-06, device='cuda:0') tensor(4.5961e-07, device='cuda:0')
+upconv2.1.weight grad stats: tensor(0.0014, device='cuda:0') tensor(3.3518, device='cuda:0') tensor(0.8369, device='cuda:0')
+upconv2.1.bias grad stats: tensor(0.0064, device='cuda:0') tensor(1.3837, device='cuda:0') tensor(0.4547, device='cuda:0')
+dec2.0.weight grad stats: tensor(1.5245e-06, device='cuda:0') tensor(8.9073, device='cuda:0') tensor(0.3811, device='cuda:0')
+dec2.0.bias grad stats: tensor(0., device='cuda:0') tensor(9.5367e-07, device='cuda:0') tensor(2.2590e-07, device='cuda:0')
+dec2.1.weight grad stats: tensor(0.0654, device='cuda:0') tensor(18.9751, device='cuda:0') tensor(3.5136, device='cuda:0')
+dec2.1.bias grad stats: tensor(0.0783, device='cuda:0') tensor(4.6085, device='cuda:0') tensor(1.5541, device='cuda:0')
+dec2.3.weight grad stats: tensor(1.1027e-06, device='cuda:0') tensor(25.1816, device='cuda:0') tensor(0.6131, device='cuda:0')
+dec2.3.bias grad stats: tensor(0., device='cuda:0') tensor(1.0729e-06, device='cuda:0') tensor(3.0675e-07, device='cuda:0')
+dec2.4.weight grad stats: tensor(0.1153, device='cuda:0') tensor(19.6042, device='cuda:0') tensor(3.8433, device='cuda:0')
+dec2.4.bias grad stats: tensor(0.0565, device='cuda:0') tensor(7.4515, device='cuda:0') tensor(2.1175, device='cuda:0')
+upconv1.0.weight grad stats: tensor(6.0215e-05, device='cuda:0') tensor(24.1430, device='cuda:0') tensor(1.1102, device='cuda:0')
+upconv1.0.bias grad stats: tensor(2.3842e-07, device='cuda:0') tensor(2.0981e-05, device='cuda:0') tensor(5.4436e-06, device='cuda:0')
+upconv1.1.weight grad stats: tensor(0.2909, device='cuda:0') tensor(16.1383, device='cuda:0') tensor(5.1479, device='cuda:0')
+upconv1.1.bias grad stats: tensor(0.1374, device='cuda:0') tensor(8.9655, device='cuda:0') tensor(2.4091, device='cuda:0')
+dec1.0.weight grad stats: tensor(3.0161e-06, device='cuda:0') tensor(25.7214, device='cuda:0') tensor(1.1533, device='cuda:0')
+dec1.0.bias grad stats: tensor(1.0245e-08, device='cuda:0') tensor(7.5698e-06, device='cuda:0') tensor(1.2371e-06, device='cuda:0')
+dec1.1.weight grad stats: tensor(0.7001, device='cuda:0') tensor(94.1882, device='cuda:0') tensor(23.9463, device='cuda:0')
+dec1.1.bias grad stats: tensor(1.8654, device='cuda:0') tensor(65.6202, device='cuda:0') tensor(25.2261, device='cuda:0')
+dec1.3.weight grad stats: tensor(7.9973e-06, device='cuda:0') tensor(22.6976, device='cuda:0') tensor(1.3527, device='cuda:0')
+dec1.3.bias grad stats: tensor(2.9104e-09, device='cuda:0') tensor(5.4240e-06, device='cuda:0') tensor(5.7804e-07, device='cuda:0')
+dec1.4.weight grad stats: tensor(1.3072, device='cuda:0') tensor(80.5973, device='cuda:0') tensor(28.4415, device='cuda:0')
+dec1.4.bias grad stats: tensor(1.1008, device='cuda:0') tensor(113.8093, device='cuda:0') tensor(26.6301, device='cuda:0')
+final_conv.weight grad stats: tensor(1.1616e-07, device='cuda:0') tensor(181.8332, device='cuda:0') tensor(5.1727, device='cuda:0')
+final_conv.bias grad stats: tensor(7.8366e-06, device='cuda:0') tensor(28.9935, device='cuda:0') tensor(3.1481, device='cuda:0')
+Number of Outlet surface points: 3000, volume points: 19315, surface points: 2934
+Divergence Loss: 0.18157819320808152, X Momentum Loss: 0.22566233247084733, Y Momentum Loss: 0.1471674889827701, Z Momentum Loss: 2.1318099517246467, Inlet Boundary Loss: 0.33153525486114016, Outlet Boundary Loss: 0.10251559141678404, Other Boundary Loss: 0.19895716145468656, Supervised Loss: 26602.87339077833 Heat Loss: 29.426484194242654 Surface Temperature Boundary Loss: 15238.49798556496 Total Loss: 42136.377661399165
+Number of Outlet surface points: 3000, volume points: 19324, surface points: 2947
+Divergence Loss: 3.5797485332215637, X Momentum Loss: 226.12786937001684, Y Momentum Loss: 3.0673630442065676, Z Momentum Loss: 16.982212974721335, Inlet Boundary Loss: 259.04322727474334, Outlet Boundary Loss: 17.396752123214288, Other Boundary Loss: 177.3453398082657, Supervised Loss: 23415.56952194862 Heat Loss: 32751.82086919676 Surface Temperature Boundary Loss: 22010.47740546938 Total Loss: 85786.94851863473
+Number of Outlet surface points: 3000, volume points: 19283, surface points: 2942
+Divergence Loss: 0.20030496233124745, X Momentum Loss: 0.1229654144324636, Y Momentum Loss: 0.1343959623576093, Z Momentum Loss: 1.692903077047007, Inlet Boundary Loss: 0.44299741694873884, Outlet Boundary Loss: 0.10008147929897376, Other Boundary Loss: 0.15223165452333398, Supervised Loss: 26585.471631455086 Heat Loss: 89.54030668408728 Surface Temperature Boundary Loss: 15148.284865771438 Total Loss: 42166.800683892434
+Number of Outlet surface points: 3000, volume points: 19317, surface points: 2946
+Divergence Loss: 0.18301394248605218, X Momentum Loss: 0.1533348241680728, Y Momentum Loss: 0.13494971893041646, Z Momentum Loss: 1.8741343838113027, Inlet Boundary Loss: 0.32191218311976333, Outlet Boundary Loss: 0.10191380032767498, Other Boundary Loss: 0.12224662444508161, Supervised Loss: 26592.7018256874 Heat Loss: 34.64467333655588 Surface Temperature Boundary Loss: 15338.617769128674 Total Loss: 42233.57338678993
+Number of Outlet surface points: 3000, volume points: 19316, surface points: 2939
+Divergence Loss: 0.18516743273677835, X Momentum Loss: 0.2003096509314666, Y Momentum Loss: 0.148731297373325, Z Momentum Loss: 2.0955279718060225, Inlet Boundary Loss: 0.325337914445073, Outlet Boundary Loss: 0.10365201617382493, Other Boundary Loss: 0.18822059573782618, Supervised Loss: 26601.544195021866 Heat Loss: 26.079347610011556 Surface Temperature Boundary Loss: 15309.593182097853 Total Loss: 42200.111269096604
+Number of Outlet surface points: 3000, volume points: 19296, surface points: 2932
