@@ -2513,3 +2513,41 @@ Divergence Loss: 0.2132899442660938, X Momentum Loss: 25.473828532492526, Y Mome
 Divergence Loss: 0.09636146033129556, X Momentum Loss: 22.186575163605916, Y Momentum Loss: 0.4830262418373849, Z Momentum Loss: 0.679604363435169, Inlet Boundary Loss: 47.90600181145244, Outlet Boundary Loss: 0.008731089630348151, Other Boundary Loss: 43.00923926247624, Supervised Loss: 17.30092472397707 Total Loss: 1197.5928210501359
 Divergence Loss: 0.04892931711721839, X Momentum Loss: 21.147427151715668, Y Momentum Loss: 0.3716396084799513, Z Momentum Loss: 0.4431340885231656, Inlet Boundary Loss: 47.87302662146292, Outlet Boundary Loss: 0.006128317908523391, Other Boundary Loss: 40.89510568040324, Supervised Loss: 17.419447004479842 Total Loss: 1194.5673666382045
 Divergence Loss: 0.050570645084169606, X Momentum Loss: 20.340196005202195, Y Momentum Loss: 0.27982569185954437, Z Momentum Loss: 0.3839019681917927, Inlet Boundary Loss: 47.85139214263941, Outlet Boundary Loss: 0.01018461858846431, Other Boundary Loss: 40.70176235119847, Supervised Loss: 17.397384784429068 Total Loss: 1192.7681319772034
+Divergence Loss: 0.06423028637555175, X Momentum Loss: 19.051456709017522, Y Momentum Loss: 0.18331083941631168, Z Momentum Loss: 0.3417762360442728, Inlet Boundary Loss: 47.841645162088554, Outlet Boundary Loss: 0.031752385578154636, Other Boundary Loss: 41.414906222682205, Supervised Loss: 17.311287513378367 Total Loss: 1191.0332110546688
+Divergence Loss: 0.04639329020117245, X Momentum Loss: 19.394687753742495, Y Momentum Loss: 0.16956445208830745, Z Momentum Loss: 0.4864220484365992, Inlet Boundary Loss: 47.806594963524184, Outlet Boundary Loss: 0.03395581260507883, Other Boundary Loss: 40.756984660050826, Supervised Loss: 17.333910666213292 Total Loss: 1190.3590139497412
+Divergence Loss: 0.04666601920010129, X Momentum Loss: 18.56294885381115, Y Momentum Loss: 0.15562261537910005, Z Momentum Loss: 0.27681716173973686, Inlet Boundary Loss: 47.79610877862099, Outlet Boundary Loss: 0.031555389224882664, Other Boundary Loss: 40.869485335565166, Supervised Loss: 17.315470878496154 Total Loss: 1189.0199797323014
+Divergence Loss: 0.044270250026140136, X Momentum Loss: 17.5767668395349, Y Momentum Loss: 0.18295473261992196, Z Momentum Loss: 0.17683301138207935, Inlet Boundary Loss: 47.78555788046872, Outlet Boundary Loss: 0.0278156511212361, Other Boundary Loss: 40.6240059109007, Supervised Loss: 17.329954845588265 Total Loss: 1187.6433524608422
+Divergence Loss: 0.03817788475063461, X Momentum Loss: 17.537017684442507, Y Momentum Loss: 0.13458430456059492, Z Momentum Loss: 0.16317076105500844, Inlet Boundary Loss: 47.76946669615075, Outlet Boundary Loss: 0.017701481136952746, Other Boundary Loss: 40.82573256602717, Supervised Loss: 17.279088011988904 Total Loss: 1186.8965987248766
+Divergence Loss: 0.03256319770092548, X Momentum Loss: 17.134408191147234, Y Momentum Loss: 0.10618185650622437, Z Momentum Loss: 0.14902127313429356, Inlet Boundary Loss: 47.76238601634901, Outlet Boundary Loss: 0.00827692388435481, Other Boundary Loss: 40.81827222262875, Supervised Loss: 17.246757049532782 Total Loss: 1185.96401448731
+Divergence Loss: 0.03122082902852221, X Momentum Loss: 16.852882774053796, Y Momentum Loss: 0.10385574088370181, Z Momentum Loss: 0.157251089797134, Inlet Boundary Loss: 47.762829172376264, Outlet Boundary Loss: 0.00698623547640778, Other Boundary Loss: 40.70309039235874, Supervised Loss: 17.23879956665458 Total Loss: 1185.4998661756695
+Divergence Loss: 0.03152357242216808, X Momentum Loss: 16.73221531613732, Y Momentum Loss: 0.10343793370195072, Z Momentum Loss: 0.17172740215585, Inlet Boundary Loss: 47.76649207954634, Outlet Boundary Loss: 0.008395516974543167, Other Boundary Loss: 40.61569256283047, Supervised Loss: 17.237162396979738 Total Loss: 1185.3644578649464
+Divergence Loss: 0.03191126645869551, X Momentum Loss: 16.447237759206526, Y Momentum Loss: 0.10326438378010712, Z Momentum Loss: 0.1793443702717703, Inlet Boundary Loss: 47.768416734429714, Outlet Boundary Loss: 0.010978960625062048, Other Boundary Loss: 40.77087151885913, Supervised Loss: 17.215834827541965 Total Loss: 1185.0702912232152
+Divergence Loss: 0.03383849677974788, X Momentum Loss: 16.138046219597026, Y Momentum Loss: 0.11336915255091497, Z Momentum Loss: 0.18214520969376582, Inlet Boundary Loss: 47.77279546095571, Outlet Boundary Loss: 0.01282166276912477, Other Boundary Loss: 41.15355111350645, Supervised Loss: 17.168914737525686 Total Loss: 1184.778828449268
+Divergence Loss: 0.03304903242492321, X Momentum Loss: 15.949963063346994, Y Momentum Loss: 0.11571493805861659, Z Momentum Loss: 0.17024223672801342, Inlet Boundary Loss: 47.77363245574359, Outlet Boundary Loss: 0.014260924156289339, Other Boundary Loss: 41.03761628925099, Supervised Loss: 17.163403577924978 Total Loss: 1184.4275313780872
+Divergence Loss: 0.032796845381923075, X Momentum Loss: 15.878809501368316, Y Momentum Loss: 0.11100379677522915, Z Momentum Loss: 0.14506744956933962, Inlet Boundary Loss: 47.77085353733985, Outlet Boundary Loss: 0.014594558979112273, Other Boundary Loss: 40.852131787088396, Supervised Loss: 17.168824146405047 Total Loss: 1184.13971615001
+Divergence Loss: 0.03298927839478512, X Momentum Loss: 15.68251393317025, Y Momentum Loss: 0.11675465842304557, Z Momentum Loss: 0.14767329013649136, Inlet Boundary Loss: 47.76939948149269, Outlet Boundary Loss: 0.013987408479659758, Other Boundary Loss: 40.812800744117965, Supervised Loss: 17.164114194054626 Total Loss: 1183.8358508831222
+Divergence Loss: 0.03354236084389075, X Momentum Loss: 15.349307590700006, Y Momentum Loss: 0.1293803242396451, Z Momentum Loss: 0.16546418881050784, Inlet Boundary Loss: 47.77094692832038, Outlet Boundary Loss: 0.01566783806761563, Other Boundary Loss: 40.87920296648387, Supervised Loss: 17.15183790457241 Total Loss: 1183.5098828812772
+Divergence Loss: 0.03307436919783294, X Momentum Loss: 15.015837651594625, Y Momentum Loss: 0.12413856283449352, Z Momentum Loss: 0.1565703192449742, Inlet Boundary Loss: 47.7725569459821, Outlet Boundary Loss: 0.014138146207113334, Other Boundary Loss: 41.109292636103895, Supervised Loss: 17.12765718261703 Total Loss: 1183.1807624309952
+Time taken for training is: 5989.314737319946
+The mean of vx differences is: 0.6183897048434138
+The mean of vy differences is: -0.006367809119128623
+The mean of vz differences is: -0.011019594544629568
+The mean of pressure differences is: -231.61993454763297
+Repository has changes, preparing to commit.
+Committed changes with message: Running job with run name: cosmic-shape-9, url: https://wandb.ai/sathvikbhagavan-epfl/Spline-PINNs_without_heat_dp11/runs/0bu3ubsm
+Traceback (most recent call last):
+  File "/home/anagupta/SteadyStateSplinePINNs/src/run.py", line 391, in <module>
+    origin.push()
+  File "/home/anagupta/SteadyStateSplinePINNs/.venv/lib64/python3.9/site-packages/git/remote.py", line 1203, in push
+    return self._get_push_info(proc, progress, kill_after_timeout=kill_after_timeout)
+  File "/home/anagupta/SteadyStateSplinePINNs/.venv/lib64/python3.9/site-packages/git/remote.py", line 968, in _get_push_info
+    proc.wait(stderr=stderr_text)
+  File "/home/anagupta/SteadyStateSplinePINNs/.venv/lib64/python3.9/site-packages/git/cmd.py", line 834, in wait
+    raise GitCommandError(remove_password_if_present(self.args), status, errstr)
+git.exc.GitCommandError: Cmd('git') failed due to: exit code(128)
+  cmdline: git push --porcelain -- origin
+  stderr: 'fatal: Could not read from remote repository.'
+[1;34mwandb[0m: 🚀 View run [33mcosmic-shape-9[0m at: [34mhttps://wandb.ai/sathvikbhagavan-epfl/Spline-PINNs_without_heat_dp11/runs/0bu3ubsm[0m
+[1;34mwandb[0m: Find logs at: [1;35mwandb/run-20241212_083657-0bu3ubsm/logs[0m
+srun: error: i65: task 0: Exited with exit code 1
+srun: Terminating StepId=2491195.0
