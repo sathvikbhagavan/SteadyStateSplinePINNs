@@ -28,7 +28,7 @@ def dynamic_viscosity(T, mu_ref=1.716e-5, T_ref=273.15, S=110.4):
         mu = mu_ref * ((T_clamped / T_ref) ** 1.5) * ((T_ref + S) / (T_clamped + S))
         
         # Replace any remaining NaNs or infs with reference viscosity
-        mu = torch.nan_to_num(mu, nan=mu_ref, posinf=mu_ref, neginf=mu_ref)
+       # mu = torch.nan_to_num(mu, nan=mu_ref, posinf=mu_ref, neginf=mu_ref)
         
         return mu
 
