@@ -6,8 +6,7 @@ torch.set_default_dtype(torch.float64)
 from sample import *
 from hermite_spline import *
 from unet import *
-from torch.optim import Adam, LBFGS
-from torch.optim.lr_scheduler import ReduceLROnPlateau
+from torch.optim import LBFGS
 from spline_pinn import *
 import time
 import wandb
@@ -79,7 +78,7 @@ vx_data = torch.tensor(np.load(data_folder + "vel_x.npy")[:, 3])
 vy_data = torch.tensor(np.load(data_folder + "vel_y.npy")[:, 3])
 vz_data = torch.tensor(np.load(data_folder + "vel_z.npy")[:, 3])
 p_data = torch.tensor(np.load(data_folder + "press.npy")[:, 3])
-num_samples = 100000
+num_samples = 50000
 # Generate random indices for sampling
 indices = torch.randint(0, data_points.shape[0], (num_samples,))
 
@@ -111,12 +110,12 @@ start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
-validation_points, validation_labels = sample_points(obj, 30000, 5000, 30000)
+validation_points, validation_labels = sample_points(obj, 60000, 5000, 50000)
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
-    train_points, train_labels = sample_points(obj, 30000, 5000, 30000)
+    train_points, train_labels = sample_points(obj, 60000, 5000, 50000)
     def closure():
         # Get Hermite Spline coefficients from the Unet
         spline_coeff = unet_model(unet_input)[0]
@@ -166,13 +165,13 @@ for epoch in range(epochs):
 
         loss_total = (
             loss_divergence
-            + loss_momentum_x
+            + 10*loss_momentum_x
             + loss_momentum_y
             + loss_momentum_z
-            + loss_inlet_boundary
+            + 10*loss_inlet_boundary
             + loss_outlet_boundary
             + loss_other_boundary
-            + supervised_loss
+            + 10*supervised_loss
         )
 
         if not debug:
