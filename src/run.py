@@ -14,6 +14,7 @@ import wandb
 import os
 from git import Repo
 from inference import *
+import subprocess
 
 folder = "dp11"
 Project_name = (
