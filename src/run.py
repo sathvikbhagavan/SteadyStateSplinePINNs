@@ -17,7 +17,7 @@ from inference import *
 
 folder = "dp0"
 Project_name = (
-    "Spline-PINNs_withs_heat"  # Full_Project_name will be {Project_name}_{folder}
+    "Spline-PINNs_with_heat"  # Full_Project_name will be {Project_name}_{folder}
 )
 device = "cuda"  # Turn this to "cpu" if you are debugging the flow on the CPU
 debug = False  # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
