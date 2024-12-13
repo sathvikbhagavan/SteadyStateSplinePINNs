@@ -19,13 +19,13 @@ def dynamic_viscosity(T, mu_ref=1.716e-5, T_ref=273.15, S=110.4):
     """
     try:
         # Ensure T is a floating point tensor
-        T = T.float()
+        #T = T.float()
         
         # Clamp temperature to prevent extreme values
-        T_clamped = torch.clamp(T, min=100, max=2000)
+        #T_clamped = torch.clamp(T, min=100, max=2000)
         
         # Compute viscosity with safe computation
-        mu = mu_ref * ((T_clamped / T_ref) ** 1.5) * ((T_ref + S) / (T_clamped + S))
+        mu = mu_ref * ((torch.abs(T) / T_ref) ** 1.5) * ((T_ref + S) / (torch.abs(T) + S))
         
         # Replace any remaining NaNs or infs with reference viscosity
        # mu = torch.nan_to_num(mu, nan=mu_ref, posinf=mu_ref, neginf=mu_ref)
@@ -152,8 +152,8 @@ def get_fields(spline_coeff, points, step, grid_resolution):
     vy = f(step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    T = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-
+    T = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0) * 1000
+    #print(T)
     return vx, vy, vz, p, T
 
 
@@ -164,6 +164,7 @@ def get_fields_and_losses(
 
     if torch.isnan(spline_coeff).any():
         print("NaN in spline coefficients!")
+        #print(torch.isnan(spline_coeff))
         return None
 
     
@@ -175,7 +176,7 @@ def get_fields_and_losses(
     vy = f(step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    T = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    T = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0) * 1000
     vx_x = f(
         step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0
     )
@@ -233,12 +234,12 @@ def get_fields_and_losses(
     vz_zz = f(
         step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2
     )
-    T_x =  f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0)
-    T_y = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0)
-    T_z = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1)
-    T_xx = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0)
-    T_yy = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0)
-    T_zz = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2)
+    T_x =  f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0) * 1000
+    T_y = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0) * 1000
+    T_z = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1) * 1000
+    T_xx = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0) * 1000
+    T_yy = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0) * 1000
+    T_zz = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2) * 1000
 
     # calculate losses
     # Divergence-free condition
@@ -248,6 +249,7 @@ def get_fields_and_losses(
 
     # Momentum equations (including temperature-dependent viscosity)
     mu = dynamic_viscosity(T)
+    #print(mu)
 
     loss_momentum_x = torch.mean(
         (
