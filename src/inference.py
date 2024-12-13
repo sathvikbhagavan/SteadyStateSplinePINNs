@@ -3,7 +3,7 @@ import numpy as np
 import plotly.graph_objects as go
 
 
-def plot_aginast_data(folder_path, vx_pred, vy_pred, vz_pred, p_pred):
+def plot_aginast_data(folder_path, vx_pred, vy_pred, vz_pred, p_pred, T_pred):
     vx = np.load(os.path.join(folder_path, "vel_x.npy"))
     vx_inlet = np.load(os.path.join(folder_path, "vel_x_inlet.npy"))
     vy = np.load(os.path.join(folder_path, "vel_y.npy"))
