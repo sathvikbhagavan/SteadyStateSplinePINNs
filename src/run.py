@@ -57,6 +57,7 @@ if not debug:
     run = wandb.init(
         # set the wandb project where this run will be logged
         project=Full_Project_name,
+        entity="sathvikbhagavan-epfl",
         # track hyperparameters and run metadata
         config={
             "optimizer": "LBFGS",
@@ -100,7 +101,7 @@ vx_sampled_data = vx_data[indices]
 vy_sampled_data = vy_data[indices]
 vz_sampled_data = vz_data[indices]
 p_sampled_data = p_data[indices] / 10**5
-temp_sampled_data = temp_data[indices] / 10**3
+temp_sampled_data = temp_data[indices] 
 
 
 obj = trimesh.load("./Baseline_ML4Science.stl")
@@ -450,7 +451,7 @@ vz_pred = vz_pred.cpu().detach().numpy()
 p_pred = p_pred.cpu().detach().numpy()
 T_pred = T_pred.cpu().detach().numpy()
 
-plot_aginast_data(data_folder_path, vx_pred, vy_pred, vz_pred, p_pred, T_pred)
+plot_aginast_data(data_folder, vx_pred, vy_pred, vz_pred, p_pred, T_pred)
 
 time.sleep(120)
 if repo.is_dirty(untracked_files=True):

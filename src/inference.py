@@ -11,6 +11,7 @@ def plot_aginast_data(folder_path, vx_pred, vy_pred, vz_pred, p_pred):
     vz = np.load(os.path.join(folder_path, "vel_z.npy"))
     vz_inlet = np.load(os.path.join(folder_path, "vel_z_inlet.npy"))
     p = np.load(os.path.join(folder_path, "press.npy"))
+    T = np.load(os.path.join(folder_path, "temp.npy"))
     all_points = np.concatenate((vx_inlet[:, :3], vx[:, :3]))
     _fields = [
         [vx_inlet, vx, vx_pred, "vx"],
@@ -121,5 +122,43 @@ def plot_aginast_data(folder_path, vx_pred, vy_pred, vz_pred, p_pred):
     fig.write_html(f"../run/p_diff.html")
     print(
         f"The mean of pressure differences is: {np.mean(scalar_field - p_pred[vx_inlet.shape[0]:]*10**5)}"
+    )
+
+    # Temperature plotting
+    scalar_field = T[:, 3]
+    index = np.random.choice(vx[:, :3].shape[0], 50000, replace=False)
+    selected_points = vx[:, :3][index]
+    selected_scalar_field = scalar_field[index]
+    selected_scalar_pred = T_pred[vx_inlet.shape[0] :][index]
+
+    # Temperature difference plot
+    fig = go.Figure(
+        data=[
+            go.Scatter3d(
+                x=selected_points[:, 0],
+                y=selected_points[:, 1],
+                z=selected_points[:, 2],
+                mode="markers",
+                marker=dict(
+                    size=5,
+                    color=selected_scalar_field - selected_scalar_pred,
+                    colorscale="Viridis",
+                    colorbar=dict(title="T"),
+                ),
+            )
+        ]
+    )
+    fig.update_layout(
+        scene=dict(
+            xaxis_title="X",
+            yaxis_title="Y",
+            zaxis_title="Z",
+            aspectmode="data",
+        ),
+        title="Diff in true and pred for temperature",
+    )
+    fig.write_html(f"../run/T_diff.html")
+    print(
+        f"The mean of temperature differences is: {np.mean(scalar_field - T_pred[vx_inlet.shape[0]:])}"
     )
     return
