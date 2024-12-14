@@ -153,21 +153,17 @@ def get_fields(spline_coeff, points, step, grid_resolution):
     vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     T = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0) * 1000
-    #print(T)
     return vx, vy, vz, p, T
 
 
 # Calculating various field terms using coefficients
 def get_fields_and_losses(
-    spline_coeff, points, labels, step, grid_resolution, T, rho, p_outlet, thermal_conductivity, density, specific_heat, T_wall
+    spline_coeff, points, labels, step, grid_resolution, rho, p_outlet, thermal_conductivity, density, specific_heat, T_wall
 ):
-
     if torch.isnan(spline_coeff).any():
         print("NaN in spline coefficients!")
         #print(torch.isnan(spline_coeff))
         return None
-
-    
 
     x, y, z, x_supports, y_supports, z_supports = get_support_points(
         points, step, grid_resolution
@@ -299,7 +295,7 @@ def get_fields_and_losses(
         (alpha * (T_xx[labels == 0] + T_yy[labels == 0] + T_zz[labels == 0])  # Diffusion term (nabla^2 T)
         + vx[labels == 0] * T_x[labels == 0] + vy[labels == 0] * T_y[labels == 0] + vz[labels == 0] * T_z[labels == 0]  # Advection term (v · nabla T)
         ) ** 2
-    )
+    )  / 10**6
 
     # loss_inlet_boundary = (
     #     torch.mean((vx[labels == 1] - inlet_vx) ** 2)
@@ -313,15 +309,14 @@ def get_fields_and_losses(
     + torch.mean((vy[labels == 2]) ** 2)
     + torch.mean((vz[labels == 2]) ** 2)
 )
-
-    loss_t_wall_boundary = torch.mean((T[labels == 2] - T_wall) ** 2)
-
+    loss_t_wall_boundary = torch.mean((T[labels == 2] - T_wall) ** 2) / 10**6
 
     return (
         vx,
         vy,
         vz,
         p,
+        T,
         loss_divergence,
         loss_momentum_x,
         loss_momentum_y,
