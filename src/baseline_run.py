@@ -26,7 +26,7 @@ data_folder = "./preProcessedData/with_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
-epochs = 1000
+epochs = 100
 # lr = 1e-3
 hidden_dim = 128
 num_layer = 4
@@ -163,9 +163,9 @@ def get_loss(
         (alpha * (T_xx[labels == 0] + T_yy[labels == 0] + T_zz[labels == 0])  # Diffusion term (nabla^2 T)
         + vx[labels == 0] * T_x[labels == 0] + vy[labels == 0] * T_y[labels == 0] + vz[labels == 0] * T_z[labels == 0]  # Advection term (v · nabla T)
         ) ** 2
-    )
+    ) / 10**6
 
-    loss_t_wall_boundary = torch.mean((T[labels == 2] - T_wall) ** 2)
+    loss_t_wall_boundary = torch.mean((T[labels == 2] - T_wall) ** 2) / 10**6
 
     loss_outlet_boundary = torch.mean((p[labels == 3] - p_outlet) ** 2)
     return (
@@ -329,7 +329,7 @@ for epoch in range(epochs):
         + torch.mean((inlet_fields[:,2] - vz_inlet_data) ** 2)
         )
 
-        loss_inlet_temp_boundary = torch.mean((T - T_inlet) ** 2)
+        loss_inlet_temp_boundary = torch.mean((T - T_inlet) ** 2) / 10**6
 
         fields_supervised = pinn_model(sampled_points)
         vx_supervised = fields_supervised[:,0]
@@ -343,7 +343,7 @@ for epoch in range(epochs):
             + torch.mean((vy_supervised - vy_sampled_data) ** 2)
             + torch.mean((vz_supervised - vz_sampled_data) ** 2)
             + torch.mean((p_supervised - p_sampled_data) ** 2)
-            + torch.mean((t_supervised - temp_sampled_data) ** 2)
+            + torch.mean((t_supervised - temp_sampled_data) ** 2) / 10**6
         )
 
         loss_total = (
