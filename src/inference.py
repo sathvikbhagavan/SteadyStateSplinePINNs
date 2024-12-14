@@ -88,7 +88,7 @@ def plot_aginast_data(folder_path, vx_pred, vy_pred, vz_pred, p_pred, T_pred):
     index = np.random.choice(vx[:, :3].shape[0], 50000, replace=False)
     selected_points = vx[:, :3][index]
     selected_scalar_field = scalar_field[index]
-    selected_scalar_pred = p_pred[vx_inlet.shape[0] :][index] * 10**5
+    selected_scalar_pred = p_pred[vx_inlet.shape[0] :][index]
 
     # Create a 3D scatter plot using Plotly
     fig = go.Figure(
@@ -120,6 +120,32 @@ def plot_aginast_data(folder_path, vx_pred, vy_pred, vz_pred, p_pred, T_pred):
         title="Diff in true and pred for pressure",
     )
     fig.write_html(f"../run/p_diff.html")
+    fig = go.Figure(
+        data=[
+            go.Scatter3d(
+                x=selected_points[:, 0],
+                y=selected_points[:, 1],
+                z=selected_points[:, 2],
+                mode="markers",
+                marker=dict(
+                    size=5,
+                    color=selected_scalar_field,
+                    colorscale="Viridis",  # Color map
+                    colorbar=dict(title="p"),  # Colorbar with title
+                ),
+            )
+        ]
+    )
+    fig.update_layout(
+        scene=dict(
+            xaxis_title="X",
+            yaxis_title="Y",
+            zaxis_title="Z",
+            aspectmode="data",  # Ensures aspect ratio is based on data's extents
+        ),
+        title=f"Data for p",
+    )
+    fig.write_html(f"../run/p_data.html")
     print(
         f"The mean of pressure differences is: {np.mean(scalar_field - p_pred[vx_inlet.shape[0]:]*10**5)}"
     )
@@ -158,6 +184,32 @@ def plot_aginast_data(folder_path, vx_pred, vy_pred, vz_pred, p_pred, T_pred):
         title="Diff in true and pred for temperature",
     )
     fig.write_html(f"../run/T_diff.html")
+    fig = go.Figure(
+        data=[
+            go.Scatter3d(
+                x=selected_points[:, 0],
+                y=selected_points[:, 1],
+                z=selected_points[:, 2],
+                mode="markers",
+                marker=dict(
+                    size=5,
+                    color=selected_scalar_field,
+                    colorscale="Viridis",  # Color map
+                    colorbar=dict(title="T"),  # Colorbar with title
+                ),
+            )
+        ]
+    )
+    fig.update_layout(
+        scene=dict(
+            xaxis_title="X",
+            yaxis_title="Y",
+            zaxis_title="Z",
+            aspectmode="data",  # Ensures aspect ratio is based on data's extents
+        ),
+        title=f"Data for T",
+    )
+    fig.write_html(f"../run/T_data.html")
     print(
         f"The mean of temperature differences is: {np.mean(scalar_field - T_pred[vx_inlet.shape[0]:])}"
     )
