@@ -74,6 +74,7 @@ def get_values_and_derivatives(fields, points):
     vy = fields[:, 1:2]
     vz = fields[:, 2:3]
     p = fields[:, 3:4]
+    T = fields[:, 4:5] * 1000
 
     # Compute all gradients of vx with respect to points in one pass
     grad_vx = torch.autograd.grad(
@@ -173,11 +174,40 @@ def get_values_and_derivatives(fields, points):
     p_y = grad_p[:, 1:2]  # Gradient w.r.t y
     p_z = grad_p[:, 2:3]  # Gradient w.r.t z
 
+    # Compute all gradients of T with respect to points in one pass
+    grad_T = torch.autograd.grad(
+        outputs=T,
+        inputs=points,
+        grad_outputs=torch.ones_like(T),
+        retain_graph=True,
+        create_graph=True,
+    )[0]
+
+    # Extract first derivatives
+    T_x = grad_T[:, 0:1] * 1000
+    T_y = grad_T[:, 1:2] * 1000
+    T_z = grad_T[:, 2:3] * 1000
+
+    # Second derivatives
+    second_grad_T = torch.autograd.grad(
+        outputs=grad_T,
+        inputs=points,
+        grad_outputs=torch.ones_like(grad_T),
+        retain_graph=True,
+        create_graph=True,
+    )[0]
+
+    T_xx = second_grad_T[:, 0:1] * 1000
+    T_yy = second_grad_T[:, 1:2] * 1000
+    T_zz = second_grad_T[:, 2:3] * 1000
+
+
     return (
         vx,
         vy,
         vz,
         p,
+        T,
         vx_x,
         vx_y,
         vx_z,
@@ -199,6 +229,12 @@ def get_values_and_derivatives(fields, points):
         p_x,
         p_y,
         p_z,
+        T_x,
+        T_y,
+        T_z,
+        T_xx,
+        T_yy,
+        T_zz,
     )
 
 

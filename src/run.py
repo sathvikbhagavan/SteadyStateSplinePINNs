@@ -16,7 +16,7 @@ from git import Repo
 from inference import *
 import subprocess
 
-folder = "dp0"
+folder = "dp1"
 Project_name = (
     "Spline-PINNs_with_heat"  # Full_Project_name will be {Project_name}_{folder}
 )
@@ -76,7 +76,8 @@ torch.cuda.manual_seed(seed)
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
-inlet = np.load(data_folder + "vel_x_inlet.npy")
+data_directory = "./preProcessedData/with_T/dp1/"
+inlet = np.load(data_directory + "vel_x_inlet.npy")
 inlet_points = torch.tensor(inlet[:, 0:3] * 1000.0)
 vx_inlet_data = torch.tensor(np.load(data_folder + "vel_x_inlet.npy")[:, 3])
 vy_inlet_data = torch.tensor(np.load(data_folder + "vel_y_inlet.npy")[:, 3])
