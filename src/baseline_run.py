@@ -25,8 +25,10 @@ debug = False  # Turn this to "True" if you are debugging the flow and don't wan
 data_folder = "./preProcessedData/without_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
 
+print(f"########## Running Project: {Full_Project_name}")
+
 # Model Hyperparams
-epochs = 1000
+epochs = 100
 # lr = 1e-3
 hidden_dim = 128
 num_layer = 4
@@ -561,7 +563,7 @@ plot_fields(fields, validation_points)
 ######## Inference
 device = "cpu"
 torch.set_default_device(device)
-pinn_model = baseline.PINNs().to(device)
+pinn_model = baseline.PINNs(in_dim=3, hidden_dim=hidden_dim, out_dim=4, num_layer=num_layer).to(device)
 pinn_model.load_state_dict(
     torch.load(
         "../run/pinn_model.pt", weights_only=True, map_location=torch.device("cpu")

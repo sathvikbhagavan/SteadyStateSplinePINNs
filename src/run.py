@@ -25,6 +25,8 @@ debug = False  # Turn this to "True" if you are debugging the flow and don't wan
 data_folder = "./preProcessedData/without_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
 
+print(f"########## Running Project: {Full_Project_name}")
+
 # Model Hyperparams
 epochs = 100
 
