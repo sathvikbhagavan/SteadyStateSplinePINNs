@@ -16,7 +16,7 @@ from git import Repo
 from inference import *
 import subprocess
 
-folder = "dp11"
+folder = "dp0"
 Project_name = (
     "Spline-PINNs_with_heat"  # Full_Project_name will be {Project_name}_{folder}
 )
@@ -27,7 +27,7 @@ data_folder = "./preProcessedData/with_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
-epochs = 1
+epochs = 100
 
 # Physics Constants
 p_outlet = (101325 - 17825) / (10**5)
