@@ -14,7 +14,6 @@ import wandb
 import os
 from git import Repo
 from inference import *
-import subprocess
 
 folder = "dp1"
 Project_name = (
@@ -27,7 +26,7 @@ data_folder = "./preProcessedData/with_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
-epochs = 30
+epochs = 100
 
 # Physics Constants
 p_outlet = (101325 - 17825) / (10**5)
@@ -76,8 +75,7 @@ torch.cuda.manual_seed(seed)
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
-data_directory = "./preProcessedData/with_T/dp1/"
-inlet = np.load(data_directory + "vel_x_inlet.npy")
+inlet = np.load(data_folder + "vel_x_inlet.npy")
 inlet_points = torch.tensor(inlet[:, 0:3] * 1000.0)
 vx_inlet_data = torch.tensor(np.load(data_folder + "vel_x_inlet.npy")[:, 3])
 vy_inlet_data = torch.tensor(np.load(data_folder + "vel_y_inlet.npy")[:, 3])
