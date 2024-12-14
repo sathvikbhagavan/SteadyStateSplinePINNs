@@ -4,6 +4,38 @@ from hermite_spline import *
 from unet import *
 import plotly.graph_objects as go
 
+def dynamic_viscosity(T, mu_ref=1.716e-5, T_ref=273.15, S=110.4):
+    """
+    Calculate dynamic viscosity using Sutherland's law with robust error handling.
+    
+    Args:
+    T: Temperature field (tensor)
+    mu_ref: Reference viscosity (default: 1.716e-5 Pa.s)
+    T_ref: Reference temperature (default: 273.15 K)
+    S: Sutherland constant (default: 110.4 K)
+    
+    Returns:
+    Tensor of dynamic viscosity values
+    """
+    try:
+        # Ensure T is a floating point tensor
+        #T = T.float()
+        
+        # Clamp temperature to prevent extreme values
+        #T_clamped = torch.clamp(T, min=100, max=2000)
+        
+        # Compute viscosity with safe computation
+        mu = mu_ref * ((torch.abs(T) / T_ref) ** 1.5) * ((T_ref + S) / (torch.abs(T) + S))
+        
+        # Replace any remaining NaNs or infs with reference viscosity
+       # mu = torch.nan_to_num(mu, nan=mu_ref, posinf=mu_ref, neginf=mu_ref)
+        
+        return mu
+
+    except Exception as e:
+        print(f"Viscosity calculation error: {e}")
+        print(f"Problematic temperature tensor: {T}")
+        return torch.full_like(T, mu_ref, dtype=T.dtype)
 
 def get_support_points(points, step, grid_resolution):
     x = points[:, 0]
@@ -120,13 +152,19 @@ def get_fields(spline_coeff, points, step, grid_resolution):
     vy = f(step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    return vx, vy, vz, p
+    T = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0) * 1000
+    return vx, vy, vz, p, T
 
 
 # Calculating various field terms using coefficients
 def get_fields_and_losses(
-    spline_coeff, points, labels, step, grid_resolution, mu, rho, p_outlet
+    spline_coeff, points, labels, step, grid_resolution, rho, p_outlet, thermal_conductivity, density, specific_heat, T_wall
 ):
+    if torch.isnan(spline_coeff).any():
+        print("NaN in spline coefficients!")
+        #print(torch.isnan(spline_coeff))
+        return None
+
     x, y, z, x_supports, y_supports, z_supports = get_support_points(
         points, step, grid_resolution
     )
@@ -134,6 +172,7 @@ def get_fields_and_losses(
     vy = f(step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    T = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0) * 1000
     vx_x = f(
         step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0
     )
@@ -191,10 +230,23 @@ def get_fields_and_losses(
     vz_zz = f(
         step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2
     )
+    T_x =  f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0) * 1000
+    T_y = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0) * 1000
+    T_z = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1) * 1000
+    T_xx = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0) * 1000
+    T_yy = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0) * 1000
+    T_zz = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2) * 1000
+
     # calculate losses
+    # Divergence-free condition
     loss_divergence = torch.mean(
         (vx_x[labels == 0] + vy_y[labels == 0] + vz_z[labels == 0]) ** 2
     )
+
+    # Momentum equations (including temperature-dependent viscosity)
+    mu = dynamic_viscosity(T)
+    #print(mu)
+
     loss_momentum_x = torch.mean(
         (
             (
@@ -203,7 +255,7 @@ def get_fields_and_losses(
                 + vz[labels == 0] * vx_z[labels == 0]
             )
             + (1 / rho) * p_x[labels == 0]
-            - (mu / rho)
+            - (mu[labels == 0] / rho)
             * (vx_xx[labels == 0] + vx_yy[labels == 0] + vx_zz[labels == 0])
         )
         ** 2
@@ -216,7 +268,7 @@ def get_fields_and_losses(
                 + vz[labels == 0] * vy_z[labels == 0]
             )
             + (1 / rho) * p_y[labels == 0]
-            - (mu / rho)
+            - (mu[labels == 0] / rho)
             * (vy_xx[labels == 0] + vy_yy[labels == 0] + vy_zz[labels == 0])
         )
         ** 2
@@ -229,27 +281,42 @@ def get_fields_and_losses(
                 + vz[labels == 0] * vz_z[labels == 0]
             )
             + (1 / rho) * p_z[labels == 0]
-            - (mu / rho)
+            - (mu[labels == 0] / rho)
             * (vz_xx[labels == 0] + vz_yy[labels == 0] + vz_zz[labels == 0])
         )
         ** 2
     )
+
+    # Calculate thermal diffusivity using specific heat at constant pressure
+    alpha = thermal_conductivity / (density * specific_heat)
+
+    # Steady-state loss function (no time derivative)
+    loss_heat = torch.mean(
+        (alpha * (T_xx[labels == 0] + T_yy[labels == 0] + T_zz[labels == 0])  # Diffusion term (nabla^2 T)
+        + vx[labels == 0] * T_x[labels == 0] + vy[labels == 0] * T_y[labels == 0] + vz[labels == 0] * T_z[labels == 0]  # Advection term (v · nabla T)
+        ) ** 2
+    )  / 10**6
+
     # loss_inlet_boundary = (
     #     torch.mean((vx[labels == 1] - inlet_vx) ** 2)
     #     + torch.mean((vy[labels == 1] - inlet_vy) ** 2)
     #     + torch.mean((vz[labels == 1] - inlet_vz) ** 2)
     # )
+
     loss_outlet_boundary = torch.mean((p[labels == 3] - p_outlet) ** 2)
     loss_other_boundary = (
-        torch.mean((vx[labels == 2]) ** 2)
-        + torch.mean((vy[labels == 2]) ** 2)
-        + torch.mean((vz[labels == 2]) ** 2)
-    )
+    torch.mean((vx[labels == 2]) ** 2)
+    + torch.mean((vy[labels == 2]) ** 2)
+    + torch.mean((vz[labels == 2]) ** 2)
+)
+    loss_t_wall_boundary = torch.mean((T[labels == 2] - T_wall) ** 2) / 10**6
+
     return (
         vx,
         vy,
         vz,
         p,
+        T,
         loss_divergence,
         loss_momentum_x,
         loss_momentum_y,
@@ -257,6 +324,8 @@ def get_fields_and_losses(
         # loss_inlet_boundary,
         loss_outlet_boundary,
         loss_other_boundary,
+        loss_heat,
+        loss_t_wall_boundary
     )
 
 
