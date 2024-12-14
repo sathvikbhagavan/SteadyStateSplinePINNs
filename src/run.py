@@ -43,8 +43,8 @@ rho = ((p_outlet * 10**5) * M) / (R * T_cons)
 thermal_conductivity = 2.61E-02
 specific_heat = 1.00E+03  #at constant pressure
 density = 9.7118E-01  # kg/m^3
-T_Inlet = 293.15 #K
-T_wall = 338.15 #K
+T_Inlet = 338.15 #K
+T_wall = 293.15 #K
 
 seed = 42
 

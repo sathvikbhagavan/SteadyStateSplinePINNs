@@ -147,7 +147,7 @@ def plot_aginast_data(folder_path, vx_pred, vy_pred, vz_pred, p_pred, T_pred):
     )
     fig.write_html(f"../run/p_data.html")
     print(
-        f"The mean of pressure differences is: {np.mean(scalar_field - p_pred[vx_inlet.shape[0]:]*10**5)}"
+        f"The mean of pressure differences is: {np.mean(scalar_field - p_pred[vx_inlet.shape[0]:])}"
     )
 
     # Temperature plotting
