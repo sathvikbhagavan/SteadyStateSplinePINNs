@@ -27,7 +27,7 @@ data_folder = "./preProcessedData/with_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
-epochs = 100
+epochs = 30
 
 # Physics Constants
 p_outlet = (101325 - 17825) / (10**5)
@@ -43,7 +43,7 @@ rho = ((p_outlet * 10**5) * M) / (R * T_cons)
 thermal_conductivity = 2.61E-02
 specific_heat = 1.00E+03  #at constant pressure
 density = 9.7118E-01  # kg/m^3
-T_inlet = 293.15 #K
+T_Inlet = 293.15 #K
 T_wall = 338.15 #K
 
 seed = 42
@@ -76,19 +76,18 @@ torch.cuda.manual_seed(seed)
 torch.set_default_device(device)
 print(f"Using device: {device}")
 
-data_directory = "./preProcessedData/with_T/dp0/"
-inlet = np.load(data_directory + "vel_x_inlet.npy")
+inlet = np.load(data_folder + "vel_x_inlet.npy")
 inlet_points = torch.tensor(inlet[:, 0:3] * 1000.0)
 vx_inlet_data = torch.tensor(np.load(data_folder + "vel_x_inlet.npy")[:, 3])
 vy_inlet_data = torch.tensor(np.load(data_folder + "vel_y_inlet.npy")[:, 3])
 vz_inlet_data = torch.tensor(np.load(data_folder + "vel_z_inlet.npy")[:, 3])
 
-data_points = torch.tensor(np.load(data_directory + "vel_x.npy")[:, 0:3] * 1000.0)
-vx_data = torch.tensor(np.load(data_directory + "vel_x.npy")[:, 3])
-vy_data = torch.tensor(np.load(data_directory + "vel_y.npy")[:, 3])
-vz_data = torch.tensor(np.load(data_directory + "vel_z.npy")[:, 3])
-p_data = torch.tensor(np.load(data_directory + "press.npy")[:, 3])
-temp_data = torch.tensor(np.load(data_directory + "temp.npy")[:, 3])
+data_points = torch.tensor(np.load(data_folder + "vel_x.npy")[:, 0:3] * 1000.0)
+vx_data = torch.tensor(np.load(data_folder + "vel_x.npy")[:, 3])
+vy_data = torch.tensor(np.load(data_folder + "vel_y.npy")[:, 3])
+vz_data = torch.tensor(np.load(data_folder + "vel_z.npy")[:, 3])
+p_data = torch.tensor(np.load(data_folder + "press.npy")[:, 3])
+temp_data = torch.tensor(np.load(data_folder + "temp.npy")[:, 3])
 
 num_samples = 50000
 # Generate random indices for sampling
@@ -103,7 +102,6 @@ vy_sampled_data = vy_data[indices]
 vz_sampled_data = vz_data[indices]
 p_sampled_data = p_data[indices] / 10**5
 temp_sampled_data = temp_data[indices] 
-
 
 obj = trimesh.load("./Baseline_ML4Science.stl")
 
@@ -124,23 +122,24 @@ start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
-validation_points, validation_labels = sample_points(obj, 30000, 3000, 20000)
+validation_points, validation_labels = sample_points(obj, 10000, 3000, 10000)
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
-    train_points, train_labels = sample_points(obj, 30000, 3000, 20000)
+    train_points, train_labels = sample_points(obj, 10000, 3000, 10000)
     def closure():
         # Get Hermite Spline coefficients from the Unet
         spline_coeff = unet_model(unet_input)[0]
 
 
-        vx_inlet, vy_inlet, vz_inlet, _, T = get_fields(
+        vx_inlet, vy_inlet, vz_inlet, _, T_inlet = get_fields(
             spline_coeff, inlet_points, step, grid_resolution
         )
 
         # Calculating various field terms using coefficients
         (
+            _,
             _,
             _,
             _,
@@ -160,7 +159,6 @@ for epoch in range(epochs):
             train_labels,
             step,
             grid_resolution,
-            T,
             rho,
             p_outlet,
             thermal_conductivity,
@@ -170,15 +168,13 @@ for epoch in range(epochs):
 
         )
 
-        
         loss_inlet_boundary = (
             torch.mean((vx_inlet - vx_inlet_data) ** 2)
             + torch.mean((vy_inlet - vy_inlet_data) ** 2)
             + torch.mean((vz_inlet - vz_inlet_data) ** 2)
         )
 
-        loss_inlet_temp_boundary = torch.mean((T - T_inlet) ** 2)
-
+        loss_inlet_temp_boundary = torch.mean((T_inlet - T_Inlet) ** 2) / 10**6
 
         vx_supervised, vy_supervised, vz_supervised, p_supervised, t_supervised = get_fields(
             spline_coeff, sampled_points, step, grid_resolution
@@ -188,7 +184,7 @@ for epoch in range(epochs):
             + torch.mean((vy_supervised - vy_sampled_data) ** 2)
             + torch.mean((vz_supervised - vz_sampled_data) ** 2)
             + torch.mean((p_supervised - p_sampled_data) ** 2)
-            + torch.mean((t_supervised - temp_sampled_data) ** 2)
+            + torch.mean((t_supervised - temp_sampled_data) ** 2) / 10**6
         )
 
         loss_total = (
@@ -196,7 +192,7 @@ for epoch in range(epochs):
             + loss_momentum_x
             + loss_momentum_y
             + loss_momentum_z
-            + 20*loss_inlet_boundary
+            + loss_inlet_boundary
             + loss_outlet_boundary
             + loss_other_boundary
             + supervised_loss
@@ -205,8 +201,6 @@ for epoch in range(epochs):
             + loss_t_wall_boundary
         )
 
- 
-        
         if not debug:
             wandb.log(
                 {
@@ -236,7 +230,7 @@ for epoch in range(epochs):
             f"Other Boundary Loss: {loss_other_boundary.item()}, "
             f"Supervised Loss: {supervised_loss.item()}",
             f"Heat Loss: {loss_heat.item()}",
-         #   f"Inlet Temperature Boundary Loss: {loss_inlet_temp_boundary.item()}",
+            f"Inlet Temperature Boundary Loss: {loss_inlet_temp_boundary.item()}",
             f"Surface Temperature Boundary Loss: {loss_t_wall_boundary.item()}",
             f"Total Loss: {loss_total.item()}",
         )
@@ -249,17 +243,14 @@ for epoch in range(epochs):
     # Validation
     # Switch model to evaluation mode
     unet_model.eval()
-    spline_coeff = unet_model(unet_input)[0]
-
-    # Recompute T outside the closure
-    _, _, _, _, T = get_fields(spline_coeff, validation_points, step, grid_resolution)
-
     with torch.no_grad():
+        spline_coeff = unet_model(unet_input)[0]
         (
             validation_vx,
             validation_vy,
             validation_vz,
             validation_p,
+            validation_T,
             validation_loss_divergence,
             validation_loss_momentum_x,
             validation_loss_momentum_y,
@@ -275,7 +266,6 @@ for epoch in range(epochs):
             validation_labels,
             step,
             grid_resolution,
-            T,
             rho,
             p_outlet,
             thermal_conductivity,
@@ -301,7 +291,7 @@ for epoch in range(epochs):
             ("vy", validation_vy),
             ("vz", validation_vz),
             ("p", validation_p),
-            ("temp", validation_loss_heat)
+            ("temp", validation_T)
         ]
         plot_fields(fields, validation_points)
 
@@ -353,16 +343,6 @@ for epoch in range(epochs):
             f"Validation Total Loss: {validation_loss_total.item()}"
         )
 
-
-    for name, param in unet_model.named_parameters():
-            if param.grad is not None:
-                print(f"{name} grad stats:", 
-                    param.grad.abs().min(), 
-                    param.grad.abs().max(), 
-                    param.grad.abs().mean())
-                if torch.isnan(param.grad).any():
-                    print(f"NaN gradient in {name}")
-
     unet_model.train()
     optimizer.step(closure)
 
@@ -371,17 +351,16 @@ print(f"Time taken for training is: {stop_time - start_time}")
 torch.save(unet_model.state_dict(), "../run/unet_model.pt")
 
 ## Plotting
-unet_input = prepare_mesh_for_unet(binary_mask).to(device)
-spline_coeff = unet_model(unet_input)[0]
 unet_model.eval()
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)
-spline_coeff = unet_model(unet_input)[0]
 with torch.no_grad():
+    spline_coeff = unet_model(unet_input)[0]
     (
         validation_vx,
         validation_vy,
         validation_vz,
         validation_p,
+        validation_T,
         validation_loss_divergence,
         validation_loss_momentum_x,
         validation_loss_momentum_y,
@@ -397,7 +376,6 @@ with torch.no_grad():
         validation_labels,
         step,
         grid_resolution,
-        T,
         rho,
         p_outlet,
         thermal_conductivity,
@@ -406,15 +384,12 @@ with torch.no_grad():
         T_wall
     )
 
-    
-
-
 fields = [
     ("vx", validation_vx),
     ("vy", validation_vy),
     ("vz", validation_vz),
     ("p", validation_p),
-    ("temp", validation_loss_heat)
+    ("temp", validation_T)
 ]
 plot_fields(fields, validation_points)
 
@@ -449,7 +424,7 @@ vx_pred, vy_pred, vz_pred, p_pred, T_pred = get_fields(
 vx_pred = vx_pred.cpu().detach().numpy()
 vy_pred = vy_pred.cpu().detach().numpy()
 vz_pred = vz_pred.cpu().detach().numpy()
-p_pred = p_pred.cpu().detach().numpy()
+p_pred = p_pred.cpu().detach().numpy() * 10**5
 T_pred = T_pred.cpu().detach().numpy()
 
 plot_aginast_data(data_folder, vx_pred, vy_pred, vz_pred, p_pred, T_pred)
