@@ -7564,3 +7564,31 @@ Divergence Loss: 0.010234184538712285, X Momentum Loss: 0.015852871606660667, Y 
 Divergence Loss: 0.010171945030559133, X Momentum Loss: 0.015684382356671675, Y Momentum Loss: 0.010374474189733897, Z Momentum Loss: 0.02714524476839052, Inlet Boundary Loss: 0.017576756048857105, Outlet Boundary Loss: 0.009561365580741747, Other Boundary Loss: 0.015400881832487829, Supervised Loss: 296.8166908166764 Heat Loss: 0.657254921629406 Surface Temperature Boundary Loss: 97.80767241887887 Total Loss: 395.97921488831093
 Divergence Loss: 0.010219915967709724, X Momentum Loss: 0.015816460456331477, Y Momentum Loss: 0.010433846923969661, Z Momentum Loss: 0.027087746732759065, Inlet Boundary Loss: 0.017517064045516922, Outlet Boundary Loss: 0.009484705090494103, Other Boundary Loss: 0.015320755005752796, Supervised Loss: 290.96410064946815 Heat Loss: 0.6615800523780059 Surface Temperature Boundary Loss: 102.4449305128777 Total Loss: 394.67398004715733
 Divergence Loss: 0.010221932812672502, X Momentum Loss: 0.015817137405779766, Y Momentum Loss: 0.010419698876762914, Z Momentum Loss: 0.02700417943936997, Inlet Boundary Loss: 0.017493168227122692, Outlet Boundary Loss: 0.009513721370128377, Other Boundary Loss: 0.015356909346665708, Supervised Loss: 290.5848213585231 Heat Loss: 0.6617665224816818 Surface Temperature Boundary Loss: 102.6003623198752 Total Loss: 394.44926123182245
+Divergence Loss: 0.01022217115863969, X Momentum Loss: 0.01580810411072824, Y Momentum Loss: 0.0104053133810952, Z Momentum Loss: 0.02696198807355838, Inlet Boundary Loss: 0.01747411850233324, Outlet Boundary Loss: 0.00955098745500266, Other Boundary Loss: 0.015372461611779648, Supervised Loss: 289.8599804388193 Heat Loss: 0.6607251600157154 Surface Temperature Boundary Loss: 103.11800450775826 Total Loss: 394.24867005896914
+Divergence Loss: 0.010218166388258449, X Momentum Loss: 0.01579001264239655, Y Momentum Loss: 0.010388783377951596, Z Momentum Loss: 0.026956668301604248, Inlet Boundary Loss: 0.017464626073786665, Outlet Boundary Loss: 0.009589270521726046, Other Boundary Loss: 0.015397198485206225, Supervised Loss: 289.1838797536801 Heat Loss: 0.6584076158230511 Surface Temperature Boundary Loss: 103.60703607318607 Total Loss: 394.07396815754436
+Divergence Loss: 0.010211966172233251, X Momentum Loss: 0.015778222232201523, Y Momentum Loss: 0.010390125121564514, Z Momentum Loss: 0.026937260256428824, Inlet Boundary Loss: 0.017470598979216104, Outlet Boundary Loss: 0.009608241950456689, Other Boundary Loss: 0.015413666390021155, Supervised Loss: 288.7766477858945 Heat Loss: 0.6571871247000083 Surface Temperature Boundary Loss: 103.83138285157625 Total Loss: 393.8957433815971
+Divergence Loss: 0.010193518101941714, X Momentum Loss: 0.015776613603343648, Y Momentum Loss: 0.010413950983610431, Z Momentum Loss: 0.026809244780877272, Inlet Boundary Loss: 0.01747430494229713, Outlet Boundary Loss: 0.009623901846891337, Other Boundary Loss: 0.01546921762885338, Supervised Loss: 288.7510656474262 Heat Loss: 0.6565026066322053 Surface Temperature Boundary Loss: 103.51401311336724 Total Loss: 393.5420938576104
+Time taken for training is: 7410.113086938858
+The mean of vx differences is: 0.17146048570766476
+The mean of vy differences is: -0.00799812995349699
+The mean of vz differences is: -0.0025761021960585334
+The mean of pressure differences is: 19120.70186722888
+The mean of temperature differences is: -8.942689202540441
+Repository has changes, preparing to commit.
+Committed changes with message: Running job with run name: vivid-violet-2, url: https://wandb.ai/sathvikbhagavan-epfl/Spline-PINNs_with_heat_dp0/runs/bw3xkt80
+Traceback (most recent call last):
+  File "/home/alphaidz/SteadyStateSplinePINNs/src/run.py", line 471, in <module>
+    origin.push()
+  File "/home/alphaidz/my_env/lib64/python3.9/site-packages/git/remote.py", line 1203, in push
+    return self._get_push_info(proc, progress, kill_after_timeout=kill_after_timeout)
+  File "/home/alphaidz/my_env/lib64/python3.9/site-packages/git/remote.py", line 968, in _get_push_info
+    proc.wait(stderr=stderr_text)
+  File "/home/alphaidz/my_env/lib64/python3.9/site-packages/git/cmd.py", line 834, in wait
+    raise GitCommandError(remove_password_if_present(self.args), status, errstr)
+git.exc.GitCommandError: Cmd('git') failed due to: exit code(128)
+  cmdline: git push --porcelain -- origin
+  stderr: 'fatal: Could not read from remote repository.'
+[1;34mwandb[0m: 🚀 View run [33mvivid-violet-2[0m at: [34mhttps://wandb.ai/sathvikbhagavan-epfl/Spline-PINNs_with_heat_dp0/runs/bw3xkt80[0m
+[1;34mwandb[0m: Find logs at: [1;35mwandb/run-20241213_225943-bw3xkt80/logs[0m
+srun: error: i24: task 0: Exited with exit code 1
+srun: Terminating StepId=2493591.0
