@@ -102,31 +102,31 @@ def get_loss(
     loss_divergence = torch.mean((vx_x + vy_y + vz_z) ** 2)
     loss_momentum_x = torch.mean(
         (
-            vx * vx_x
-            + vy * vx_y
-            + vz * vx_z
-            + (1 / rho) * p_x
-            - (mu / rho) * (vx_xx + vx_yy + vx_zz)
+            vx[labels==0] * vx_x[labels==0]
+            + vy[labels==0] * vx_y[labels==0]
+            + vz[labels==0] * vx_z[labels==0]
+            + (1 / rho) * p_x[labels==0]
+            - (mu / rho) * (vx_xx[labels==0] + vx_yy[labels==0] + vx_zz[labels==0])
         )
         ** 2
     )
     loss_momentum_y = torch.mean(
         (
-            vx * vy_x
-            + vy * vy_y
-            + vz * vy_z
-            + (1 / rho) * p_y
-            - (mu / rho) * (vy_xx + vy_yy + vy_zz)
+            vx[labels==0] * vy_x[labels==0]
+            + vy[labels==0] * vy_y[labels==0]
+            + vz[labels==0] * vy_z[labels==0]
+            + (1 / rho) * p_y[labels==0]
+            - (mu / rho) * (vy_xx[labels==0] + vy_yy[labels==0] + vy_zz[labels==0])
         )
         ** 2
     )
     loss_momentum_z = torch.mean(
         (
-            vx * vz_x
-            + vy * vz_y
-            + vz * vz_z
-            + (1 / rho) * p_z
-            - (mu / rho) * (vz_xx + vz_yy + vz_zz)
+            vx[labels==0] * vz_x[labels==0]
+            + vy[labels==0] * vz_y[labels==0]
+            + vz[labels==0] * vz_z[labels==0]
+            + (1 / rho) * p_z[labels==0]
+            - (mu / rho) * (vz_xx[labels==0] + vz_yy[labels==0] + vz_zz[labels==0])
         )
         ** 2
     )
