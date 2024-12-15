@@ -188,13 +188,13 @@ for epoch in range(epochs):
 
         loss_total = (
             loss_divergence
-            + loss_momentum_x
+            + 10*loss_momentum_x
             + loss_momentum_y
             + loss_momentum_z
-            + loss_inlet_boundary
+            + 10*loss_inlet_boundary
             + loss_outlet_boundary
             + loss_other_boundary
-            + supervised_loss
+            + 10*supervised_loss
             + loss_heat
             + loss_inlet_temp_boundary
             + loss_t_wall_boundary
