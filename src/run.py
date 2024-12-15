@@ -193,7 +193,7 @@ for epoch in range(epochs):
             + loss_momentum_z
             + 10*loss_inlet_boundary
             + loss_outlet_boundary
-            + loss_other_boundary
+            + 10*loss_other_boundary
             + 10*supervised_loss
             + loss_heat
             + loss_inlet_temp_boundary
