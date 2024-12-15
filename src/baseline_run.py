@@ -16,7 +16,7 @@ from git import Repo
 from inference import *
 from constants import *
 
-folder = "dp0"
+folder = "dp11"
 Project_name = (
     "PINNs-baseline_with_heat"  # Full_Project_name will be {Project_name}_{folder}
 )
@@ -205,14 +205,14 @@ for epoch in range(epochs):
         + torch.mean((inlet_fields[:,2] - vz_inlet_data) ** 2)
         )
 
-        loss_inlet_temp_boundary = torch.mean((inlet_fields[:,4] - T_inlet) ** 2) / 10**6
+        loss_inlet_temp_boundary = torch.mean((inlet_fields[:,4]*1000 - T_inlet) ** 2) / 10**6
 
         fields_supervised = pinn_model(sampled_points)
         vx_supervised = fields_supervised[:,0]
         vy_supervised = fields_supervised[:,1]
         vz_supervised = fields_supervised[:,2]
         p_supervised = fields_supervised[:,3]
-        t_supervised = fields_supervised[:,4]
+        t_supervised = fields_supervised[:,4]*1000
 
         supervised_loss = (
             torch.mean((vx_supervised - vx_sampled_data) ** 2)
@@ -322,7 +322,6 @@ for epoch in range(epochs):
         validation_loss_momentum_x,
         validation_loss_momentum_y,
         validation_loss_momentum_z,
-        # validation_loss_inlet_boundary,
         validation_loss_outlet_boundary,
         validation_loss_other_boundary,
         validation_loss_heat,
@@ -364,23 +363,11 @@ for epoch in range(epochs):
         p_outlet,
     )
 
-    inlet_fields = pinn_model(inlet_points)
-
-    # validation_loss_inlet_boundary = (
-    # torch.mean((inlet_fields[:,0] - vx_inlet_data) ** 2)
-    # + torch.mean((inlet_fields[:,1] - vy_inlet_data) ** 2)
-    # + torch.mean((inlet_fields[:,2] - vz_inlet_data) ** 2)
-    # )
-
-    # validation_loss_inlet_temp_boundary = torch.mean((inlet_fields[:,4] - T_inlet) ** 2)
-
     validation_loss_total = (
         validation_loss_divergence
         + validation_loss_momentum_x
         + validation_loss_momentum_y
         + validation_loss_momentum_z
-        # + validation_loss_inlet_boundary
-        # + validation_loss_inlet_temp_boundary
         + validation_loss_outlet_boundary
         + validation_loss_other_boundary
         + validation_loss_heat
@@ -392,7 +379,7 @@ for epoch in range(epochs):
         ("vy", validation_fields[:,1]),
         ("vz", validation_fields[:,2]),
         ("p", validation_fields[:,3]),
-        ("T", validation_fields[:,4]),
+        ("T", validation_fields[:,4]*1000),
     ]
     plot_fields(validation_fields, validation_points)
 
@@ -411,9 +398,6 @@ for epoch in range(epochs):
                 "Validation Z Momentum Loss": np.log10(
                     validation_loss_momentum_z.item()
                 ),
-                # "Validation Inlet Boundary Loss": np.log10(
-                #     validation_loss_inlet_boundary.item()
-                # ),
                 "Validation outlet Boundary Loss": np.log10(
                     validation_loss_outlet_boundary.item()
                 ),
@@ -437,7 +421,6 @@ for epoch in range(epochs):
         f"Validation X Momentum Loss: {validation_loss_momentum_x.item()}, "
         f"Validation Y Momentum Loss: {validation_loss_momentum_y.item()}, "
         f"Validation Z Momentum Loss: {validation_loss_momentum_z.item()}, "
-        # f"Validation Inlet Boundary Loss: {validation_loss_inlet_boundary.item()}, "
         f"Validation Outlet Boundary Loss: {validation_loss_outlet_boundary.item()}, "
         f"Validation Other Boundary Loss: {validation_loss_other_boundary.item()}, "
         f"Validation Heat Loss: {validation_loss_heat.item()}, "
@@ -496,7 +479,6 @@ validation_fields = pinn_model(validation_points)
     validation_loss_momentum_x,
     validation_loss_momentum_y,
     validation_loss_momentum_z,
-    # validation_loss_inlet_boundary,
     validation_loss_outlet_boundary,
     validation_loss_other_boundary,
     validation_loss_heat,
@@ -543,7 +525,7 @@ fields = [
     ("vy", validation_fields[:,1]),
     ("vz", validation_fields[:,2]),
     ("p", validation_fields[:,3]),
-    ("T", validation_fields[:,4]),
+    ("T", validation_fields[:,4]*1000),
 ]
 plot_fields(fields, validation_points)
 
@@ -572,7 +554,7 @@ vx_pred = all_fields[:,0].cpu().detach().numpy()
 vy_pred = all_fields[:,1].cpu().detach().numpy()
 vz_pred = all_fields[:,2].cpu().detach().numpy()
 p_pred = all_fields[:,3].cpu().detach().numpy()
-T_pred = all_fields[:,4].cpu().detach().numpy()
+T_pred = (all_fields[:,4]*1000).cpu().detach().numpy()
 
 plot_aginast_data(data_folder, vx_pred, vy_pred, vz_pred, p_pred, T_pred)
 
