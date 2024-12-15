@@ -7,7 +7,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --output=../run/logs.txt
 
-source ~/my_env/bin/activate
+source /home/bhagavan/CS433/pinns/bin/activate
 
 # Debugging: Check Python and PyTorch
 echo "Python binary: $(which python)"
@@ -26,5 +26,5 @@ module load cuda/11.8.0
 
 
 # Run the script
-srun python run.py
+srun python baseline_run.py
 deactivate
