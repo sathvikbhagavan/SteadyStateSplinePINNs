@@ -14,39 +14,23 @@ import wandb
 import os
 from git import Repo
 from inference import *
+from constants import *
 
 folder = "dp0"
 Project_name = (
     "PINNs-baseline_with_heat"  # Full_Project_name will be {Project_name}_{folder}
 )
-device = "cuda"  # Turn this to "cpu" if you are debugging the flow on the CPU
-debug = False  # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
+device = "cpu"  # Turn this to "cpu" if you are debugging the flow on the CPU
+debug = True  # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
 
 data_folder = "./preProcessedData/with_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
-epochs = 100
+epochs = 10
 # lr = 1e-3
 hidden_dim = 128
 num_layer = 4
-inlet_velocity = 0.5
-
-# Physics Constants
-p_outlet = (101325 - 17825) / (10**5)
-Tref = 273.15
-T = 298.15
-mu_ref = 1.716e-5
-S = 110.4
-#mu = round(mu_ref * (T / Tref) ** (1.5) * ((Tref + S) / (T + S)), 8)
-M = 28.96 / 1000
-R = 8.314
-rho = ((p_outlet * 10**5) * M) / (R * T)
-thermal_conductivity = 2.61E-02
-specific_heat = 1.00E+03  #at constant pressure
-density = 9.7118E-01  # kg/m^3
-T_inlet = 293.15 #K
-T_wall = 338.15 #K
 
 seed = 42
 
@@ -69,115 +53,7 @@ if not debug:
             "seed": seed,
             "hidden_dim": hidden_dim,
             "num_layers": num_layer,
-            "inlet_velocity": inlet_velocity,
         },
-    )
-
-def get_loss(
-    vx,
-    vy,
-    vz,
-    p,
-    T,
-    vx_x,
-    vx_y,
-    vx_z,
-    vx_xx,
-    vx_yy,
-    vx_zz,
-    vy_x,
-    vy_y,
-    vy_z,
-    vy_xx,
-    vy_yy,
-    vy_zz,
-    vz_x,
-    vz_y,
-    vz_z,
-    vz_xx,
-    vz_yy,
-    vz_zz,
-    p_x,
-    p_y,
-    p_z,
-    T_x,
-    T_y,
-    T_z,
-    T_xx,
-    T_yy,
-    T_zz,
-    labels,
-    p_outlet,
-):
-    loss_divergence = torch.mean((vx_x + vy_y + vz_z) ** 2)
-
-    mu = dynamic_viscosity(T)
-
-    loss_momentum_x = torch.mean(
-        (
-            vx[labels == 0] * vx_x[labels == 0]
-            + vy[labels == 0] * vx_y[labels == 0]
-            + vz[labels == 0] * vx_z[labels == 0]
-            + (1 / rho) * p_x[labels == 0]
-            - (mu[labels == 0] / rho) 
-            * (vx_xx[labels == 0] + vx_yy[labels == 0] + vx_zz[labels == 0])
-        )
-        ** 2
-    )
-    loss_momentum_y = torch.mean(
-        (
-            vx[labels == 0] * vy_x[labels == 0]
-            + vy[labels == 0] * vy_y[labels == 0]
-            + vz[labels == 0] * vy_z[labels == 0]
-            + (1 / rho) * p_y[labels == 0]
-            - (mu[labels == 0] / rho) 
-            * (vy_xx[labels == 0] + vy_yy[labels == 0] + vy_zz[labels == 0])
-        )
-        ** 2
-    )
-    loss_momentum_z = torch.mean(
-        (
-            vx[labels == 0] * vz_x[labels == 0]
-            + vy[labels == 0] * vz_y[labels == 0]
-            + vz[labels == 0] * vz_z[labels == 0]
-            + (1 / rho) * p_z[labels == 0]
-            - (mu[labels == 0] / rho) 
-            * (vz_xx[labels == 0] + vz_yy[labels == 0] + vz_zz[labels == 0])
-        )
-        ** 2
-    )
-    # inlet_boundary_loss = (
-    #     torch.mean((vx[labels == 1] - inlet_velocity) ** 2)
-    #     + torch.mean((vy[labels == 1]) ** 2)
-    #     + torch.mean((vz[labels == 1]) ** 2)
-    # )
-    loss_other_boundary = (
-        torch.mean((vx[labels == 2]) ** 2)
-        + torch.mean((vy[labels == 2]) ** 2)
-        + torch.mean((vz[labels == 2]) ** 2)
-    )
-
-    alpha = thermal_conductivity / (density * specific_heat)
-    # Steady-state loss function (no time derivative)
-    loss_heat = torch.mean(
-        (alpha * (T_xx[labels == 0] + T_yy[labels == 0] + T_zz[labels == 0])  # Diffusion term (nabla^2 T)
-        + vx[labels == 0] * T_x[labels == 0] + vy[labels == 0] * T_y[labels == 0] + vz[labels == 0] * T_z[labels == 0]  # Advection term (v · nabla T)
-        ) ** 2
-    ) / 10**6
-
-    loss_t_wall_boundary = torch.mean((T[labels == 2] - T_wall) ** 2) / 10**6
-
-    loss_outlet_boundary = torch.mean((p[labels == 3] - p_outlet) ** 2)
-    return (
-        loss_divergence,
-        loss_momentum_x,
-        loss_momentum_y,
-        loss_momentum_z,
-        # loss_inlet_boundary,
-        loss_outlet_boundary,
-        loss_other_boundary,
-        loss_heat,
-        loss_t_wall_boundary
     )
 
 np.random.seed(seed)
@@ -233,7 +109,7 @@ validation_points = validation_points/1000
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
-    train_points, train_labels = sample_points(obj, 30000, 3000, 20000)
+    train_points, train_labels = sample_points(obj, 30000, 3000, 20000) # Excluding inlet points
     train_points = train_points/1000
     train_points.requires_grad_(True)
 
@@ -284,7 +160,7 @@ for epoch in range(epochs):
             loss_other_boundary,
             loss_heat,
             loss_t_wall_boundary
-        ) = get_loss(
+        ) = baseline.get_loss(
             vx,
             vy,
             vz,
@@ -329,7 +205,7 @@ for epoch in range(epochs):
         + torch.mean((inlet_fields[:,2] - vz_inlet_data) ** 2)
         )
 
-        loss_inlet_temp_boundary = torch.mean((T - T_inlet) ** 2) / 10**6
+        loss_inlet_temp_boundary = torch.mean((inlet_fields[:,4] - T_inlet) ** 2) / 10**6
 
         fields_supervised = pinn_model(sampled_points)
         vx_supervised = fields_supervised[:,0]
@@ -351,10 +227,10 @@ for epoch in range(epochs):
             + loss_momentum_x
             + loss_momentum_y
             + loss_momentum_z
-            + 20*loss_inlet_boundary
+            + loss_inlet_boundary
             + loss_outlet_boundary
             + loss_other_boundary
-            + 10*supervised_loss
+            + supervised_loss
             + loss_heat
             + loss_inlet_temp_boundary
             + loss_t_wall_boundary
@@ -451,7 +327,7 @@ for epoch in range(epochs):
         validation_loss_other_boundary,
         validation_loss_heat,
         validation_loss_t_wall_boundary
-    ) = get_loss(
+    ) = baseline.get_loss(
         vx,
         vy,
         vz,
@@ -490,35 +366,35 @@ for epoch in range(epochs):
 
     inlet_fields = pinn_model(inlet_points)
 
-    validation_loss_inlet_boundary = (
-    torch.mean((inlet_fields[:,0] - vx_inlet_data) ** 2)
-    + torch.mean((inlet_fields[:,1] - vy_inlet_data) ** 2)
-    + torch.mean((inlet_fields[:,2] - vz_inlet_data) ** 2)
-    )
+    # validation_loss_inlet_boundary = (
+    # torch.mean((inlet_fields[:,0] - vx_inlet_data) ** 2)
+    # + torch.mean((inlet_fields[:,1] - vy_inlet_data) ** 2)
+    # + torch.mean((inlet_fields[:,2] - vz_inlet_data) ** 2)
+    # )
 
-    validation_loss_inlet_temp_boundary = torch.mean((T - T_inlet) ** 2)
+    # validation_loss_inlet_temp_boundary = torch.mean((inlet_fields[:,4] - T_inlet) ** 2)
 
     validation_loss_total = (
         validation_loss_divergence
         + validation_loss_momentum_x
         + validation_loss_momentum_y
         + validation_loss_momentum_z
-        + 20*validation_loss_inlet_boundary
-        + validation_loss_inlet_temp_boundary
+        # + validation_loss_inlet_boundary
+        # + validation_loss_inlet_temp_boundary
         + validation_loss_outlet_boundary
         + validation_loss_other_boundary
         + validation_loss_heat
         + validation_loss_t_wall_boundary
     )
 
-    fields = [
+    validation_fields = [
         ("vx", validation_fields[:,0]),
         ("vy", validation_fields[:,1]),
         ("vz", validation_fields[:,2]),
         ("p", validation_fields[:,3]),
         ("T", validation_fields[:,4]),
     ]
-    plot_fields(fields, validation_points)
+    plot_fields(validation_fields, validation_points)
 
     if not debug:
         wandb.log(
@@ -625,7 +501,7 @@ validation_fields = pinn_model(validation_points)
     validation_loss_other_boundary,
     validation_loss_heat,
     validation_loss_t_wall_boundary,
-) = get_loss(
+) = baseline.get_loss(
     vx,
     vy,
     vz,
@@ -674,7 +550,7 @@ plot_fields(fields, validation_points)
 ######## Inference
 device = "cpu"
 torch.set_default_device(device)
-pinn_model = baseline.PINNs().to(device)
+pinn_model = baseline.PINNs(in_dim=3, hidden_dim=hidden_dim, out_dim=5, num_layer=num_layer).to(device)
 pinn_model.load_state_dict(
     torch.load(
         "../run/pinn_model.pt", weights_only=True, map_location=torch.device("cpu")
