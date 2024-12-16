@@ -126,7 +126,7 @@ unet_input = prepare_mesh_for_unet(binary_mask).to(device)
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
-    train_points, train_labels = sample_points(obj, 100000, 10000, 100000)
+    train_points, train_labels = sample_points(obj, 100000, 10000, 200000)
     def closure():
         # Get Hermite Spline coefficients from the Unet
         spline_coeff = unet_model(unet_input)[0]
