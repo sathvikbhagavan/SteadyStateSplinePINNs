@@ -26,5 +26,5 @@ module load cuda/11.8.0
 
 
 # Run the script
-srun python run.py
+srun python spline_pinn_run.py
 deactivate

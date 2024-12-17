@@ -1,9 +1,9 @@
 import torch
-from sample import *
+from utils import *
 from hermite_spline import *
 from unet import *
-import plotly.graph_objects as go
 from constants import *
+
 
 def f(
     step,
@@ -52,18 +52,15 @@ def get_fields(spline_coeff, points, step, grid_resolution):
     vy = f(step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    T = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0) * 1000
+    T = (
+        f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+        * 1000
+    )
     return vx, vy, vz, p, T
 
 
 # Calculating various field terms using coefficients
-def get_fields_and_losses(
-    spline_coeff, points, labels, step, grid_resolution):
-    if torch.isnan(spline_coeff).any():
-        print("NaN in spline coefficients!")
-        #print(torch.isnan(spline_coeff))
-        return None
-
+def get_fields_and_losses(spline_coeff, points, labels, step, grid_resolution):
     x, y, z, x_supports, y_supports, z_supports = get_support_points(
         points, step, grid_resolution
     )
@@ -71,7 +68,10 @@ def get_fields_and_losses(
     vy = f(step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    T = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0) * 1000
+    T = (
+        f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+        * 1000
+    )
     vx_x = f(
         step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0
     )
@@ -129,12 +129,30 @@ def get_fields_and_losses(
     vz_zz = f(
         step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2
     )
-    T_x =  f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0) * 1000
-    T_y = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0) * 1000
-    T_z = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1) * 1000
-    T_xx = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0) * 1000
-    T_yy = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0) * 1000
-    T_zz = f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2) * 1000
+    T_x = (
+        f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0)
+        * 1000
+    )
+    T_y = (
+        f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0)
+        * 1000
+    )
+    T_z = (
+        f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1)
+        * 1000
+    )
+    T_xx = (
+        f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0)
+        * 1000
+    )
+    T_yy = (
+        f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 2, 0)
+        * 1000
+    )
+    T_zz = (
+        f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 2)
+        * 1000
+    )
 
     # calculate losses
     # Divergence-free condition
@@ -144,7 +162,6 @@ def get_fields_and_losses(
 
     # Momentum equations (including temperature-dependent viscosity)
     mu = dynamic_viscosity(T)
-    #print(mu)
 
     loss_momentum_x = torch.mean(
         (
@@ -190,24 +207,28 @@ def get_fields_and_losses(
     alpha = thermal_conductivity / (density * specific_heat)
 
     # Steady-state loss function (no time derivative)
-    loss_heat = torch.mean(
-        (alpha * (T_xx[labels == 0] + T_yy[labels == 0] + T_zz[labels == 0])  # Diffusion term (nabla^2 T)
-        + vx[labels == 0] * T_x[labels == 0] + vy[labels == 0] * T_y[labels == 0] + vz[labels == 0] * T_z[labels == 0]  # Advection term (v · nabla T)
-        ) ** 2
-    )  / 10**6
-
-    # loss_inlet_boundary = (
-    #     torch.mean((vx[labels == 1] - inlet_vx) ** 2)
-    #     + torch.mean((vy[labels == 1] - inlet_vy) ** 2)
-    #     + torch.mean((vz[labels == 1] - inlet_vz) ** 2)
-    # )
+    loss_heat = (
+        torch.mean(
+            (
+                alpha
+                * (
+                    T_xx[labels == 0] + T_yy[labels == 0] + T_zz[labels == 0]
+                )  # Diffusion term (nabla^2 T)
+                + vx[labels == 0] * T_x[labels == 0]
+                + vy[labels == 0] * T_y[labels == 0]
+                + vz[labels == 0] * T_z[labels == 0]  # Advection term (v · nabla T)
+            )
+            ** 2
+        )
+        / 10**6
+    )
 
     loss_outlet_boundary = torch.mean((p[labels == 3] - p_outlet) ** 2)
     loss_other_boundary = (
-    torch.mean((vx[labels == 2]) ** 2)
-    + torch.mean((vy[labels == 2]) ** 2)
-    + torch.mean((vz[labels == 2]) ** 2)
-)
+        torch.mean((vx[labels == 2]) ** 2)
+        + torch.mean((vy[labels == 2]) ** 2)
+        + torch.mean((vz[labels == 2]) ** 2)
+    )
     loss_t_wall_boundary = torch.mean((T[labels == 2] - T_wall) ** 2) / 10**6
 
     return (
@@ -220,51 +241,8 @@ def get_fields_and_losses(
         loss_momentum_x,
         loss_momentum_y,
         loss_momentum_z,
-        # loss_inlet_boundary,
         loss_outlet_boundary,
         loss_other_boundary,
         loss_heat,
-        loss_t_wall_boundary
+        loss_t_wall_boundary,
     )
-
-
-def plot_fields(fields, validation_points, train=False):
-    for field in fields:
-        # Convert to numpy for plotting
-        points = validation_points.cpu().detach().numpy()
-        scalar_field = field[1].cpu().detach().numpy()
-
-        # Create a 3D scatter plot using Plotly
-        fig = go.Figure(
-            data=[
-                go.Scatter3d(
-                    x=points[:, 0],
-                    y=points[:, 1],
-                    z=points[:, 2],
-                    mode="markers",
-                    marker=dict(
-                        size=5,
-                        color=scalar_field,  # Color by scalar field
-                        colorscale="Viridis",  # Color map
-                        colorbar=dict(title=f"{field[0]}"),  # Colorbar with title
-                    ),
-                )
-            ]
-        )
-
-        # Update layout with aspectmode='data' to preserve aspect ratio
-        fig.update_layout(
-            scene=dict(
-                xaxis_title="X",
-                yaxis_title="Y",
-                zaxis_title="Z",
-                aspectmode="data",  # Ensures aspect ratio is based on data's extents
-            ),
-            title=f"{field[0]}",
-        )
-
-        # Save as HTML (interactive)
-        if train:
-            fig.write_html(f"../run/{field[0]}_train.html")
-        else:
-            fig.write_html(f"../run/{field[0]}.html")

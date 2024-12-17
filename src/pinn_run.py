@@ -2,21 +2,20 @@ import trimesh
 import numpy as np
 import random
 import torch
+
 torch.set_default_dtype(torch.float64)
-from sample import *
+from utils import *
 from unet import *
-from torch.optim import Adam, LBFGS
-from torch.optim.lr_scheduler import ReduceLROnPlateau
-from spline_pinn import *
-import baseline
+from torch.optim import LBFGS
+from pinn import *
 import time
 import wandb
 import os
 from git import Repo
-from inference import *
+from utils import *
 from constants import *
 
-folder = "dp1"
+folder = "dp11"
 Project_name = (
     "PINNs-baseline_with_heat"  # Full_Project_name will be {Project_name}_{folder}
 )
@@ -28,10 +27,8 @@ Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
 epochs = 100
-# lr = 1e-3
 hidden_dim = 128
 num_layer = 4
-
 seed = 42
 
 # Path to the parent directory of the `src/` folder
@@ -78,39 +75,44 @@ p_data = torch.tensor(np.load(data_folder + "press.npy")[:, 3])
 p_data = torch.tensor(np.load(data_folder + "press.npy")[:, 3])
 temp_data = torch.tensor(np.load(data_folder + "temp.npy")[:, 3])
 
+# Use data for supervised loss
 num_samples = 50000
-# Generate random indices for sampling
 indices = torch.randint(0, data_points.shape[0], (num_samples,))
-
-# Sample points from the first line
 sampled_points = data_points[indices]
 
-# Get the corresponding velocities
+# Get the corresponding fields
 vx_sampled_data = vx_data[indices]
 vy_sampled_data = vy_data[indices]
 vz_sampled_data = vz_data[indices]
 p_sampled_data = p_data[indices] / 10**5
-temp_sampled_data = temp_data[indices] 
+temp_sampled_data = temp_data[indices]
 
+# Load the domain
 obj = trimesh.load("./Baseline_ML4Science.stl")
 
-pinn_model = baseline.PINNs(in_dim=3, hidden_dim=hidden_dim, out_dim=5, num_layer=num_layer).to(device)
-pinn_model.apply(baseline.init_weights)
+# Define the model
+pinn_model = PINNs(in_dim=3, hidden_dim=hidden_dim, out_dim=5, num_layer=num_layer).to(
+    device
+)
+pinn_model.apply(init_weights)
 pinn_model = pinn_model.double()
-# optim = Adam(pinn_model.parameters(), lr = lr)
+
+# Define optimizer
 optimizer = LBFGS(pinn_model.parameters(), line_search_fn="strong_wolfe")
 
 start_time = time.time()
 training_loss_track = []
 validation_loss_track = []
 
+# Sample validation points
 validation_points, validation_labels = sample_points(obj, 30000, 3000, 20000)
-validation_points = validation_points/1000
+validation_points = validation_points / 1000
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
-    train_points, train_labels = sample_points(obj, 30000, 3000, 20000) # Excluding inlet points
-    train_points = train_points/1000
+    # Sample train points
+    train_points, train_labels = sample_points(obj, 30000, 3000, 20000)
+    train_points = train_points / 1000
     train_points.requires_grad_(True)
 
     def closure():
@@ -148,19 +150,18 @@ for epoch in range(epochs):
             T_xx,
             T_yy,
             T_zz,
-        ) = baseline.get_values_and_derivatives(train_fields, train_points)
+        ) = get_values_and_derivatives(train_fields, train_points)
 
         (
             loss_divergence,
             loss_momentum_x,
             loss_momentum_y,
             loss_momentum_z,
-            # loss_inlet_boundary,
             loss_outlet_boundary,
             loss_other_boundary,
             loss_heat,
-            loss_t_wall_boundary
-        ) = baseline.get_loss(
+            loss_t_wall_boundary,
+        ) = get_loss(
             vx,
             vy,
             vz,
@@ -194,25 +195,27 @@ for epoch in range(epochs):
             T_yy,
             T_zz,
             train_labels,
-            p_outlet
+            p_outlet,
         )
 
         inlet_fields = pinn_model(inlet_points)
 
         loss_inlet_boundary = (
-        torch.mean((inlet_fields[:,0] - vx_inlet_data) ** 2)
-        + torch.mean((inlet_fields[:,1] - vy_inlet_data) ** 2)
-        + torch.mean((inlet_fields[:,2] - vz_inlet_data) ** 2)
+            torch.mean((inlet_fields[:, 0] - vx_inlet_data) ** 2)
+            + torch.mean((inlet_fields[:, 1] - vy_inlet_data) ** 2)
+            + torch.mean((inlet_fields[:, 2] - vz_inlet_data) ** 2)
         )
 
-        loss_inlet_temp_boundary = torch.mean((inlet_fields[:,4]*1000 - T_inlet) ** 2) / 10**6
+        loss_inlet_temp_boundary = (
+            torch.mean((inlet_fields[:, 4] * 1000 - T_inlet) ** 2) / 10**6
+        )
 
         fields_supervised = pinn_model(sampled_points)
-        vx_supervised = fields_supervised[:,0]
-        vy_supervised = fields_supervised[:,1]
-        vz_supervised = fields_supervised[:,2]
-        p_supervised = fields_supervised[:,3]
-        t_supervised = fields_supervised[:,4]*1000
+        vx_supervised = fields_supervised[:, 0]
+        vy_supervised = fields_supervised[:, 1]
+        vz_supervised = fields_supervised[:, 2]
+        p_supervised = fields_supervised[:, 3]
+        t_supervised = fields_supervised[:, 4] * 1000
 
         supervised_loss = (
             torch.mean((vx_supervised - vx_sampled_data) ** 2)
@@ -248,8 +251,12 @@ for epoch in range(epochs):
                     "Other Boundary Loss": np.log10(loss_other_boundary.item()),
                     "Supervised Loss": np.log10(supervised_loss.item()),
                     "Heat Loss": np.log10(loss_heat.item()),
-                    "Inlet Temperature Boundary Loss": np.log10(loss_inlet_temp_boundary.item()),
-                    "Surface Temperature Boundary Loss": np.log10(loss_t_wall_boundary.item()),
+                    "Inlet Temperature Boundary Loss": np.log10(
+                        loss_inlet_temp_boundary.item()
+                    ),
+                    "Surface Temperature Boundary Loss": np.log10(
+                        loss_t_wall_boundary.item()
+                    ),
                     "Total Loss": np.log10(loss_total.item()),
                 }
             )
@@ -281,7 +288,7 @@ for epoch in range(epochs):
     optimizer.zero_grad()
     validation_points.requires_grad_(True)
     validation_fields = pinn_model(validation_points)
-    
+
     (
         vx,
         vy,
@@ -315,7 +322,7 @@ for epoch in range(epochs):
         T_xx,
         T_yy,
         T_zz,
-    ) = baseline.get_values_and_derivatives(validation_fields, validation_points)
+    ) = get_values_and_derivatives(validation_fields, validation_points)
 
     (
         validation_loss_divergence,
@@ -325,8 +332,8 @@ for epoch in range(epochs):
         validation_loss_outlet_boundary,
         validation_loss_other_boundary,
         validation_loss_heat,
-        validation_loss_t_wall_boundary
-    ) = baseline.get_loss(
+        validation_loss_t_wall_boundary,
+    ) = get_loss(
         vx,
         vy,
         vz,
@@ -375,11 +382,11 @@ for epoch in range(epochs):
     )
 
     validation_fields = [
-        ("vx", validation_fields[:,0]),
-        ("vy", validation_fields[:,1]),
-        ("vz", validation_fields[:,2]),
-        ("p", validation_fields[:,3]),
-        ("T", validation_fields[:,4]*1000),
+        ("vx", validation_fields[:, 0]),
+        ("vy", validation_fields[:, 1]),
+        ("vz", validation_fields[:, 2]),
+        ("p", validation_fields[:, 3]),
+        ("T", validation_fields[:, 4] * 1000),
     ]
     plot_fields(validation_fields, validation_points)
 
@@ -404,14 +411,11 @@ for epoch in range(epochs):
                 "Validation Other Boundary Loss": np.log10(
                     validation_loss_other_boundary.item()
                 ),
-                "Validation Heat Loss": np.log10(
-                    validation_loss_heat.item()
-                ),
+                "Validation Heat Loss": np.log10(validation_loss_heat.item()),
                 "Validation Surface Temperature Boundary Loss": np.log10(
                     validation_loss_t_wall_boundary.item()
                 ),
-                "Validation Total Loss": np.log10(validation_loss_total.item()
-                ),
+                "Validation Total Loss": np.log10(validation_loss_total.item()),
             }
         )
 
@@ -473,7 +477,7 @@ validation_fields = pinn_model(validation_points)
     T_xx,
     T_yy,
     T_zz,
-) = baseline.get_values_and_derivatives(validation_fields, validation_points)
+) = get_values_and_derivatives(validation_fields, validation_points)
 (
     validation_loss_divergence,
     validation_loss_momentum_x,
@@ -483,7 +487,7 @@ validation_fields = pinn_model(validation_points)
     validation_loss_other_boundary,
     validation_loss_heat,
     validation_loss_t_wall_boundary,
-) = baseline.get_loss(
+) = get_loss(
     vx,
     vy,
     vz,
@@ -521,18 +525,21 @@ validation_fields = pinn_model(validation_points)
 )
 
 fields = [
-    ("vx", validation_fields[:,0]),
-    ("vy", validation_fields[:,1]),
-    ("vz", validation_fields[:,2]),
-    ("p", validation_fields[:,3]),
-    ("T", validation_fields[:,4]*1000),
+    ("vx", validation_fields[:, 0]),
+    ("vy", validation_fields[:, 1]),
+    ("vz", validation_fields[:, 2]),
+    ("p", validation_fields[:, 3]),
+    ("T", validation_fields[:, 4] * 1000),
 ]
 plot_fields(fields, validation_points)
 
 ######## Inference
+
 device = "cpu"
 torch.set_default_device(device)
-pinn_model = baseline.PINNs(in_dim=3, hidden_dim=hidden_dim, out_dim=5, num_layer=num_layer).to(device)
+pinn_model = PINNs(in_dim=3, hidden_dim=hidden_dim, out_dim=5, num_layer=num_layer).to(
+    device
+)
 pinn_model.load_state_dict(
     torch.load(
         "../run/pinn_model.pt", weights_only=True, map_location=torch.device("cpu")
@@ -550,11 +557,11 @@ all_points = torch.tensor(
 
 all_fields = pinn_model(all_points)
 
-vx_pred = all_fields[:,0].cpu().detach().numpy()
-vy_pred = all_fields[:,1].cpu().detach().numpy()
-vz_pred = all_fields[:,2].cpu().detach().numpy()
-p_pred = all_fields[:,3].cpu().detach().numpy()
-T_pred = (all_fields[:,4]*1000).cpu().detach().numpy()
+vx_pred = all_fields[:, 0].cpu().detach().numpy()
+vy_pred = all_fields[:, 1].cpu().detach().numpy()
+vz_pred = all_fields[:, 2].cpu().detach().numpy()
+p_pred = all_fields[:, 3].cpu().detach().numpy()
+T_pred = (all_fields[:, 4] * 1000).cpu().detach().numpy()
 
 plot_aginast_data(data_folder, vx_pred, vy_pred, vz_pred, p_pred, T_pred)
 

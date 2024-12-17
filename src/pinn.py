@@ -7,7 +7,8 @@ import trimesh
 import time
 import wandb
 from constants import *
-from sample import *
+from utils import *
+
 
 class PINNs(nn.Module):
     def __init__(self, in_dim, hidden_dim, out_dim, num_layer):
@@ -171,7 +172,6 @@ def get_values_and_derivatives(fields, points):
     T_yy = second_grad_T[:, 1:2] * 1000
     T_zz = second_grad_T[:, 2:3] * 1000
 
-
     return (
         vx,
         vy,
@@ -254,7 +254,7 @@ def get_loss(
             + vy[labels == 0] * vx_y[labels == 0]
             + vz[labels == 0] * vx_z[labels == 0]
             + (1 / rho) * p_x[labels == 0]
-            - (mu[labels == 0] / rho) 
+            - (mu[labels == 0] / rho)
             * (vx_xx[labels == 0] + vx_yy[labels == 0] + vx_zz[labels == 0])
         )
         ** 2
@@ -265,7 +265,7 @@ def get_loss(
             + vy[labels == 0] * vy_y[labels == 0]
             + vz[labels == 0] * vy_z[labels == 0]
             + (1 / rho) * p_y[labels == 0]
-            - (mu[labels == 0] / rho) 
+            - (mu[labels == 0] / rho)
             * (vy_xx[labels == 0] + vy_yy[labels == 0] + vy_zz[labels == 0])
         )
         ** 2
@@ -276,7 +276,7 @@ def get_loss(
             + vy[labels == 0] * vz_y[labels == 0]
             + vz[labels == 0] * vz_z[labels == 0]
             + (1 / rho) * p_z[labels == 0]
-            - (mu[labels == 0] / rho) 
+            - (mu[labels == 0] / rho)
             * (vz_xx[labels == 0] + vz_yy[labels == 0] + vz_zz[labels == 0])
         )
         ** 2
@@ -294,11 +294,21 @@ def get_loss(
 
     alpha = thermal_conductivity / (density * specific_heat)
     # Steady-state loss function (no time derivative)
-    loss_heat = torch.mean(
-        (alpha * (T_xx[labels == 0] + T_yy[labels == 0] + T_zz[labels == 0])  # Diffusion term (nabla^2 T)
-        + vx[labels == 0] * T_x[labels == 0] + vy[labels == 0] * T_y[labels == 0] + vz[labels == 0] * T_z[labels == 0]  # Advection term (v · nabla T)
-        ) ** 2
-    ) / 10**6
+    loss_heat = (
+        torch.mean(
+            (
+                alpha
+                * (
+                    T_xx[labels == 0] + T_yy[labels == 0] + T_zz[labels == 0]
+                )  # Diffusion term (nabla^2 T)
+                + vx[labels == 0] * T_x[labels == 0]
+                + vy[labels == 0] * T_y[labels == 0]
+                + vz[labels == 0] * T_z[labels == 0]  # Advection term (v · nabla T)
+            )
+            ** 2
+        )
+        / 10**6
+    )
 
     loss_t_wall_boundary = torch.mean((T[labels == 2] - T_wall) ** 2) / 10**6
 
@@ -312,5 +322,5 @@ def get_loss(
         loss_outlet_boundary,
         loss_other_boundary,
         loss_heat,
-        loss_t_wall_boundary
+        loss_t_wall_boundary,
     )
