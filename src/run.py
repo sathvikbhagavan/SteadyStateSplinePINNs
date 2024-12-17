@@ -197,7 +197,7 @@ for epoch in range(epochs):
             + supervised_loss
             + 0.1*loss_heat
             + 0.1*loss_inlet_temp_boundary
-            + 0.1*loss_t_wall_boundary
+            + loss_t_wall_boundary
         )
 
         if not debug:
