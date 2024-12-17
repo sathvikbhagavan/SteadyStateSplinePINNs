@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from sample import *
+from utils import *
 
 
 # Convert binary mask to PyTorch tensor and reshape for UNet
