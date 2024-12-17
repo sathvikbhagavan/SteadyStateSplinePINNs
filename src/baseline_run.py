@@ -233,7 +233,7 @@ for epoch in range(epochs):
             + supervised_loss
             + loss_heat
             + loss_inlet_temp_boundary
-            + loss_t_wall_boundary
+            + 20 * loss_t_wall_boundary
         )
 
         if not debug:
@@ -371,7 +371,7 @@ for epoch in range(epochs):
         + validation_loss_outlet_boundary
         + validation_loss_other_boundary
         + validation_loss_heat
-        + validation_loss_t_wall_boundary
+        + 20 * validation_loss_t_wall_boundary
     )
 
     validation_fields = [
