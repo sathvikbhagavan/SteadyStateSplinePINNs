@@ -16,7 +16,7 @@ from git import Repo
 from inference import *
 from constants import *
 
-folder = "dp11"
+folder = "dp1"
 Project_name = (
     "PINNs-baseline_with_heat"  # Full_Project_name will be {Project_name}_{folder}
 )
