@@ -14,6 +14,7 @@ import wandb
 import os
 from git import Repo
 from inference import *
+from constants import *
 
 folder = "dp1"
 Project_name = (
@@ -27,23 +28,6 @@ Full_Project_name = Project_name + "_" + folder
 
 # Model Hyperparams
 epochs = 100
-
-# Physics Constants
-p_outlet = (101325 - 17825) / (10**5)
-T_ref = 273.15
-T_cons = 298.15
-mu_ref = 1.716e-5
-S = 110.4
-#mu = round(mu_ref * (T / Tref) ** (1.5) * ((Tref + S) / (T + S)), 8)
-#mu = dynamic_viscosity(T)
-M = 28.96 / 1000
-R = 8.314
-rho = ((p_outlet * 10**5) * M) / (R * T_cons)
-thermal_conductivity = 2.61E-02
-specific_heat = 1.00E+03  #at constant pressure
-density = 9.7118E-01  # kg/m^3
-T_Inlet = 338.15 #K
-T_wall = 293.15 #K
 
 seed = 42
 
@@ -131,11 +115,6 @@ for epoch in range(epochs):
         # Get Hermite Spline coefficients from the Unet
         spline_coeff = unet_model(unet_input)[0]
 
-
-        vx_inlet, vy_inlet, vz_inlet, _, T_inlet = get_fields(
-            spline_coeff, inlet_points, step, grid_resolution
-        )
-
         # Calculating various field terms using coefficients
         (
             _,
@@ -157,23 +136,20 @@ for epoch in range(epochs):
             train_points,
             train_labels,
             step,
-            grid_resolution,
-            rho,
-            p_outlet,
-            thermal_conductivity,
-            density,
-            specific_heat,
-            T_wall
+            grid_resolution
+        )
 
+        inlet_fields = get_fields(
+            spline_coeff, inlet_points, step, grid_resolution
         )
 
         loss_inlet_boundary = (
-            torch.mean((vx_inlet - vx_inlet_data) ** 2)
-            + torch.mean((vy_inlet - vy_inlet_data) ** 2)
-            + torch.mean((vz_inlet - vz_inlet_data) ** 2)
+            torch.mean((inlet_fields[0] - vx_inlet_data) ** 2)
+            + torch.mean((inlet_fields[1] - vy_inlet_data) ** 2)
+            + torch.mean((inlet_fields[2] - vz_inlet_data) ** 2)
         )
 
-        loss_inlet_temp_boundary = torch.mean((T_inlet - T_Inlet) ** 2) / 10**6
+        loss_inlet_temp_boundary = torch.mean((inlet_fields[4] - T_inlet) ** 2) / 10**6
 
         vx_supervised, vy_supervised, vz_supervised, p_supervised, t_supervised = get_fields(
             spline_coeff, sampled_points, step, grid_resolution

@@ -6,38 +6,8 @@ from torch.optim import Adam, LBFGS
 import trimesh
 import time
 import wandb
-
-obj = trimesh.load("./Baseline_ML4Science.stl")
-
-# lr = 1e-3
-epochs = 1000
-seed = 42
-hidden_dim = 128
-num_layer = 4
-inlet_velocity = 0.5
-
-# wandb.init(
-#     # set the wandb project where this run will be logged
-#     project="PINNs-baseline",
-#     # track hyperparameters and run metadata
-#     config={
-#         # "learning_rate": lr,
-#         "optimizer": "LBFGS",
-#         "architecture": "FFNN",
-#         "epochs": epochs,
-#         "seed": seed,
-#         "hidden_dim": hidden_dim,
-#         "num_layers": num_layer,
-#         "inlet_velocity": inlet_velocity,
-#     },
-# )
-
-np.random.seed(seed)
-random.seed(seed)
-torch.manual_seed(seed)
-torch.cuda.manual_seed(seed)
-device = "cuda"
-
+from constants import *
+from sample import *
 
 class PINNs(nn.Module):
     def __init__(self, in_dim, hidden_dim, out_dim, num_layer):
@@ -243,6 +213,7 @@ def get_loss(
     vy,
     vz,
     p,
+    T,
     vx_x,
     vx_y,
     vx_z,
@@ -264,37 +235,49 @@ def get_loss(
     p_x,
     p_y,
     p_z,
+    T_x,
+    T_y,
+    T_z,
+    T_xx,
+    T_yy,
+    T_zz,
     labels,
     p_outlet,
 ):
     loss_divergence = torch.mean((vx_x + vy_y + vz_z) ** 2)
+
+    mu = dynamic_viscosity(T)
+
     loss_momentum_x = torch.mean(
         (
-            vx * vx_x
-            + vy * vx_y
-            + vz * vx_z
-            + (1 / rho) * p_x
-            - (mu / rho) * (vx_xx + vx_yy + vx_zz)
+            vx[labels == 0] * vx_x[labels == 0]
+            + vy[labels == 0] * vx_y[labels == 0]
+            + vz[labels == 0] * vx_z[labels == 0]
+            + (1 / rho) * p_x[labels == 0]
+            - (mu[labels == 0] / rho) 
+            * (vx_xx[labels == 0] + vx_yy[labels == 0] + vx_zz[labels == 0])
         )
         ** 2
     )
     loss_momentum_y = torch.mean(
         (
-            vx * vy_x
-            + vy * vy_y
-            + vz * vy_z
-            + (1 / rho) * p_y
-            - (mu / rho) * (vy_xx + vy_yy + vy_zz)
+            vx[labels == 0] * vy_x[labels == 0]
+            + vy[labels == 0] * vy_y[labels == 0]
+            + vz[labels == 0] * vy_z[labels == 0]
+            + (1 / rho) * p_y[labels == 0]
+            - (mu[labels == 0] / rho) 
+            * (vy_xx[labels == 0] + vy_yy[labels == 0] + vy_zz[labels == 0])
         )
         ** 2
     )
     loss_momentum_z = torch.mean(
         (
-            vx * vz_x
-            + vy * vz_y
-            + vz * vz_z
-            + (1 / rho) * p_z
-            - (mu / rho) * (vz_xx + vz_yy + vz_zz)
+            vx[labels == 0] * vz_x[labels == 0]
+            + vy[labels == 0] * vz_y[labels == 0]
+            + vz[labels == 0] * vz_z[labels == 0]
+            + (1 / rho) * p_z[labels == 0]
+            - (mu[labels == 0] / rho) 
+            * (vz_xx[labels == 0] + vz_yy[labels == 0] + vz_zz[labels == 0])
         )
         ** 2
     )
@@ -308,6 +291,17 @@ def get_loss(
         + torch.mean((vy[labels == 2]) ** 2)
         + torch.mean((vz[labels == 2]) ** 2)
     )
+
+    alpha = thermal_conductivity / (density * specific_heat)
+    # Steady-state loss function (no time derivative)
+    loss_heat = torch.mean(
+        (alpha * (T_xx[labels == 0] + T_yy[labels == 0] + T_zz[labels == 0])  # Diffusion term (nabla^2 T)
+        + vx[labels == 0] * T_x[labels == 0] + vy[labels == 0] * T_y[labels == 0] + vz[labels == 0] * T_z[labels == 0]  # Advection term (v · nabla T)
+        ) ** 2
+    ) / 10**6
+
+    loss_t_wall_boundary = torch.mean((T[labels == 2] - T_wall) ** 2) / 10**6
+
     loss_outlet_boundary = torch.mean((p[labels == 3] - p_outlet) ** 2)
     return (
         loss_divergence,
@@ -317,143 +311,6 @@ def get_loss(
         # loss_inlet_boundary,
         loss_outlet_boundary,
         loss_other_boundary,
+        loss_heat,
+        loss_t_wall_boundary
     )
-
-
-# model = PINNs(in_dim=3, hidden_dim=hidden_dim, out_dim=4, num_layer=num_layer).to(
-#     device
-# )
-# model.apply(init_weights)
-# model = model.double()
-# # optim = Adam(model.parameters(), lr = lr)
-# optim = LBFGS(model.parameters(), line_search_fn="strong_wolfe")
-# rho = 1.010427
-# mu = 2.02e-5
-# loss_track = []
-# start_time = time.time()
-
-
-def get_inlet_surface_points(num_points):
-    threshold = 1e-5
-    faces_x_zero = [
-        i
-        for i, face in enumerate(obj.faces)
-        if np.all(
-            np.abs(obj.vertices[face, 0]) < threshold
-        )  # Check if all vertices' x-coordinates are 0
-    ]
-    subset_mesh = obj.submesh([faces_x_zero], only_watertight=False)[0]
-    points, _ = trimesh.sample.sample_surface(subset_mesh, count=num_points)
-    return torch.tensor(points / 1000.0, dtype=torch.float64, device=device)
-
-
-def get_other_surface_points(num_points):
-    threshold = 1e-5
-    points, _ = trimesh.sample.sample_surface(obj, count=num_points)
-    filtered_points = points[np.abs(points[:, 0]) > threshold]
-    return torch.tensor(filtered_points / 1000.0, dtype=torch.float64, device=device)
-
-
-# surface_points = torch.tensor(trimesh.sample.sample_surface(obj, 500)[0] / 1000.0, device=device, dtype=torch.float64)
-# volume_points = torch.tensor(trimesh.sample.volume_mesh(obj, 500) / 1000.0, device=device, dtype=torch.float64)
-# surface_labels = torch.ones(surface_points.size(0), dtype=torch.int64)
-# volume_labels = torch.zeros(volume_points.size(0), dtype=torch.int64)
-# valid_points = torch.cat([surface_points, volume_points], dim = 0)
-# valid_labels = torch.cat([surface_labels, volume_labels], dim = 0)
-
-# for i in range(epochs):
-
-#     def closure():
-#         # surface_points = torch.tensor(trimesh.sample.sample_surface(obj, 500)[0] / 1000.0, device=device, dtype=torch.float64)
-#         inlet_surface_points = get_inlet_surface_points(100)
-#         other_surface_points = get_other_surface_points(400)
-#         volume_points = torch.tensor(
-#             trimesh.sample.volume_mesh(obj, 500) / 1000.0,
-#             device=device,
-#             dtype=torch.float64,
-#         )
-#         inlet_surface_labels = torch.ones(
-#             inlet_surface_points.size(0), dtype=torch.int64
-#         )
-#         other_surface_labels = 2 * torch.ones(
-#             other_surface_points.size(0), dtype=torch.int64
-#         )
-#         volume_labels = torch.zeros(volume_points.size(0), dtype=torch.int64)
-#         # Combine points and labels
-#         all_points = torch.cat(
-#             [inlet_surface_points, other_surface_points, volume_points], dim=0
-#         )
-#         all_labels = torch.cat(
-#             [inlet_surface_labels, other_surface_labels, volume_labels], dim=0
-#         )
-#         # Shuffle points and labels together
-#         permutation = torch.randperm(all_points.size(0))
-#         train_points = all_points[permutation]
-#         train_points.requires_grad_(True)
-#         train_labels = all_labels[permutation]
-#         train_fields = model(train_points)
-#         (
-#             vx,
-#             vy,
-#             vz,
-#             p,
-#             vx_x,
-#             vx_y,
-#             vx_z,
-#             vx_xx,
-#             vx_yy,
-#             vx_zz,
-#             vy_x,
-#             vy_y,
-#             vy_z,
-#             vy_xx,
-#             vy_yy,
-#             vy_zz,
-#             vz_x,
-#             vz_y,
-#             vz_z,
-#             vz_xx,
-#             vz_yy,
-#             vz_zz,
-#             p_x,
-#             p_y,
-#             p_z,
-#         ) = get_values_and_derivatives(train_fields, train_points)
-#         train_loss = get_loss(
-#             vx,
-#             vy,
-#             vz,
-#             p,
-#             vx_x,
-#             vx_y,
-#             vx_z,
-#             vx_xx,
-#             vx_yy,
-#             vx_zz,
-#             vy_x,
-#             vy_y,
-#             vy_z,
-#             vy_xx,
-#             vy_yy,
-#             vy_zz,
-#             vz_x,
-#             vz_y,
-#             vz_z,
-#             vz_xx,
-#             vz_yy,
-#             vz_zz,
-#             p_x,
-#             p_y,
-#             p_z,
-#             train_labels,
-#         )
-#         loss_track.append(train_loss.item())
-#         # print(f'Train Loss: {train_loss.item()}')
-#         optim.zero_grad()
-#         train_loss.backward()
-#         return train_loss
-
-#     optim.step(closure)
-
-# stop_time = time.time()
-# print(f"Time taken for training is: {stop_time - start_time}")
