@@ -130,7 +130,6 @@ for epoch in range(epochs):
             loss_momentum_x,
             loss_momentum_y,
             loss_momentum_z,
-            # loss_inlet_boundary,
             loss_outlet_boundary,
             loss_other_boundary,
             loss_heat,
@@ -237,17 +236,7 @@ for epoch in range(epochs):
             validation_loss_heat,
             validation_loss_t_wall_boundary,
         ) = get_fields_and_losses(
-            spline_coeff,
-            validation_points,
-            validation_labels,
-            step,
-            grid_resolution,
-            rho,
-            p_outlet,
-            thermal_conductivity,
-            density,
-            specific_heat,
-            T_wall,
+            spline_coeff, validation_points, validation_labels, step, grid_resolution
         )
 
         validation_loss_total = (
@@ -339,17 +328,7 @@ with torch.no_grad():
         validation_loss_heat,
         validation_loss_t_wall_boundary,
     ) = get_fields_and_losses(
-        spline_coeff,
-        validation_points,
-        validation_labels,
-        step,
-        grid_resolution,
-        rho,
-        p_outlet,
-        thermal_conductivity,
-        density,
-        specific_heat,
-        T_wall,
+        spline_coeff, validation_points, validation_labels, step, grid_resolution
     )
 
 fields = [
