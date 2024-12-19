@@ -251,6 +251,14 @@ def plot_aginast_data(folder_path, vx_pred, vy_pred, vz_pred, p_pred, T_pred):
         [vy_inlet, vy, vy_pred, "vy"],
         [vz_inlet, vz, vz_pred, "vz"],
     ]
+
+    all_indices = torch.arange(vx.shape[0])
+    supervised_indices = torch.tensor(np.load(os.path.join("indices.npy")), dtype=torch.long)
+
+    test_indices = torch.tensor(list(set(all_indices.tolist()) - set(supervised_indices.tolist())))
+
+    supervised_rms_errors = []
+    test_rms_errors = []
     for _field in _fields:
         scalar_field = np.concatenate((_field[0][:, 3], _field[1][:, 3]))
         index = np.random.choice(all_points.shape[0], 100000, replace=False)
@@ -313,9 +321,14 @@ def plot_aginast_data(folder_path, vx_pred, vy_pred, vz_pred, p_pred, T_pred):
             title=f"Data for {_field[3]}",
         )
         fig.write_html(f"../run/{_field[3]}_data.html")
+        mean_error_velocity = np.mean(scalar_field - _field[2])
+        supervised_rms_error_velocity = np.sqrt(np.mean((_field[1][:,3][supervised_indices] - _field[2][supervised_indices])**2))
+        test_rms_error_velocity = np.sqrt(np.mean((_field[1][:,3][test_indices] - _field[2][test_indices])**2))
         print(
-            f"The mean of {_field[3]} differences is: {np.mean(scalar_field - _field[2])}"
+            f"The mean of {_field[3]} differences is: {mean_error_velocity}"
         )
+        supervised_rms_errors.append(supervised_rms_error_velocity)
+        test_rms_errors.append(test_rms_error_velocity)
 
     scalar_field = p[:, 3]
     index = np.random.choice(vx[:, :3].shape[0], 50000, replace=False)
@@ -379,9 +392,14 @@ def plot_aginast_data(folder_path, vx_pred, vy_pred, vz_pred, p_pred, T_pred):
         title=f"Data for p",
     )
     fig.write_html(f"../run/p_data.html")
+    mean_error_pressure = np.mean(scalar_field - p_pred[vx_inlet.shape[0]:])
+    supervised_rms_error_pressure = np.sqrt(np.mean((_field[1][:,3][supervised_indices] - p_pred[vx_inlet.shape[0]:][supervised_indices])**2))
+    test_rms_error_pressure = np.sqrt(np.mean((_field[1][:,3][test_indices] - p_pred[vx_inlet.shape[0]:][test_indices])**2))
     print(
-        f"The mean of pressure differences is: {np.mean(scalar_field - p_pred[vx_inlet.shape[0]:])}"
+        f"The mean of pressure differences is: {mean_error_pressure}"
     )
+    supervised_rms_errors.append(supervised_rms_error_pressure)
+    test_rms_errors.append(test_rms_error_pressure)
 
     # Temperature plotting
     scalar_field = T[:, 3]
@@ -443,7 +461,12 @@ def plot_aginast_data(folder_path, vx_pred, vy_pred, vz_pred, p_pred, T_pred):
         title=f"Data for T",
     )
     fig.write_html(f"../run/T_data.html")
+    mean_error_temp = np.mean(scalar_field - T_pred[vx_inlet.shape[0]:])
+    supervised_rms_error_temp = np.sqrt(np.mean((_field[1][:,3][supervised_indices] - T_pred[vx_inlet.shape[0]:][supervised_indices])**2))
+    test_rms_error_temp = np.sqrt(np.mean((_field[1][:,3][test_indices] - T_pred[vx_inlet.shape[0]:][test_indices])**2))
     print(
-        f"The mean of temperature differences is: {np.mean(scalar_field - T_pred[vx_inlet.shape[0]:])}"
+        f"The mean of temperature differences is: {mean_error_temp}"
     )
-    return
+    supervised_rms_errors.append(supervised_rms_error_temp)
+    test_rms_errors.append(test_rms_error_temp)
+    return supervised_rms_errors, test_rms_errors
