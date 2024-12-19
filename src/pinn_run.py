@@ -226,17 +226,17 @@ for epoch in range(epochs):
         )
 
         loss_total = (
-            0.1*loss_divergence
+            0.1 * loss_divergence
             + loss_momentum_x
-            + 0.1*loss_momentum_y
-            + 0.1*loss_momentum_z
+            + 0.1 * loss_momentum_y
+            + 0.1 * loss_momentum_z
             + loss_inlet_boundary
-            + 0.1*loss_outlet_boundary
-            + 0.1*loss_other_boundary
+            + 0.1 * loss_outlet_boundary
+            + 0.1 * loss_other_boundary
             + supervised_loss
-            + 0.1*loss_heat
-            + 0.1*loss_inlet_temp_boundary
-            + 10*loss_t_wall_boundary
+            + 0.1 * loss_heat
+            + 0.1 * loss_inlet_temp_boundary
+            + 10 * loss_t_wall_boundary
         )
 
         if not debug:
@@ -382,11 +382,11 @@ for epoch in range(epochs):
     )
 
     validation_fields = [
-        ("vx", validation_fields[:, 0]),
-        ("vy", validation_fields[:, 1]),
-        ("vz", validation_fields[:, 2]),
-        ("p", validation_fields[:, 3]),
-        ("T", validation_fields[:, 4] * 1000),
+        ("vx", validation_fields[:, 0].cpu().detach().numpy()),
+        ("vy", validation_fields[:, 1].cpu().detach().numpy()),
+        ("vz", validation_fields[:, 2].cpu().detach().numpy()),
+        ("p", validation_fields[:, 3].cpu().detach().numpy()),
+        ("T", validation_fields[:, 4].cpu().detach().numpy() * 1000),
     ]
     plot_fields(validation_fields, validation_points)
 
@@ -525,11 +525,11 @@ validation_fields = pinn_model(validation_points)
 )
 
 fields = [
-    ("vx", validation_fields[:, 0]),
-    ("vy", validation_fields[:, 1]),
-    ("vz", validation_fields[:, 2]),
-    ("p", validation_fields[:, 3]),
-    ("T", validation_fields[:, 4] * 1000),
+    ("vx", validation_fields[:, 0].cpu().detach().numpy()),
+    ("vy", validation_fields[:, 1].cpu().detach().numpy()),
+    ("vz", validation_fields[:, 2].cpu().detach().numpy()),
+    ("p", validation_fields[:, 3].cpu().detach().numpy()),
+    ("T", validation_fields[:, 4].cpu().detach().numpy() * 1000),
 ]
 plot_fields(fields, validation_points)
 

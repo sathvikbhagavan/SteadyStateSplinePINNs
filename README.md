@@ -9,8 +9,8 @@ This project implements Spline Physics Informed Neural Networks (Spline PINNs) b
 
 To run our best model, we provide the following [`run.py`](./run.py) script. You can run it with the following command:
 
-- The `run.py` script can be used for best spline pinn model by running the following command: `python3 run.py --model splinepinn`
-- The `run.py` script can also be used for best baseline pinn model by running the following command: `python3 run.py --model pinn`
+- The `src/run.py` script can be used for best steady state spline pinn model by running the following command: `cd src/; python3 run.py --model sssplinepinn`
+- The `src/run.py` script can also be used for best baseline pinn model by running the following command: `cd src/; python3 run.py --model pinn`
 - This will run inference using the trained model and generate plots storing them in `run/`. The plots include the visualizing different velocity fields, pressure and temperature as well as their difference from the ground truth data.
 
 ## Layout of the repository
