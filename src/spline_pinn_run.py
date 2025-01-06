@@ -107,13 +107,13 @@ training_loss_track = []
 validation_loss_track = []
 
 # Sample validation points
-validation_points, validation_labels = sample_points(obj, 10000, 3000, 10000)
+validation_points, validation_labels = sample_points(obj, 100000, 10000, 200000)
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
     # Sample train points
-    train_points, train_labels = sample_points(obj, 10000, 3000, 10000)
+    train_points, train_labels = sample_points(obj, 100000, 10000, 200000)
 
     def closure():
         # Get hermite spline coefficients from the model
@@ -159,18 +159,20 @@ for epoch in range(epochs):
             + torch.mean((t_supervised - temp_sampled_data) ** 2) / 10**6
         )
 
+        l2_reg_loss = 0.1*sum(p.pow(2).sum() for p in unet_model.parameters())
         loss_total = (
-            loss_divergence
+            0.1*loss_divergence
             + loss_momentum_x
-            + loss_momentum_y
-            + loss_momentum_z
+            + 0.1*loss_momentum_y
+            + 0.1*loss_momentum_z
             + loss_inlet_boundary
-            + loss_outlet_boundary
-            + loss_other_boundary
+            + 0.1*loss_outlet_boundary
+            + 0.1*loss_other_boundary
             + supervised_loss
-            + loss_heat
-            + loss_inlet_temp_boundary
+            + 0.1*loss_heat
+            + 0.1*loss_inlet_temp_boundary
             + loss_t_wall_boundary
+            + l2_reg_loss
         )
 
         if not debug:
@@ -192,6 +194,7 @@ for epoch in range(epochs):
                         loss_t_wall_boundary.item()
                     ),
                     "Total Loss": np.log10(loss_total.item()),
+                    "L2 Reg Loss": l2_reg_loss
                 }
             )
 
@@ -209,6 +212,7 @@ for epoch in range(epochs):
             f"Inlet Temperature Boundary Loss: {loss_inlet_temp_boundary.item()}",
             f"Surface Temperature Boundary Loss: {loss_t_wall_boundary.item()}",
             f"Total Loss: {loss_total.item()}",
+            f"L2 Reg Loss: {l2_reg_loss}"
         )
 
         # Using LBFGS optimizer
@@ -251,13 +255,13 @@ for epoch in range(epochs):
         )
 
         fields = [
-            ("vx", validation_vx),
-            ("vy", validation_vy),
-            ("vz", validation_vz),
-            ("p", validation_p),
-            ("temp", validation_T),
+            ("vx", validation_vx.cpu().numpy()),
+            ("vy", validation_vy.cpu().numpy()),
+            ("vz", validation_vz.cpu().numpy()),
+            ("p", validation_p.cpu().numpy()),
+            ("temp", validation_T.cpu().numpy()),
         ]
-        plot_fields(fields, validation_points)
+        plot_fields(fields, validation_points.cpu().numpy())
 
         if not debug:
             wandb.log(
@@ -332,13 +336,13 @@ with torch.no_grad():
     )
 
 fields = [
-    ("vx", validation_vx),
-    ("vy", validation_vy),
-    ("vz", validation_vz),
-    ("p", validation_p),
-    ("temp", validation_T),
+    ("vx", validation_vx.cpu().numpy()),
+    ("vy", validation_vy.cpu().numpy()),
+    ("vz", validation_vz.cpu().numpy()),
+    ("p", validation_p.cpu().numpy()),
+    ("temp", validation_T.cpu().numpy()),
 ]
-plot_fields(fields, validation_points)
+plot_fields(fields, validation_points.cpu().numpy())
 
 ######## Inference
 
