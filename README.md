@@ -9,9 +9,10 @@ This project implements Spline Physics Informed Neural Networks (Spline PINNs) b
 
 To run our best model, we provide the following [`run.py`](src/run.py) script. You can run it with the following command:
 
-- The `run.py` script can be used for best spline pinn model by running the following command: `python3 run.py --model splinepinn`
+- The `run.py` script can be used for best spline pinn model by running the following command: `python3 run.py --model sssplinepinn`
 - The `run.py` script can also be used for best baseline pinn model by running the following command: `python3 run.py --model pinn`
 - This will run inference using the trained model and generate plots storing them in `run/`. The plots include the visualizing different velocity fields, pressure and temperature.
+- For training of SteadyStateSplinePINNs, run `spline_pinn_run.py`.
 
 ## Layout of the repository
 
@@ -21,7 +22,7 @@ To run our best model, we provide the following [`run.py`](src/run.py) script. Y
 ├── best_models/               # The directory where all the best models will be stored
 ├── run/                       # The directory where all the plots will be stored after inference
 ├── src/
-    ├── preProceessedData/     # The data folder which is processed from CFD simulations
+    ├── preProceessedData/     # The data folder which is processed from CFD simulations (not included in the repo)
     ├── constants.py           # All the constants required for training
     ├── hermite_spline.py      # Functions for defining hermite spline kernels
     ├── pinn_run.py            # Run script for training baseline pinn models
@@ -34,5 +35,4 @@ To run our best model, we provide the following [`run.py`](src/run.py) script. Y
     ├── utils.py               # Helper functions
 ├── .gitignore                 # Git ignore file
 ├── requirements.txt           # The necessary packages to run the project
-├── run.py                     # Inference script to reproduce results
 ```
