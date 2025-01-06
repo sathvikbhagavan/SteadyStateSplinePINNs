@@ -251,13 +251,13 @@ for epoch in range(epochs):
         )
 
         fields = [
-            ("vx", validation_vx),
-            ("vy", validation_vy),
-            ("vz", validation_vz),
-            ("p", validation_p),
-            ("temp", validation_T),
+            ("vx", validation_vx.cpu().numpy()),
+            ("vy", validation_vy.cpu().numpy()),
+            ("vz", validation_vz.cpu().numpy()),
+            ("p", validation_p.cpu().numpy()),
+            ("temp", validation_T.cpu().numpy()),
         ]
-        plot_fields(fields, validation_points)
+        plot_fields(fields, validation_points.cpu().numpy())
 
         if not debug:
             wandb.log(
@@ -332,13 +332,13 @@ with torch.no_grad():
     )
 
 fields = [
-    ("vx", validation_vx),
-    ("vy", validation_vy),
-    ("vz", validation_vz),
-    ("p", validation_p),
-    ("temp", validation_T),
+    ("vx", validation_vx.cpu().numpy()),
+    ("vy", validation_vy.cpu().numpy()),
+    ("vz", validation_vz.cpu().numpy()),
+    ("p", validation_p.cpu().numpy()),
+    ("temp", validation_T.cpu().numpy()),
 ]
-plot_fields(fields, validation_points)
+plot_fields(fields, validation_points.cpu().numpy())
 
 ######## Inference
 
