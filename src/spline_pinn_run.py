@@ -18,7 +18,7 @@ from constants import *
 
 folder = "dp11"
 Project_name = (
-    "Spline-PINNs_with_heat"  # Full_Project_name will be {Project_name}_{folder}
+    "Spline-PINNs_with_heat_without_supervised_data"  # Full_Project_name will be {Project_name}_{folder}
 )
 device = "cuda"  # Turn this to "cpu" if you are debugging the flow on the CPU
 debug = False  # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
@@ -167,7 +167,7 @@ for epoch in range(epochs):
             + loss_inlet_boundary
             + loss_outlet_boundary
             + loss_other_boundary
-            + supervised_loss
+            # + supervised_loss
             + loss_heat
             + loss_inlet_temp_boundary
             + loss_t_wall_boundary
