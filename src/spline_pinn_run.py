@@ -81,7 +81,7 @@ sampled_points = data_points[indices]
 vx_sampled_data = vx_data[indices]
 vy_sampled_data = vy_data[indices]
 vz_sampled_data = vz_data[indices]
-p_sampled_data = p_data[indices] / 10**5
+p_sampled_data = p_data[indices]
 temp_sampled_data = temp_data[indices]
 
 # Load the domain
@@ -155,7 +155,7 @@ for epoch in range(epochs):
             torch.mean((vx_supervised - vx_sampled_data) ** 2)
             + torch.mean((vy_supervised - vy_sampled_data) ** 2)
             + torch.mean((vz_supervised - vz_sampled_data) ** 2)
-            + torch.mean((p_supervised - p_sampled_data) ** 2)
+            + torch.mean((p_supervised - p_sampled_data) ** 2) / 10**10
             + torch.mean((t_supervised - temp_sampled_data) ** 2) / 10**6
         )
 
@@ -372,7 +372,7 @@ vx_pred, vy_pred, vz_pred, p_pred, T_pred = get_fields(
 vx_pred = vx_pred.cpu().detach().numpy()
 vy_pred = vy_pred.cpu().detach().numpy()
 vz_pred = vz_pred.cpu().detach().numpy()
-p_pred = p_pred.cpu().detach().numpy() * 10**5
+p_pred = p_pred.cpu().detach().numpy()
 T_pred = T_pred.cpu().detach().numpy()
 
 plot_aginast_data(data_folder, vx_pred, vy_pred, vz_pred, p_pred, T_pred)
