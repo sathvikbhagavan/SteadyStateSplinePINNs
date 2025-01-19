@@ -20,8 +20,8 @@ folder = "dp11"
 Project_name = (
     "Spline-PINNs_with_heat_without_supervised_data"  # Full_Project_name will be {Project_name}_{folder}
 )
-device = "cuda"  # Turn this to "cpu" if you are debugging the flow on the CPU
-debug = False  # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
+device = "cpu"  # Turn this to "cpu" if you are debugging the flow on the CPU
+debug = True  # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
 
 data_folder = "./preProcessedData/with_T/" + folder + "/"
 Full_Project_name = Project_name + "_" + folder
@@ -81,7 +81,7 @@ sampled_points = data_points[indices]
 vx_sampled_data = vx_data[indices]
 vy_sampled_data = vy_data[indices]
 vz_sampled_data = vz_data[indices]
-p_sampled_data = p_data[indices] / 10**5
+p_sampled_data = p_data[indices]
 temp_sampled_data = temp_data[indices]
 
 # Load the domain
@@ -107,13 +107,13 @@ training_loss_track = []
 validation_loss_track = []
 
 # Sample validation points
-validation_points, validation_labels = sample_points(obj, 10000, 3000, 10000)
+validation_points, validation_labels = sample_points(obj, 100000, 10000, 200000)
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)
 
 for epoch in range(epochs):
     print(f"{epoch+1}/{epochs}")
     # Sample train points
-    train_points, train_labels = sample_points(obj, 10000, 3000, 10000)
+    train_points, train_labels = sample_points(obj, 100000, 10000, 200000)
 
     def closure():
         # Get hermite spline coefficients from the model
@@ -148,28 +148,28 @@ for epoch in range(epochs):
 
         loss_inlet_temp_boundary = torch.mean((inlet_fields[4] - T_inlet) ** 2) / 10**6
 
-        vx_supervised, vy_supervised, vz_supervised, p_supervised, t_supervised = (
-            get_fields(spline_coeff, sampled_points, step, grid_resolution)
-        )
-        supervised_loss = (
-            torch.mean((vx_supervised - vx_sampled_data) ** 2)
-            + torch.mean((vy_supervised - vy_sampled_data) ** 2)
-            + torch.mean((vz_supervised - vz_sampled_data) ** 2)
-            + torch.mean((p_supervised - p_sampled_data) ** 2)
-            + torch.mean((t_supervised - temp_sampled_data) ** 2) / 10**6
-        )
+        # vx_supervised, vy_supervised, vz_supervised, p_supervised, t_supervised = (
+        #     get_fields(spline_coeff, sampled_points, step, grid_resolution)
+        # )
+        # supervised_loss = (
+        #     torch.mean((vx_supervised - vx_sampled_data) ** 2)
+        #     + torch.mean((vy_supervised - vy_sampled_data) ** 2)
+        #     + torch.mean((vz_supervised - vz_sampled_data) ** 2)
+        #     + torch.mean((p_supervised - p_sampled_data) ** 2) / 10**10
+        #     + torch.mean((t_supervised - temp_sampled_data) ** 2) / 10**6
+        # )
 
         loss_total = (
-            loss_divergence
+            0.1*loss_divergence
             + loss_momentum_x
-            + loss_momentum_y
-            + loss_momentum_z
+            + 0.1*loss_momentum_y
+            + 0.1*loss_momentum_z
             + loss_inlet_boundary
-            + loss_outlet_boundary
-            + loss_other_boundary
+            + 0.1*loss_outlet_boundary
+            + 0.1*loss_other_boundary
             # + supervised_loss
-            + loss_heat
-            + loss_inlet_temp_boundary
+            + 0.1*loss_heat
+            + 0.1*loss_inlet_temp_boundary
             + loss_t_wall_boundary
         )
 
@@ -183,7 +183,7 @@ for epoch in range(epochs):
                     "Inlet Boundary Loss": np.log10(loss_inlet_boundary.item()),
                     "Outlet Boundary Loss": np.log10(loss_outlet_boundary.item()),
                     "Other Boundary Loss": np.log10(loss_other_boundary.item()),
-                    "Supervised Loss": np.log10(supervised_loss.item()),
+                    # "Supervised Loss": np.log10(supervised_loss.item()),
                     "Heat Loss": np.log10(loss_heat.item()),
                     "Inlet Temperature Boundary Loss": np.log10(
                         loss_inlet_temp_boundary.item()
@@ -191,7 +191,7 @@ for epoch in range(epochs):
                     "Surface Temperature Boundary Loss": np.log10(
                         loss_t_wall_boundary.item()
                     ),
-                    "Total Loss": np.log10(loss_total.item()),
+                    "Total Loss": np.log10(loss_total.item())
                 }
             )
 
@@ -204,7 +204,7 @@ for epoch in range(epochs):
             f"Inlet Boundary Loss: {loss_inlet_boundary.item()}, "
             f"Outlet Boundary Loss: {loss_outlet_boundary.item()}, "
             f"Other Boundary Loss: {loss_other_boundary.item()}, "
-            f"Supervised Loss: {supervised_loss.item()}",
+            # f"Supervised Loss: {supervised_loss.item()}",
             f"Heat Loss: {loss_heat.item()}",
             f"Inlet Temperature Boundary Loss: {loss_inlet_temp_boundary.item()}",
             f"Surface Temperature Boundary Loss: {loss_t_wall_boundary.item()}",
@@ -372,7 +372,7 @@ vx_pred, vy_pred, vz_pred, p_pred, T_pred = get_fields(
 vx_pred = vx_pred.cpu().detach().numpy()
 vy_pred = vy_pred.cpu().detach().numpy()
 vz_pred = vz_pred.cpu().detach().numpy()
-p_pred = p_pred.cpu().detach().numpy() * 10**5
+p_pred = p_pred.cpu().detach().numpy()
 T_pred = T_pred.cpu().detach().numpy()
 
 plot_aginast_data(data_folder, vx_pred, vy_pred, vz_pred, p_pred, T_pred)

@@ -51,7 +51,7 @@ def get_fields(spline_coeff, points, step, grid_resolution):
     vx = f(step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vy = f(step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0) * 10**5
     T = (
         f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
         * 1000
@@ -67,7 +67,7 @@ def get_fields_and_losses(spline_coeff, points, labels, step, grid_resolution):
     vx = f(step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vy = f(step, spline_coeff, 1, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
     vz = f(step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
-    p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
+    p = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0) * 10**5
     T = (
         f(step, spline_coeff, 4, x, y, z, x_supports, y_supports, z_supports, 0, 0, 0)
         * 1000
@@ -99,9 +99,9 @@ def get_fields_and_losses(spline_coeff, points, labels, step, grid_resolution):
     vz_z = f(
         step, spline_coeff, 2, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1
     )
-    p_x = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0)
-    p_y = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0)
-    p_z = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1)
+    p_x = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 1, 0, 0) * 10**5
+    p_y = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 1, 0) * 10**5
+    p_z = f(step, spline_coeff, 3, x, y, z, x_supports, y_supports, z_supports, 0, 0, 1) * 10**5
     vx_xx = f(
         step, spline_coeff, 0, x, y, z, x_supports, y_supports, z_supports, 2, 0, 0
     )
@@ -156,15 +156,13 @@ def get_fields_and_losses(spline_coeff, points, labels, step, grid_resolution):
 
     # calculate losses
     # Divergence-free condition
-    loss_divergence = torch.mean(
-        (vx_x[labels == 0] + vy_y[labels == 0] + vz_z[labels == 0]) ** 2
-    )
+    loss_divergence = (vx_x[labels == 0] + vy_y[labels == 0] + vz_z[labels == 0]) ** 2
+    loss_divergence_normalised = torch.mean(loss_divergence)/torch.max(loss_divergence)
 
     # Momentum equations (including temperature-dependent viscosity)
     mu = dynamic_viscosity(T)
 
-    loss_momentum_x = torch.mean(
-        (
+    loss_momentum_x = (
             (
                 vx[labels == 0] * vx_x[labels == 0]
                 + vy[labels == 0] * vx_y[labels == 0]
@@ -173,11 +171,9 @@ def get_fields_and_losses(spline_coeff, points, labels, step, grid_resolution):
             + (1 / rho) * p_x[labels == 0]
             - (mu[labels == 0] / rho)
             * (vx_xx[labels == 0] + vx_yy[labels == 0] + vx_zz[labels == 0])
-        )
-        ** 2
-    )
-    loss_momentum_y = torch.mean(
-        (
+        ) ** 2
+    loss_momentum_x_normalised = torch.mean(loss_momentum_x)/torch.max(loss_momentum_x)
+    loss_momentum_y = (
             (
                 vx[labels == 0] * vy_x[labels == 0]
                 + vy[labels == 0] * vy_y[labels == 0]
@@ -186,11 +182,9 @@ def get_fields_and_losses(spline_coeff, points, labels, step, grid_resolution):
             + (1 / rho) * p_y[labels == 0]
             - (mu[labels == 0] / rho)
             * (vy_xx[labels == 0] + vy_yy[labels == 0] + vy_zz[labels == 0])
-        )
-        ** 2
-    )
-    loss_momentum_z = torch.mean(
-        (
+        ) ** 2
+    loss_momentum_y_normalised = torch.mean(loss_momentum_y)/torch.max(loss_momentum_y)
+    loss_momentum_z = (
             (
                 vx[labels == 0] * vz_x[labels == 0]
                 + vy[labels == 0] * vz_y[labels == 0]
@@ -199,17 +193,14 @@ def get_fields_and_losses(spline_coeff, points, labels, step, grid_resolution):
             + (1 / rho) * p_z[labels == 0]
             - (mu[labels == 0] / rho)
             * (vz_xx[labels == 0] + vz_yy[labels == 0] + vz_zz[labels == 0])
-        )
-        ** 2
-    )
+        ) ** 2
+    loss_momentum_z_normalised = torch.mean(loss_momentum_z)/torch.max(loss_momentum_z)
 
     # Calculate thermal diffusivity using specific heat at constant pressure
     alpha = thermal_conductivity / (density * specific_heat)
 
     # Steady-state loss function (no time derivative)
     loss_heat = (
-        torch.mean(
-            (
                 alpha
                 * (
                     T_xx[labels == 0] + T_yy[labels == 0] + T_zz[labels == 0]
@@ -217,19 +208,15 @@ def get_fields_and_losses(spline_coeff, points, labels, step, grid_resolution):
                 + vx[labels == 0] * T_x[labels == 0]
                 + vy[labels == 0] * T_y[labels == 0]
                 + vz[labels == 0] * T_z[labels == 0]  # Advection term (v · nabla T)
-            )
-            ** 2
-        )
-        / 10**6
-    )
+            ) ** 2
+    loss_heat_normalised = torch.mean(loss_heat)/torch.max(loss_heat)
 
-    loss_outlet_boundary = torch.mean((p[labels == 3] - p_outlet) ** 2)
-    loss_other_boundary = (
-        torch.mean((vx[labels == 2]) ** 2)
-        + torch.mean((vy[labels == 2]) ** 2)
-        + torch.mean((vz[labels == 2]) ** 2)
-    )
-    loss_t_wall_boundary = torch.mean((T[labels == 2] - T_wall) ** 2) / 10**6
+    loss_outlet_boundary = (p[labels == 3] - p_outlet) ** 2
+    loss_outlet_boundary_normalised = torch.mean(loss_outlet_boundary)/torch.max(loss_outlet_boundary)
+    loss_other_boundary = (vx[labels == 2]) ** 2 + (vy[labels == 2]) ** 2 + (vz[labels == 2]) ** 2
+    loss_other_boundary_normalised = torch.mean(loss_other_boundary)/torch.max(loss_other_boundary)
+    loss_t_wall_boundary = (T[labels == 2] - T_wall) ** 2
+    loss_t_wall_boundary_normalised = torch.mean(loss_t_wall_boundary)/torch.max(loss_t_wall_boundary)
 
     return (
         vx,
@@ -237,12 +224,12 @@ def get_fields_and_losses(spline_coeff, points, labels, step, grid_resolution):
         vz,
         p,
         T,
-        loss_divergence,
-        loss_momentum_x,
-        loss_momentum_y,
-        loss_momentum_z,
-        loss_outlet_boundary,
-        loss_other_boundary,
-        loss_heat,
-        loss_t_wall_boundary,
+        loss_divergence_normalised,
+        loss_momentum_x_normalised,
+        loss_momentum_y_normalised,
+        loss_momentum_z_normalised,
+        loss_outlet_boundary_normalised,
+        loss_other_boundary_normalised,
+        loss_heat_normalised,
+        loss_t_wall_boundary_normalised,
     )
