@@ -7,6 +7,7 @@ torch.set_default_dtype(torch.float64)
 from utils import *
 from hermite_spline import *
 from unet import *
+from transformer import *
 from torch.optim import LBFGS
 from spline_pinn import *
 import time
@@ -18,7 +19,7 @@ from constants import *
 
 folder = "dp11"
 Project_name = (
-    "Spline-PINNs_with_heat"  # Full_Project_name will be {Project_name}_{folder}
+    "Spline-PINNs_transformers_with_heat"  # Full_Project_name will be {Project_name}_{folder}
 )
 device = "cuda"  # Turn this to "cpu" if you are debugging the flow on the CPU
 debug = False  # Turn this to "True" if you are debugging the flow and don't want to send logs to Wandb
@@ -92,9 +93,10 @@ binary_mask = get_binary_mask(obj, grid_resolution)
 step = obj.bounding_box.extents / (grid_resolution - 1)
 
 # Instantiate the neural network
-unet_model = UNet3D().to(device)
-unet_model.apply(initialize_weights)
-unet_model = unet_model.double()
+# unet_model = UNet3D().to(device)
+# unet_model.apply(initialize_weights)
+# unet_model = unet_model.double()
+unet_model = create_model().to(device).double()
 print(
     f"Number of parameters in the model is: {sum(p.numel() for p in unet_model.parameters())}"
 )
@@ -117,7 +119,7 @@ for epoch in range(epochs):
 
     def closure():
         # Get hermite spline coefficients from the model
-        spline_coeff = unet_model(unet_input)[0]
+        spline_coeff = unet_model(unet_input.squeeze(0))[0]
 
         # Calculating various field terms using coefficients
         (
@@ -148,16 +150,16 @@ for epoch in range(epochs):
 
         loss_inlet_temp_boundary = torch.mean((inlet_fields[4] - T_inlet) ** 2) / 10**6
 
-        # vx_supervised, vy_supervised, vz_supervised, p_supervised, t_supervised = (
-        #     get_fields(spline_coeff, sampled_points, step, grid_resolution)
-        # )
-        # supervised_loss = (
-        #     torch.mean((vx_supervised - vx_sampled_data) ** 2)
-        #     + torch.mean((vy_supervised - vy_sampled_data) ** 2)
-        #     + torch.mean((vz_supervised - vz_sampled_data) ** 2)
-        #     + torch.mean((p_supervised - p_sampled_data) ** 2) / 10**10
-        #     + torch.mean((t_supervised - temp_sampled_data) ** 2) / 10**6
-        # )
+        vx_supervised, vy_supervised, vz_supervised, p_supervised, t_supervised = (
+            get_fields(spline_coeff, sampled_points, step, grid_resolution)
+        )
+        supervised_loss = (
+            torch.mean((vx_supervised - vx_sampled_data) ** 2)
+            + torch.mean((vy_supervised - vy_sampled_data) ** 2)
+            + torch.mean((vz_supervised - vz_sampled_data) ** 2)
+            + torch.mean((p_supervised - p_sampled_data) ** 2) / 10**10
+            + torch.mean((t_supervised - temp_sampled_data) ** 2) / 10**6
+        )
 
         loss_total = (
             0.1*loss_divergence
@@ -167,7 +169,7 @@ for epoch in range(epochs):
             + loss_inlet_boundary
             + 0.1*loss_outlet_boundary
             + 0.1*loss_other_boundary
-            # + supervised_loss
+            + supervised_loss
             + 0.1*loss_heat
             + 0.1*loss_inlet_temp_boundary
             + loss_t_wall_boundary
@@ -183,7 +185,7 @@ for epoch in range(epochs):
                     "Inlet Boundary Loss": np.log10(loss_inlet_boundary.item()),
                     "Outlet Boundary Loss": np.log10(loss_outlet_boundary.item()),
                     "Other Boundary Loss": np.log10(loss_other_boundary.item()),
-                    # "Supervised Loss": np.log10(supervised_loss.item()),
+                    "Supervised Loss": np.log10(supervised_loss.item()),
                     "Heat Loss": np.log10(loss_heat.item()),
                     "Inlet Temperature Boundary Loss": np.log10(
                         loss_inlet_temp_boundary.item()
@@ -204,7 +206,7 @@ for epoch in range(epochs):
             f"Inlet Boundary Loss: {loss_inlet_boundary.item()}, "
             f"Outlet Boundary Loss: {loss_outlet_boundary.item()}, "
             f"Other Boundary Loss: {loss_other_boundary.item()}, "
-            # f"Supervised Loss: {supervised_loss.item()}",
+            f"Supervised Loss: {supervised_loss.item()}",
             f"Heat Loss: {loss_heat.item()}",
             f"Inlet Temperature Boundary Loss: {loss_inlet_temp_boundary.item()}",
             f"Surface Temperature Boundary Loss: {loss_t_wall_boundary.item()}",
@@ -220,7 +222,7 @@ for epoch in range(epochs):
     # Switch model to evaluation mode
     unet_model.eval()
     with torch.no_grad():
-        spline_coeff = unet_model(unet_input)[0]
+        spline_coeff = unet_model(unet_input.squeeze(0))[0]
         (
             validation_vx,
             validation_vy,
@@ -312,7 +314,7 @@ torch.save(unet_model.state_dict(), "../run/unet_model.pt")
 unet_model.eval()
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)
 with torch.no_grad():
-    spline_coeff = unet_model(unet_input)[0]
+    spline_coeff = unet_model(unet_input.squeeze(0))[0]
     (
         validation_vx,
         validation_vy,
@@ -344,14 +346,14 @@ plot_fields(fields, validation_points.cpu().numpy())
 
 device = "cpu"
 torch.set_default_device(device)
-unet_model = UNet3D().to(device)
+unet_model = create_model().to(device).double()
 unet_model.load_state_dict(
     torch.load(
         "../run/unet_model.pt", weights_only=True, map_location=torch.device("cpu")
     )
 )
 unet_input = prepare_mesh_for_unet(binary_mask).to(device)
-spline_coeff = unet_model(unet_input)[0]
+spline_coeff = unet_model(unet_input.squeeze(0))[0]
 
 all_points = torch.tensor(
     np.concatenate(
@@ -377,21 +379,21 @@ T_pred = T_pred.cpu().detach().numpy()
 
 plot_aginast_data(data_folder, vx_pred, vy_pred, vz_pred, p_pred, T_pred)
 
-time.sleep(120)
-if repo.is_dirty(untracked_files=True):
-    print("Repository has changes, preparing to commit.")
+# time.sleep(120)
+# if repo.is_dirty(untracked_files=True):
+#     print("Repository has changes, preparing to commit.")
 
-    # Stage all changes in the parent directory
-    repo.git.add(A=True)  # Stages all changes
+#     # Stage all changes in the parent directory
+#     repo.git.add(A=True)  # Stages all changes
 
-    # Commit the changes
-    commit_message = f"Running job with run name: {run.name}, url: {run.url}"
-    repo.index.commit(commit_message)
-    print(f"Committed changes with message: {commit_message}")
+#     # Commit the changes
+#     commit_message = f"Running job with run name: {run.name}, url: {run.url}"
+#     repo.index.commit(commit_message)
+#     print(f"Committed changes with message: {commit_message}")
 
-    # Push changes
-    origin = repo.remote(name="origin")
-    origin.push()
-    print("Pushed changes to the remote repository.")
-else:
-    print("No changes to commit.")
+#     # Push changes
+#     origin = repo.remote(name="origin")
+#     origin.push()
+#     print("Pushed changes to the remote repository.")
+# else:
+#     print("No changes to commit.")
