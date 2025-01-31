@@ -254,10 +254,10 @@ def plot_aginast_data(folder_path, vx_pred, vy_pred, vz_pred, p_pred, T_pred):
     all_indices = torch.arange(vx.shape[0])
     supervised_indices = torch.tensor(
         np.load(os.path.join("indices.npy")), dtype=torch.long
-    )
+    ).cpu()
     test_indices = torch.tensor(
         list(set(all_indices.tolist()) - set(supervised_indices.tolist()))
-    )
+    ).cpu()
     for _field in _fields:
         scalar_field = np.concatenate((_field[0][:, 3], _field[1][:, 3]))
         index = np.random.choice(all_points.shape[0], 100000, replace=False)
