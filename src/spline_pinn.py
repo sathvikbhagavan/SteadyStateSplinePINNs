@@ -230,6 +230,7 @@ def get_fields_and_losses(spline_coeff, points, labels, step, grid_resolution):
         + torch.mean((vz[labels == 2]) ** 2)
     )
     loss_t_wall_boundary = torch.mean((T[labels == 2] - T_wall) ** 2) / 10**6
+    loss_reg = torch.mean(torch.log(torch.abs(vx[labels == 0])*torch.abs(vy[labels == 0])*torch.abs(vz[labels == 0])) ** 2)
 
     return (
         vx,
@@ -245,4 +246,5 @@ def get_fields_and_losses(spline_coeff, points, labels, step, grid_resolution):
         loss_other_boundary,
         loss_heat,
         loss_t_wall_boundary,
+        loss_reg
     )
